@@ -1,0 +1,43 @@
+
+{
+"Graph":
+    [{
+        "Name": "image",
+        "Active": 0,
+        "Type": "Comapre",
+        "Next":[{"Name": "B1", "Active": 2, "Signal":0},{"Name": "B1", "Active": 4, "Signal":0}],
+        "Prev":[{"Name": "IN", "Active": -1, "Signal":0}],
+        "Config":{"Name": "None"}
+    },{
+        "Name": "GT",
+        "Active": 1,
+        "Type": "Comapre",
+        "Next":[{"Name": "B1", "Active": 2, "Signal":0},{"Name": "B1", "Active": 4, "Signal":0}],
+        "Prev":[{"Name": "IN", "Active": -1, "Signal":0}],
+        "Config":{"Name": "None"}
+    },{
+        "Name": "ROI",
+        "Active": 2,
+        "Type": "Comapre",
+        "Next":[{"Name": "B1", "Active": 3, "Signal":0}],
+        "Prev":[{"Name": "image", "Active": 0, "Signal":0},{"Name": "GT", "Active": 1, "Signal":0}],
+        "Config": {"Name": "DlibNetwork"}
+    },{
+        "Name": "Fitness",
+        "Active": 3,
+        "Type": "Fitness",
+        "Next":[{"Name": "OUT1", "Active": -1, "Signal":0}],
+        "Prev":[{"Name": "A", "Active": 2, "Signal":0}],
+        "Config": {"Name": "BGFitness", "FitnessFunction": "Accuracy_Recall_Precision_FMeasure"},
+		"ConfigALL": {"Name": "BGFitness", "FitnessFunction": "Accuracy_Recall_Specificity_Precision_NegativePrecision_FMeasure_FitnessTime"}
+    },{
+        "Name": "Encoder",
+        "Active": 4,
+        "Type": "Encoder",
+        "Next":[{"Name": "OUT2", "Active": -1, "Signal":0}],
+        "Prev":[{"Name": "image", "Active": 0, "Signal":0},{"Name": "GT", "Active": 1, "Signal":0}],
+        "Config": {"Name": "None", "Path": "","FPS":10.0, "Width":1800, "Height":1500,  "Type":".mp4", "Iter": 1000}
+    }
+	
+	]
+}

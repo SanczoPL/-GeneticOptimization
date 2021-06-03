@@ -1,0 +1,38 @@
+{
+	"General": 
+	{
+		"LogLevel": 0,
+		"ThreadsMax": 1,
+		"Standalone": false,
+		"PopulationSize" : 30
+	},
+	"ConfigUnix": 
+	{
+		"Dataset": "/home/gm/repo/GeneticOptimization/dataset.json",
+		"Graph": "/home/gm/repo/GeneticOptimization/graph.json",
+		"Bounds": "/home/gm/repo/GeneticOptimization/bounds.json",
+		"Preprocess": "/home/gm/repo/GeneticOptimization/preprocess.json",
+		"Postprocess": "/home/gm/repo/GeneticOptimization/postprocess.json"
+	},
+	"DatasetLinux": 
+	{
+		"PathToDataset": "/home/gm/repo/datasets/NORM0010_1280x720_120/",
+      	"ConfigName": "config.json",
+
+		"GtDirectory": "/home/gm/repo/datasets/test1/gt",
+		"ImageDirectory": "/home/gm/repo/datasets/test1/images",
+		"JsonDirectory": "/home/gm/repo/datasets/test1/gt_json"
+	},
+	"ColorsForeground":
+	[
+		{"Name":"bird","GrayColor":220,"R":255,"G":255,"B":0,"A":100},
+		{"Name":"dron","GrayColor":255,"R":0,"G":255,"B":0,"A":100},
+		{"Name":"UAV","GrayColor":85,"R":0,"G":255,"B":255,"A":100},
+		{"Name":"person","GrayColor":170,"R":255,"G":0,"B":0,"A":100}
+	],
+	"ColorsBackground":
+	[ 
+		
+		{"Name":"background","GrayColor":0,"R":255,"G":255,"B":255,"A":100}
+	]
+}
