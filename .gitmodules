@@ -1,0 +1,6 @@
+[submodule "ProcessingModules"]
+	path = ProcessingModules
+	url = https://github.com/SanczoPL/ProcessingModules.git
+[submodule "PostProcessingModules"]
+	path = PostProcessingModules
+	url = https://github.com/SanczoPL/PostProcessingModules
