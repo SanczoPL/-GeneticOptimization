@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <QJsonObject>
+#include <QJsonArray>
 #include <QFile>
 #include <QJsonDocument>
 
@@ -14,6 +15,7 @@ class ConfigReader : public QObject
 		ConfigReader();
 		~ConfigReader();
 		bool readConfig(QString configPathWithName, QJsonObject& obj);
+		bool readConfig(QString configPathWithName, QJsonArray& obj);
 
 };
 #endif //CONFIG_READER_H
