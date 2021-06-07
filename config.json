@@ -1,10 +1,15 @@
 {
 	"General": 
 	{
-		"LogLevel": 0,
-		"ThreadsMax": 1,
-		"Standalone": false,
-		"PopulationSize" : 30
+		"LogLevel": 1,
+		"ThreadsMax": 30,
+		"Standalone": false
+	},
+	"Genetic":
+	{
+		"PopulationSize" : 30,
+		"GraphType" : "Graph_estimator",
+		"BoundsType" : "MOG2"
 	},
 	"ConfigUnix": 
 	{

@@ -1,137 +1,250 @@
 ﻿{
-	"Filter": 
+	"Graph_two_filter_test":
 	{
-		"Used-all-filters":
-		[
-			{"Name": "MedianBlur", "Parameters":[{"Type": "KernelSize","Min": 1,"Max": 5,"IsOdd": true}]},
-			{"Name": "Blur", "Parameters":[
-				{"Type": "KernelSizeX","Min": 1,"Max": 5,"IsOdd": true},
-				{"Type": "KernelSizeY","Min": 1,"Max": 5,"IsOdd": true},
-				{"Type": "BorderType","Min": 1,"Max": 2}
-				]},
-			{"Name": "GaussianBlur", "Parameters":[
-				{"Type": "KernelSizeX","Min": 1,"Max": 5,"IsOdd": true},
-				{"Type": "KernelSizeY","Min": 1,"Max": 5,"IsOdd": true},
-				{"Type": "SigmaX","Min": 0,"Max": 10,"IsDouble": 10},
-				{"Type": "SigmaY","Min": 0,"Max": 10,"IsDouble": 10},
-				{"Type": "BorderType","Min": 1,"Max": 2}
-				]},
-			{"Name": "Threshold", "Parameters":[
-				{"Type": "ThresholdDecision","Min": 2,"Max": 254},
-				{"Type": "ThresholdTypes","Min": 0,"Max": 1},
-				{"Type": "ThresholdValue","Min": 0,"Max": 255}
-			 ]},
-			{"Name": "None", "Parameters":[
-				{"Type": "None","Min": 0,"Max": 2}
-				]},
-			{"Name": "MorphologyOperation", "Parameters":[
-				{"Type": "MorphOperator","Min": 0,"Max": 5},
-				{"Type": "MorphSize","Min": 1,"Max": 3},
-				{"Type": "MorphElement","Min": 0,"Max": 2}
-				]},
-			{"Name": "Sobel", "Parameters":[
-				{"Type": "OrderDerivativeX","Min": 1,"Max": 2},
-				{"Type": "OrderDerivativeY","Min": 1,"Max": 2},
-				{"Type": "KernelSize","Min": 1,"Max": 2,"IsOdd": true},
-				{"Type": "BorderType","Min": 1,"Max": 2}
-				]},
-			{"Name": "BilateralFilter", "Parameters":[
-				{"Type": "Diameter","Min": 1,"Max": 5},
-				{"Type": "SigmaColor","Min": 0,"Max": 10,"IsDouble": 10},
-				{"Type": "SigmaSpace","Min": 0,"Max": 10,"IsDouble": 10},
-				{"Type": "BorderType","Min": 1,"Max": 2}
-				]}
-
-		],
-		"Used-viterbi-with-filters":
-		[
-			{"Name": "Viterbi", "Parameters":[
-				{"Type": "Treck","Min": 1,"Max": 3},
-				{"Type": "Range","Min": 5,"Max": 10},
-				{"Type": "ClusterWidth","Min": 10,"Max": 20},
-				{"Type": "ClusterHeight","Min": 10,"Max": 20},
-				{"Type": "AbsFilter","Min": 0,"Max": 1, "IsBool":true},
-				{"Type": "ShiftWidth","Min": 10,"Max": 20},
-				{"Type": "ShiftHeight","Min": 10,"Max": 20}
-				]},
+		"Filter": 
+		{
+			"Used-all-filters":
+			[
 				{"Name": "MedianBlur", "Parameters":[{"Type": "KernelSize","Min": 1,"Max": 5,"IsOdd": true}]},
-			{"Name": "Blur", "Parameters":[
-				{"Type": "KernelSizeX","Min": 1,"Max": 5,"IsOdd": true},
-				{"Type": "KernelSizeY","Min": 1,"Max": 5,"IsOdd": true},
-				{"Type": "BorderType","Min": 1,"Max": 2}
+				{"Name": "Blur", "Parameters":[
+					{"Type": "KernelSizeX","Min": 1,"Max": 5,"IsOdd": true},
+					{"Type": "KernelSizeY","Min": 1,"Max": 5,"IsOdd": true},
+					{"Type": "BorderType","Min": 1,"Max": 2}
+					]},
+				{"Name": "GaussianBlur", "Parameters":[
+					{"Type": "KernelSizeX","Min": 1,"Max": 5,"IsOdd": true},
+					{"Type": "KernelSizeY","Min": 1,"Max": 5,"IsOdd": true},
+					{"Type": "SigmaX","Min": 0,"Max": 10,"IsDouble": 10},
+					{"Type": "SigmaY","Min": 0,"Max": 10,"IsDouble": 10},
+					{"Type": "BorderType","Min": 1,"Max": 2}
+					]},
+				{"Name": "Threshold", "Parameters":[
+					{"Type": "ThresholdDecision","Min": 2,"Max": 254},
+					{"Type": "ThresholdTypes","Min": 0,"Max": 1},
+					{"Type": "ThresholdValue","Min": 0,"Max": 255}
 				]},
-			{"Name": "GaussianBlur", "Parameters":[
-				{"Type": "KernelSizeX","Min": 1,"Max": 5,"IsOdd": true},
-				{"Type": "KernelSizeY","Min": 1,"Max": 5,"IsOdd": true},
-				{"Type": "SigmaX","Min": 0,"Max": 10,"IsDouble": 10},
-				{"Type": "SigmaY","Min": 0,"Max": 10,"IsDouble": 10},
-				{"Type": "BorderType","Min": 1,"Max": 2}
+				{"Name": "None", "Parameters":[
+					{"Type": "None","Min": 0,"Max": 2}
+					]},
+				{"Name": "MorphologyOperation", "Parameters":[
+					{"Type": "MorphOperator","Min": 0,"Max": 5},
+					{"Type": "MorphSize","Min": 1,"Max": 3},
+					{"Type": "MorphElement","Min": 0,"Max": 2}
+					]},
+				{"Name": "Sobel", "Parameters":[
+					{"Type": "OrderDerivativeX","Min": 1,"Max": 2},
+					{"Type": "OrderDerivativeY","Min": 1,"Max": 2},
+					{"Type": "KernelSize","Min": 1,"Max": 2,"IsOdd": true},
+					{"Type": "BorderType","Min": 1,"Max": 2}
+					]},
+				{"Name": "BilateralFilter", "Parameters":[
+					{"Type": "Diameter","Min": 1,"Max": 5},
+					{"Type": "SigmaColor","Min": 0,"Max": 10,"IsDouble": 10},
+					{"Type": "SigmaSpace","Min": 0,"Max": 10,"IsDouble": 10},
+					{"Type": "BorderType","Min": 1,"Max": 2}
+					]}
+
+			],
+			"Used-viterbi-with-filters":
+			[
+				{"Name": "Viterbi", "Parameters":[
+					{"Type": "Treck","Min": 1,"Max": 3},
+					{"Type": "Range","Min": 5,"Max": 10},
+					{"Type": "ClusterWidth","Min": 10,"Max": 20},
+					{"Type": "ClusterHeight","Min": 10,"Max": 20},
+					{"Type": "AbsFilter","Min": 0,"Max": 1, "IsBool":true},
+					{"Type": "ShiftWidth","Min": 10,"Max": 20},
+					{"Type": "ShiftHeight","Min": 10,"Max": 20}
+					]},
+					{"Name": "MedianBlur", "Parameters":[{"Type": "KernelSize","Min": 1,"Max": 5,"IsOdd": true}]},
+				{"Name": "Blur", "Parameters":[
+					{"Type": "KernelSizeX","Min": 1,"Max": 5,"IsOdd": true},
+					{"Type": "KernelSizeY","Min": 1,"Max": 5,"IsOdd": true},
+					{"Type": "BorderType","Min": 1,"Max": 2}
+					]},
+				{"Name": "GaussianBlur", "Parameters":[
+					{"Type": "KernelSizeX","Min": 1,"Max": 5,"IsOdd": true},
+					{"Type": "KernelSizeY","Min": 1,"Max": 5,"IsOdd": true},
+					{"Type": "SigmaX","Min": 0,"Max": 10,"IsDouble": 10},
+					{"Type": "SigmaY","Min": 0,"Max": 10,"IsDouble": 10},
+					{"Type": "BorderType","Min": 1,"Max": 2}
+					]},
+				{"Name": "Threshold", "Parameters":[
+					{"Type": "ThresholdDecision","Min": 2,"Max": 254},
+					{"Type": "ThresholdTypes","Min": 0,"Max": 1},
+					{"Type": "ThresholdValue","Min": 0,"Max": 255}
 				]},
-			{"Name": "Threshold", "Parameters":[
-				{"Type": "ThresholdDecision","Min": 2,"Max": 254},
-				{"Type": "ThresholdTypes","Min": 0,"Max": 1},
-				{"Type": "ThresholdValue","Min": 0,"Max": 255}
-			 ]},
-			{"Name": "None", "Parameters":[
-				{"Type": "None","Min": 0,"Max": 2}
-				]},
-			{"Name": "MorphologyOperation", "Parameters":[
-				{"Type": "MorphOperator","Min": 0,"Max": 5},
-				{"Type": "MorphSize","Min": 1,"Max": 3},
-				{"Type": "MorphElement","Min": 0,"Max": 2}
-				]},
-			{"Name": "Sobel", "Parameters":[
-				{"Type": "OrderDerivativeX","Min": 1,"Max": 2},
-				{"Type": "OrderDerivativeY","Min": 1,"Max": 2},
-				{"Type": "KernelSize","Min": 1,"Max": 2,"IsOdd": true},
-				{"Type": "BorderType","Min": 1,"Max": 2}
-				]},
-			{"Name": "BilateralFilter", "Parameters":[
-				{"Type": "Diameter","Min": 1,"Max": 5},
-				{"Type": "SigmaColor","Min": 0,"Max": 10,"IsDouble": 10},
-				{"Type": "SigmaSpace","Min": 0,"Max": 10,"IsDouble": 10},
-				{"Type": "BorderType","Min": 1,"Max": 2}
+				{"Name": "None", "Parameters":[
+					{"Type": "None","Min": 0,"Max": 2}
+					]},
+				{"Name": "MorphologyOperation", "Parameters":[
+					{"Type": "MorphOperator","Min": 0,"Max": 5},
+					{"Type": "MorphSize","Min": 1,"Max": 3},
+					{"Type": "MorphElement","Min": 0,"Max": 2}
+					]},
+				{"Name": "Sobel", "Parameters":[
+					{"Type": "OrderDerivativeX","Min": 1,"Max": 2},
+					{"Type": "OrderDerivativeY","Min": 1,"Max": 2},
+					{"Type": "KernelSize","Min": 1,"Max": 2,"IsOdd": true},
+					{"Type": "BorderType","Min": 1,"Max": 2}
+					]},
+				{"Name": "BilateralFilter", "Parameters":[
+					{"Type": "Diameter","Min": 1,"Max": 5},
+					{"Type": "SigmaColor","Min": 0,"Max": 10,"IsDouble": 10},
+					{"Type": "SigmaSpace","Min": 0,"Max": 10,"IsDouble": 10},
+					{"Type": "BorderType","Min": 1,"Max": 2}
+					]}
+			],
+			"Used":
+			[
+				{"Name": "Threshold", "Parameters":[
+					{"Type": "ThresholdDecision","Min": 2,"Max": 254},
+					{"Type": "ThresholdTypes","Min": 0,"Max": 1},
+					{"Type": "ThresholdValue","Min": 0,"Max": 255}
 				]}
-		],
-		"Used":
-		[
-			{"Name": "Threshold", "Parameters":[
-				{"Type": "ThresholdDecision","Min": 2,"Max": 254},
-				{"Type": "ThresholdTypes","Min": 0,"Max": 1},
-				{"Type": "ThresholdValue","Min": 0,"Max": 255}
-			 ]}
-		]
+			]
+		},
+		"Estimator": 
+		{
+			"Used":
+			[	{"Name":"MOG2", "Parameters":[
+					{"Type": "LearningRate","Min": 0,"Max": 10,"IsDouble": 10},
+					{"Type": "History","Min": 0,"Max": 1},
+					{"Type": "VarThreshold","Min": 0,"Max": 255},
+					{"Type": "DetectShadow","Min": 0,"Max": 2, "IsBool":true}
+					]}
+				
+			],
+			"NotUsed":
+			[
+				
+				{"Name":"Median", "Parameters":[
+					{"Type": "History","Min": 0,"Max": 3},
+					{"Type": "HistoryDelta","Min": 0,"Max": 3},
+					{"Type": "DecisionThreshold","Min": 0,"Max": 255}
+					]},
+				{"Name":"KNN", "Parameters":[
+					{"Type": "LearningRate","Min": 0,"Max": 10,"IsDouble": 10},
+					{"Type": "History","Min": 0,"Max": 100},
+					{"Type": "VarThreshold","Min": 0,"Max": 255},
+					{"Type": "DetectShadow","Min": 0,"Max": 1, "IsBool":true}
+					]}
+				,
+				{"Name": "None", "Parameters":[
+					{"Type": "None","Min": 0,"Max": 2}
+					]}
+			]
+		}
 	},
-	"Estimator": 
+	"Graph_estimator":
 	{
-		"Used":
-		[	{"Name":"MOG2", "Parameters":[
-				{"Type": "LearningRate","Min": 0,"Max": 10,"IsDouble": 10},
-				{"Type": "History","Min": 0,"Max": 1},
-				{"Type": "VarThreshold","Min": 0,"Max": 255},
-				{"Type": "DetectShadow","Min": 0,"Max": 2, "IsBool":true}
-				]}
-			
-		],
-		"NotUsed":
-		[
-			
-			{"Name":"Median", "Parameters":[
-				{"Type": "History","Min": 0,"Max": 3},
-				{"Type": "HistoryDelta","Min": 0,"Max": 3},
-				{"Type": "DecisionThreshold","Min": 0,"Max": 255}
-				]},
-			{"Name":"KNN", "Parameters":[
-				{"Type": "LearningRate","Min": 0,"Max": 10,"IsDouble": 10},
-				{"Type": "History","Min": 0,"Max": 100},
-				{"Type": "VarThreshold","Min": 0,"Max": 255},
-				{"Type": "DetectShadow","Min": 0,"Max": 1, "IsBool":true}
-				]}
-			,
-			{"Name": "None", "Parameters":[
-				{"Type": "None","Min": 0,"Max": 2}
-				]}
-		]
+		"MOG2":
+		{
+			"Filter": 
+			{
+				"Used":
+				[
+					{"Name": "Threshold", "Parameters":[
+						{"Type": "ThresholdDecision","Min": 1,"Max": 254},
+						{"Type": "ThresholdTypes","Min": 0,"Max": 1},
+						{"Type": "ThresholdValue","Min": 1,"Max": 254}
+					]}
+				],
+				"NotUsed":[]
+			},
+			"Estimator": 
+			{
+				"Used":
+				[	{"Name":"MOG2", "Parameters":[
+					{"Type": "LearningRate","Min": 0,"Max": 10,"IsDouble": 10},
+					{"Type": "History","Min": 0,"Max": 1},
+					{"Type": "VarThreshold","Min": 0,"Max": 255},
+					{"Type": "DetectShadow","Min": 0,"Max": 2, "IsBool":true}
+					]}
+				],
+				"NotUsed":[]
+			}
+		},
+		"KNN":
+		{
+			"Filter": 
+			{
+				"Used":
+				[
+					{"Name": "Threshold", "Parameters":[
+						{"Type": "ThresholdDecision","Min": 2,"Max": 254},
+						{"Type": "ThresholdTypes","Min": 0,"Max": 1},
+						{"Type": "ThresholdValue","Min": 0,"Max": 255}
+					]}
+				],
+				"NotUsed":
+				[]
+			},
+			"Estimator": 
+			{
+				"Used":
+				[	{"Name":"KNN", "Parameters":[
+					{"Type": "LearningRate","Min": 0,"Max": 10,"IsDouble": 10},
+					{"Type": "History","Min": 0,"Max": 100},
+					{"Type": "VarThreshold","Min": 0,"Max": 255},
+					{"Type": "DetectShadow","Min": 0,"Max": 1, "IsBool":true}
+					]}
+				],
+				"NotUsed":[]
+			}
+		},
+		"MEDIAN":
+		{
+			"Filter": 
+			{
+				"Used":
+				[
+					{"Name": "Threshold", "Parameters":[
+						{"Type": "ThresholdDecision","Min": 2,"Max": 254},
+						{"Type": "ThresholdTypes","Min": 0,"Max": 1},
+						{"Type": "ThresholdValue","Min": 0,"Max": 255}
+					]}
+				],
+				"NotUsed":
+				[]
+			},
+			"Estimator": 
+			{
+				"Used":
+				[	{"Name":"Median", "Parameters":[
+					{"Type": "History","Min": 1,"Max": 3},
+					{"Type": "HistoryDelta","Min": 1,"Max": 3},
+					{"Type": "DecisionThreshold","Min": 1,"Max": 254}
+					]}
+				],
+				"NotUsed":[]
+			}
+		},
+		"NONE":
+		{
+			"Filter": 
+			{
+				"Used":
+				[
+					{"Name": "Threshold", "Parameters":[
+						{"Type": "ThresholdDecision","Min": 2,"Max": 254},
+						{"Type": "ThresholdTypes","Min": 0,"Max": 1},
+						{"Type": "ThresholdValue","Min": 0,"Max": 255}
+					]}
+				],
+				"NotUsed":
+				[]
+			},
+			"Estimator": 
+			{
+				"Used":
+				[	
+					{"Name": "None", "Parameters":[
+					{"Type": "None","Min": 0,"Max": 2}
+					]}
+				],
+				"NotUsed":[]
+			}
+		}
 	}
-	
 }
