@@ -1,5 +1,5 @@
 {
-    "Graph":
+    "Graph_two_filter_test":
     [{
         "Name": "FILTER_1",        "Active": 0,        "Type": "Filter",
         "Next":[{"Name": "FILTER_2", "Active": 1, "Signal":0}],
@@ -9,7 +9,8 @@
         "Next":[{"Name": "OUT", "Active": -1, "Signal":0}],
         "Prev":[{"Name": "FILTER_1", "Active": 0}]
     }],
-    "Graph_old":
+    
+    "Graph_estimator":
     [{
         "Name": "ESTIMATOR",        "Active": 0,        "Type": "Estimator",
         "Next":[{"Name": "THRESHOLD", "Active": 1, "Signal":0}],
@@ -19,7 +20,8 @@
         "Next":[{"Name": "OUT", "Active": -1, "Signal":0}],
         "Prev":[{"Name": "ESTIMATOR", "Active": 0}]
     }],
-	"Graph-with_filters":
+
+	"Graph_estimator_with_filters":
     [{
         "Name": "FILTER_1",        "Active": 0,        "Type": "Filter",
         "Next":[{"Name": "FILTER_2", "Active": 1, "Signal":0}],

@@ -1,4 +1,6 @@
 {
+  "Graph_estimator":
+  {
     "FromVideo": true,
 
     "DatasetWin32": 
@@ -12,3 +14,4 @@
       "ConfigName": "config.json"
     }
   }
+}
