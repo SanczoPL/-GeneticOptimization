@@ -15,7 +15,6 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
 file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}")
-#file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/test_images")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}")
 
 
@@ -25,8 +24,8 @@ configure_file(config.json ${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE}/config.json)
 configure_file(preprocess.json ${CMAKE_BINARY_DIR}/preprocess.json)
 configure_file(preprocess.json ${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE}/preprocess.json)
 
-##configure_file(gtest/test.json ${CMAKE_BINARY_DIR}/test.json)
-#configure_file(gtest/test.json ${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE}/test.json)
+configure_file(gtest/test_graph.json ${CMAKE_BINARY_DIR}/test_graph.json)
+configure_file(gtest/test_graph_config.json ${CMAKE_BINARY_DIR}/test_graph_config.json)
 
 #file(COPY test_images DESTINATION ${CMAKE_BINARY_DIR})
 
@@ -83,26 +82,32 @@ set(SRC
 	src/genetic/data.cc
 	src/genetic/case.cc
 	src/genetic/genetic.cc
+	src/genetic/geneticoperation.cc
 	src/genetic/mainloop.cc
+	src/genetic/graph.cc
 	)
 
 set(HEADERS
 	include/genetic/data.h
 	include/genetic/case.h
 	include/genetic/genetic.h
+	include/genetic/geneticoperation.h
 	include/genetic/mainloop.h
 	include/genetic/structures.h
+	include/genetic/graph.h
 	)
 
 set(SRC_UTILS
   src/utils/configreader.cc
   src/utils/includespdlog.cc
   src/utils/listvector.cc
+  src/utils/filelogger.cc
 )
 set(HEADERS_UTILS
   include/utils/configreader.h
   include/utils/includespdlog.h
   include/utils/listvector.h
+  include/utils/filelogger.h
 )
 
 file(GLOB_RECURSE SRC_PROCESSING ProcessingModules/*.cc)
