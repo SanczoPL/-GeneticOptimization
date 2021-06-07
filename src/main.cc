@@ -5,6 +5,7 @@
 
 #include "genetic/data.h"
 #include "genetic/mainloop.h"
+#include "postprocessing.h"
 
 #include <X11/Xlib.h>
 
@@ -20,12 +21,11 @@ QJsonObject readConfig(QString name);
 
 int main(int argc, char* argv[])
 {
-	//XInitThreads();
 	XInitThreads();
 	QCoreApplication app(argc, argv);
 	
-
-	//qRegisterMetaType<QString>("QString");
+	qRegisterMetaType<fitness>("fitness");
+	qRegisterMetaType<QString>("QString");
 
 	Logger->set_level(static_cast<spdlog::level::level_enum>(0));
 	Logger->set_pattern("[%Y-%m-%d] [%H:%M:%S.%e] [%t] [%^%l%$] %v");
@@ -38,12 +38,6 @@ int main(int argc, char* argv[])
 	Logger->set_level(static_cast<spdlog::level::level_enum>(messageLevel));
 
 	Logger->info("start DataMemory:");
-	//DataMemory dm{config};
-	//dm.preprocess(preConfig);
-	//window.show();
-	//qint64 pid = app.applicationPid();
-	//config[PID] = pid;
-	//qDebug() << "config" << config;
 	MainLoop mainLoop{ config};
 
 	return app.exec();
