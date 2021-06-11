@@ -1,13 +1,14 @@
 {
 	"General": 
 	{
-		"LogLevel": 1,
+		"LogLevel": 2,
 		"ThreadsMax": 30,
 		"Standalone": false
 	},
 	"Genetic":
 	{
-		"PopulationSize" : 30,
+		"PopulationSize" : 60,
+		"DronType" : "BLACK",
 		"GraphType" : "Graph_estimator",
 		"BoundsType" : "MOG2"
 	},

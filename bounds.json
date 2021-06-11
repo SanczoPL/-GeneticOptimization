@@ -145,9 +145,9 @@
 				"Used":
 				[
 					{"Name": "Threshold", "Parameters":[
-						{"Type": "ThresholdDecision","Min": 1,"Max": 254},
+						{"Type": "ThresholdDecision","Min": 1,"Max": 255},
 						{"Type": "ThresholdTypes","Min": 0,"Max": 1},
-						{"Type": "ThresholdValue","Min": 1,"Max": 254}
+						{"Type": "ThresholdValue","Min": 1,"Max": 255}
 					]}
 				],
 				"NotUsed":[]
@@ -172,7 +172,7 @@
 				"Used":
 				[
 					{"Name": "Threshold", "Parameters":[
-						{"Type": "ThresholdDecision","Min": 2,"Max": 254},
+						{"Type": "ThresholdDecision","Min": 0,"Max": 255},
 						{"Type": "ThresholdTypes","Min": 0,"Max": 1},
 						{"Type": "ThresholdValue","Min": 0,"Max": 255}
 					]}
@@ -200,7 +200,7 @@
 				"Used":
 				[
 					{"Name": "Threshold", "Parameters":[
-						{"Type": "ThresholdDecision","Min": 2,"Max": 254},
+						{"Type": "ThresholdDecision","Min": 0,"Max": 255},
 						{"Type": "ThresholdTypes","Min": 0,"Max": 1},
 						{"Type": "ThresholdValue","Min": 0,"Max": 255}
 					]}
@@ -227,7 +227,7 @@
 				"Used":
 				[
 					{"Name": "Threshold", "Parameters":[
-						{"Type": "ThresholdDecision","Min": 2,"Max": 254},
+						{"Type": "ThresholdDecision","Min": 0,"Max": 255},
 						{"Type": "ThresholdTypes","Min": 0,"Max": 1},
 						{"Type": "ThresholdValue","Min": 0,"Max": 255}
 					]}
@@ -240,7 +240,118 @@
 				"Used":
 				[	
 					{"Name": "None", "Parameters":[
-					{"Type": "None","Min": 0,"Max": 2}
+					{"Type": "None","Min": 0,"Max": 1}
+					]}
+				],
+				"NotUsed":[]
+			}
+		},
+		"CNT":
+		{
+			"Filter": 
+			{
+				"Used":
+				[
+					{"Name": "Threshold", "Parameters":[
+						{"Type": "ThresholdDecision","Min": 0,"Max": 255},
+						{"Type": "ThresholdTypes","Min": 0,"Max": 1},
+						{"Type": "ThresholdValue","Min": 0,"Max": 255}
+					]}
+				],
+				"NotUsed":
+				[]
+			},
+			"Estimator": 
+			{
+				"Used":
+				[	{"Name":"CNT", "Parameters":[
+					{"Type": "MinPixelStability","Min": 10,"Max": 20},
+					{"Type": "MaxPixelStability","Min": 600,"Max": 1200},
+					{"Type": "IsParallel", "Min": 0,"Max": 1, "IsBool":true},
+					{"Type": "UseHistory", "Min": 0,"Max": 1, "IsBool":true}
+					]}
+				],
+				"NotUsed":[]
+			}
+		},
+		"GMG":
+		{
+			"Filter": 
+			{
+				"Used":
+				[
+					{"Name": "Threshold", "Parameters":[
+						{"Type": "ThresholdDecision","Min": 0,"Max": 255},
+						{"Type": "ThresholdTypes","Min": 0,"Max": 1},
+						{"Type": "ThresholdValue","Min": 0,"Max": 255}
+					]}
+				],
+				"NotUsed":
+				[]
+			},
+			"Estimator": 
+			{
+				"Used":
+				[	{"Name":"GMG", "Parameters":[
+					{"Type": "InitializationFrames","Min": 10,"Max": 30},
+					{"Type": "DecisionThreshold","Min": 1,"Max": 255}
+					]}
+				],
+				"NotUsed":[]
+			}
+		}
+		,
+		"MOG":
+		{
+			"Filter": 
+			{
+				"Used":
+				[
+					{"Name": "Threshold", "Parameters":[
+						{"Type": "ThresholdDecision","Min": 0,"Max": 255},
+						{"Type": "ThresholdTypes","Min": 0,"Max": 1},
+						{"Type": "ThresholdValue","Min": 0,"Max": 255}
+					]}
+				],
+				"NotUsed":
+				[]
+			},
+			"Estimator": 
+			{
+				"Used":
+				[	{"Name":"MOG", "Parameters":[
+					{"Type": "History","Min": 1,"Max": 200},
+					{"Type": "Nmixtures","Min": 1,"Max": 10},
+					{"Type": "BackgroundRatio","Min": 1,"Max": 100, "IsDouble": 100},
+					{"Type": "NoiseSigma","Min": 1,"Max": 100, "IsDouble": 100}
+					]}
+				],
+				"NotUsed":[]
+			}
+		},
+		"ViBe":
+		{
+			"Filter": 
+			{
+				"Used":
+				[
+					{"Name": "Threshold", "Parameters":[
+						{"Type": "ThresholdDecision","Min": 0,"Max": 255},
+						{"Type": "ThresholdTypes","Min": 0,"Max": 1},
+						{"Type": "ThresholdValue","Min": 0,"Max": 255}
+					]}
+				],
+				"NotUsed":
+				[]
+			},
+			"Estimator": 
+			{
+				"Used":
+				[	{"Name":"ViBe", "Parameters":[
+					{"Type": "NumberOfSamples","Min": 2,"Max": 40},
+					{"Type": "MatchingThreshold","Min": 2,"Max": 40},
+					{"Type": "MatchingNumber","Min": 1,"Max": 10},
+					{"Type": "UpdateFactor","Min": 2,"Max": 40}
 					]}
 				],
 				"NotUsed":[]
