@@ -26,6 +26,12 @@ configure_file(preprocess.json ${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE}/preproces
 
 configure_file(gtest/test_graph.json ${CMAKE_BINARY_DIR}/test_graph.json)
 configure_file(gtest/test_graph_config.json ${CMAKE_BINARY_DIR}/test_graph_config.json)
+configure_file(gtest/test_dataset.json ${CMAKE_BINARY_DIR}/test_dataset.json)
+configure_file(gtest/test_preprocess.json ${CMAKE_BINARY_DIR}/test_preprocess.json)
+configure_file(gtest/test_graph_postprocessing.json ${CMAKE_BINARY_DIR}/test_graph_postprocessing.json)
+configure_file(gtest/test_graph_config_postprocesssing.json ${CMAKE_BINARY_DIR}/test_graph_config_postprocesssing.json)
+configure_file(gtest/test_addmultipledron.json ${CMAKE_BINARY_DIR}/test_addmultipledron.json)
+
 
 #file(COPY test_images DESTINATION ${CMAKE_BINARY_DIR})
 
