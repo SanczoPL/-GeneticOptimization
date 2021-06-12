@@ -2,7 +2,7 @@
 	"General": 
 	{
 		"LogLevel": 2,
-		"ThreadsMax": 30,
+		"ThreadsMax": 60,
 		"Standalone": false
 	},
 	"Genetic":
