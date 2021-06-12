@@ -45,6 +45,7 @@ public:
 private:
 	void loadDataFromStream(cv::VideoCapture videoFromFile, std::vector<cv::Mat>& m_cleanData, bool resize);
 	bool configure(QJsonObject a_config);
+	void createSplit();
 
 signals:
   void memoryLoaded();

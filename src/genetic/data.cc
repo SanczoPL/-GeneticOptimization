@@ -45,13 +45,7 @@ DataMemory::DataMemory()
 	#ifdef DEBUG
 	Logger->debug("DataMemory::DataMemory()");
 	#endif
-	#ifdef _WIN32
-	m_split = "\\";
-	#endif // _WIN32
-	#ifdef __linux__
-	m_split = "/";
-	#endif // _UNIX
-
+	DataMemory::createSplit();
 }
 
 DataMemory::DataMemory(QJsonObject jDataset)
@@ -59,12 +53,7 @@ DataMemory::DataMemory(QJsonObject jDataset)
 	#ifdef DEBUG
 	Logger->debug("DataMemory::DataMemory()");
 	#endif
-	#ifdef _WIN32
-	m_split = "\\";
-	#endif // _WIN32
-	#ifdef __linux__
-	m_split = "/";
-	#endif // _UNIX
+	DataMemory::createSplit();
 	loadData(jDataset);
 }
 
@@ -74,6 +63,16 @@ void DataMemory::clearDataForNextIteration()
 {
 	m_data.clear();
 	m_outputData.clear();
+}
+
+void DataMemory::createSplit()
+{
+	#ifdef _WIN32
+	m_split = "\\";
+	#endif // _WIN32
+	#ifdef __linux__
+	m_split = "/";
+	#endif // _UNIX
 }
 
 bool DataMemory::preprocess(QJsonArray dataGraph)
@@ -95,7 +94,6 @@ bool DataMemory::preprocess(QJsonArray dataGraph)
 	
 	for (qint32 iteration = 0; iteration < m_cleanData.size(); iteration++)
 	{
-
 		if (iteration % 100 == 0)
 		{
 			Logger->info("DataMemory::preprocess() processing:{}/{} m_inputData.size():{}", iteration, m_cleanData.size(), m_inputData.size());
@@ -106,7 +104,6 @@ bool DataMemory::preprocess(QJsonArray dataGraph)
 		clearDataForNextIteration();
 		
 		// PROCESSING
-		
 		for (int i = 0; i < m_graph.size(); i++) 
 		{
 			std::vector<_data> dataVec;
@@ -118,8 +115,6 @@ bool DataMemory::preprocess(QJsonArray dataGraph)
 			{
 				m_graph_processing.loadInputs(_prevActive, dataVec, dataGraph, m_data);				
 			}
-
-
 			try
 			{
 				m_block[i]->process((dataVec));
@@ -129,9 +124,7 @@ bool DataMemory::preprocess(QJsonArray dataGraph)
 				const char* err_msg = e.what();
 				qDebug() << "exception caught: " << err_msg;
 			}
-
 			m_data.push_back((dataVec));
-
 			if (m_graph_processing.checkIfReturnData(_nextActive))
 			{
 				m_graph_processing.returnData(i, m_outputData, m_data);
@@ -145,8 +138,6 @@ bool DataMemory::preprocess(QJsonArray dataGraph)
 				cv::waitKey(0);
 			}
 			#endif
-			
-
 		}
 		if (m_outputData.size() > 1)
 		{
@@ -190,7 +181,6 @@ bool DataMemory::preprocess(QJsonArray dataGraph)
 bool DataMemory::configure(QJsonObject a_config)
 {
 	#ifdef DEBUG
-	Logger->debug("DataMemory::loadData()");
 	qDebug() << "DataMemory::loadData() a_config:"<< a_config;
 	#endif
 	#ifdef _WIN32

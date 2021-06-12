@@ -63,7 +63,8 @@ void FileLogger::clear()
 	}
 }
 
-void FileLogger::logJsonBest(QJsonObject json) {
+void FileLogger::logJsonBest(QJsonObject json)
+{
 	#ifdef DEBUG
 	qDebug() << "FileLogger::logJsonBest:" << json;
 	#endif
