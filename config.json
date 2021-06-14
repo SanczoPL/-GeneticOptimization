@@ -2,12 +2,12 @@
 	"General": 
 	{
 		"LogLevel": 2,
-		"ThreadsMax": 60,
+		"ThreadsMax": 12,
 		"Standalone": false
 	},
 	"Genetic":
 	{
-		"PopulationSize" : 60,
+		"PopulationSize" : 36,
 		"DronType" : "BLACK",
 		"GraphType" : "Graph_estimator",
 		"BoundsType" : "MOG2"
@@ -20,25 +20,12 @@
 		"Preprocess": "/home/gm/repo/GeneticOptimization/preprocess.json",
 		"Postprocess": "/home/gm/repo/GeneticOptimization/postprocess.json"
 	},
-	"DatasetLinux": 
+	"ConfigWin": 
 	{
-		"PathToDataset": "/home/gm/repo/datasets/NORM0010_1280x720_120/",
-      	"ConfigName": "config.json",
-
-		"GtDirectory": "/home/gm/repo/datasets/test1/gt",
-		"ImageDirectory": "/home/gm/repo/datasets/test1/images",
-		"JsonDirectory": "/home/gm/repo/datasets/test1/gt_json"
-	},
-	"ColorsForeground":
-	[
-		{"Name":"bird","GrayColor":220,"R":255,"G":255,"B":0,"A":100},
-		{"Name":"dron","GrayColor":255,"R":0,"G":255,"B":0,"A":100},
-		{"Name":"UAV","GrayColor":85,"R":0,"G":255,"B":255,"A":100},
-		{"Name":"person","GrayColor":170,"R":255,"G":0,"B":0,"A":100}
-	],
-	"ColorsBackground":
-	[ 
-		
-		{"Name":"background","GrayColor":0,"R":255,"G":255,"B":255,"A":100}
-	]
+		"Dataset": "E:\\repo\\GeneticOptimization\\dataset.json",
+		"Graph": "E:\\repo\\GeneticOptimization\\graph.json",
+		"Bounds": "E:\\repo\\GeneticOptimization\\bounds.json",
+		"Preprocess": "E:\\repo\\GeneticOptimization\\preprocess.json",
+		"Postprocess": "E:\\repo\\GeneticOptimization\\postprocess.json"
+	}
 }

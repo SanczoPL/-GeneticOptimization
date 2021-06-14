@@ -5,7 +5,22 @@
 
     "DatasetWin32": 
     {
-      "PathToDataset": "E:\\repo\\BigData\\NORM0004_1280x720x120\\",
+      "PathToDataset": "E:\\repo\\datasets\\NORM0010_1280x720_120\\",
+      "ConfigName": "config.json"
+    },
+    "DatasetLinux": 
+    {
+      "PathToDataset": "/home/gm/repo/datasets/NORM0010_1280x720_120/",
+      "ConfigName": "config.json"
+    }
+  },
+  "Graph_estimator_with_filters":
+  {
+    "FromVideo": true,
+
+    "DatasetWin32": 
+    {
+      "PathToDataset": "E:\\repo\\datasets\\NORM0010_1280x720_120\\",
       "ConfigName": "config.json"
     },
     "DatasetLinux": 
