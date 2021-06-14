@@ -7,7 +7,10 @@ set(CMAKE_BUILD_TYPE "Debug")
 #STNDARD STUFF
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${FLAGS_COMMON} -lX11" )
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${FLAGS_COMMON}" )
+if (UNIX)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lX11" )
+endif (UNIX)
 set(TARGET_NAME "GeneticOptimization")
 
 set(CMAKE_AUTOMOC ON)
@@ -42,26 +45,24 @@ include_directories( "ProcessingModules/include" )
 if (WIN32)
 	set(QT5_PATH  "E:\\Qt\\5.15.2\\msvc2019_64")
 	list(APPEND CMAKE_PREFIX_PATH ${QT5_PATH})
-	list(APPEND CMAKE_PREFIX_PATH "E:\\repo\\opencvBuild")
-	list(APPEND CMAKE_PREFIX_PATH "E:\\repo\\spdlog\\build\\install")
-	list(APPEND CMAKE_PREFIX_PATH "E:\\repo\\IncludeSpdlog\\build\\install")
-	list(APPEND CMAKE_PREFIX_PATH "E:\\repo\\ConfigReader\\build\\install")
-	list(APPEND CMAKE_PREFIX_PATH "E:\\repo\\Broadcaster\\build\\install")
+	list(APPEND CMAKE_PREFIX_PATH "E:\\repo\\opencvBuild\\")
 endif (WIN32)
 
 #list(APPEND CMAKE_PREFIX_PATH "include")
 #list(APPEND CMAKE_PREFIX_PATH "src")
 
+if (UNIX)
 find_package(X11 REQUIRED)
+endif (UNIX)
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
 find_package(Qt5Core REQUIRED)
 find_package(OpenCV REQUIRED)
 find_package(Qt5Test REQUIRED)
-#find_package(Qt5Widgets REQUIRED)
 find_package(Qt5Network REQUIRED)
 include_directories(${OpenCV_INCLUDE_DIRS})
-#find_package(Qt5OpenGL)
+find_package(OpenCV QUIET COMPONENTS core highgui imgproc imgcodecs videoio)
+
 
 enable_testing()
 
@@ -86,6 +87,7 @@ set(SRC_MAIN src/main.cc)
 
 set(SRC
 	src/genetic/data.cc
+	src/genetic/loaddata.cc
 	src/genetic/case.cc
 	src/genetic/genetic.cc
 	src/genetic/geneticoperation.cc
@@ -95,6 +97,7 @@ set(SRC
 
 set(HEADERS
 	include/genetic/data.h
+	include/genetic/loaddata.h
 	include/genetic/case.h
 	include/genetic/genetic.h
 	include/genetic/geneticoperation.h
@@ -104,16 +107,16 @@ set(HEADERS
 	)
 
 set(SRC_UTILS
-  src/utils/configreader.cc
-  src/utils/includespdlog.cc
-  src/utils/listvector.cc
-  src/utils/filelogger.cc
+	src/utils/configreader.cc
+	src/utils/includespdlog.cc
+	src/utils/listvector.cc
+	src/utils/filelogger.cc
 )
 set(HEADERS_UTILS
-  include/utils/configreader.h
-  include/utils/includespdlog.h
-  include/utils/listvector.h
-  include/utils/filelogger.h
+	include/utils/configreader.h
+	include/utils/includespdlog.h
+	include/utils/listvector.h
+	include/utils/filelogger.h
 )
 
 file(GLOB_RECURSE SRC_PROCESSING ProcessingModules/*.cc)
@@ -134,6 +137,8 @@ add_library(utils STATIC
 add_executable(${PROJECT_NAME}
     ${SRC_MAIN})
 
+message(" cv_libs:     " ${OpenCV_LIBS})
+message(" cv_includes: " ${OPENCV_INCLUDE_DIRS})
 
 file(GLOB_RECURSE SRC_HEADERS_TEST gtest/*.cc gtest/*.h)
 
@@ -142,14 +147,18 @@ add_executable(g_test ${SRC_HEADERS_TEST})
 target_link_libraries(utils ${QT_LIBRARIES} spdlog)
 target_link_libraries(utils Qt5::Core )
 
-target_link_libraries(${PROJECT_NAME}_lib ${QT_LIBRARIES} ${OpenCV_LIBS} Threads::Threads utils X11)
+target_link_libraries(${PROJECT_NAME}_lib ${QT_LIBRARIES} ${OpenCV_LIBS} Threads::Threads utils)
 target_link_libraries(${PROJECT_NAME}_lib Qt5::Core Qt5::Network)
+
+if (UNIX)
+target_link_libraries(${PROJECT_NAME}_libX11)
+endif (UNIX)
 
 target_link_libraries(${PROJECT_NAME} ${PROJECT_NAME}_lib ${QT_LIBRARIES} ${OpenCV_LIBS} Threads::Threads utils)
 target_link_libraries(${PROJECT_NAME} ${PROJECT_NAME}_lib Qt5::Core Qt5::Network )
 
 target_link_libraries(g_test ${PROJECT_NAME}_lib gtest gmock utils)
-target_link_libraries(g_test ${PROJECT_NAME}_lib Qt5::Core Threads::Threads )
+target_link_libraries(g_test ${PROJECT_NAME}_lib Qt5::Core Threads::Threads)
 
 
 message("CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE} ")
@@ -165,14 +174,7 @@ if (CMAKE_BUILD_TYPE STREQUAL "Release" AND WIN32)
 endif()
 
 
-if (WIN32)
-    get_target_property(QT5_QMAKE_EXECUTABLE Qt5::qmake IMPORTED_LOCATION)
-    get_filename_component(QT5_WINDEPLOYQT_EXECUTABLE ${QT5_QMAKE_EXECUTABLE} PATH)
-    set(QT5_WINDEPLOYQT_EXECUTABLE "${QT5_WINDEPLOYQT_EXECUTABLE}/windeployqt.exe")
-    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-       COMMAND ${QT5_WINDEPLOYQT_EXECUTABLE} --qmldir ${CMAKE_SOURCE_DIR} $<TARGET_FILE_DIR:${PROJECT_NAME}>)
 
-endif(WIN32)
 
 if (WIN32)
 	message("CMAKE_BINARY_DIR: ${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE} ")
@@ -187,7 +189,7 @@ if (WIN32)
 
 	add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 	COMMAND ${CMAKE_COMMAND} -E copy_if_different  ${QT5_PATH}/bin/Qt5Test${OPENCV_PREFIX_BUILD_TYPE}.dll   ${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE}/
-	@COMMAND ${CMAKE_COMMAND} -E copy_if_different  ${QT5_PATH}/bin/Qt5Gui${OPENCV_PREFIX_BUILD_TYPE}.dll   ${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE}/
+	COMMAND ${CMAKE_COMMAND} -E copy_if_different  ${QT5_PATH}/bin/Qt5Gui${OPENCV_PREFIX_BUILD_TYPE}.dll   ${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE}/
 	#COMMAND ${CMAKE_COMMAND} -E copy_if_different  ${QT5_PATH}/bin/Qt5Widgets${OPENCV_PREFIX_BUILD_TYPE}.dll   ${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE}/
 	COMMAND ${CMAKE_COMMAND} -E copy_if_different  ${OpenCV_DIR}/bin/${CMAKE_BUILD_TYPE}/opencv_stitching450${OPENCV_PREFIX_BUILD_TYPE}.dll   ${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE}/
 	COMMAND ${CMAKE_COMMAND} -E copy_if_different  ${OpenCV_DIR}/bin/${CMAKE_BUILD_TYPE}/opencv_bgsegm450${OPENCV_PREFIX_BUILD_TYPE}.dll   ${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE}/
