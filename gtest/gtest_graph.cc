@@ -28,6 +28,8 @@ namespace gtest_graph
 {
 	TEST_F(GTest_graph, test_load_graph_processing)
 	{
+
+		
 		Graph<Processing, _data> m_graph_processing;
 		std::vector<Processing*> m_block;
 		std::vector<PostProcess*> m_blockPostprocess;
@@ -42,7 +44,7 @@ namespace gtest_graph
 		QJsonObject m_dataset = GTest_graph::readConfig(TEST_DATASET);
 
 		DataMemory* m_dataMemory = new DataMemory();
-		m_dataMemory->loadData(m_dataset);
+		m_dataMemory->configure(m_dataset);
 		if(!m_dataMemory->preprocess(m_preprocess))
 		{
 			EXPECT_EQ(0,1);
@@ -118,7 +120,7 @@ namespace gtest_graph
 		QJsonObject m_dataset = GTest_graph::readConfig(TEST_DATASET);
 
 		DataMemory* m_dataMemory = new DataMemory();
-		m_dataMemory->loadData(m_dataset);
+		m_dataMemory->configure(m_dataset);
 		if(!m_dataMemory->preprocess(m_preprocess))
 		{
 			EXPECT_EQ(0,1);

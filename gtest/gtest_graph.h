@@ -8,6 +8,11 @@
 #include "utils/includespdlog.h"
 #include "utils/configreader.h"
 
+#include <opencv2/core.hpp>
+#include <opencv2/opencv.hpp>
+#include <opencv2/videoio.hpp>
+#include <opencv2/highgui.hpp>
+
 using ::testing::AtLeast;
 
 
