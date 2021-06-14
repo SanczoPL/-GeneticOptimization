@@ -7,13 +7,19 @@
 #include <QJsonArray>
 
 #include <opencv2/imgproc.hpp>
+#include <opencv2/core.hpp>
 #include <opencv2/opencv.hpp>
+#include <opencv2\opencv.hpp>
+#include <opencv2/videoio.hpp>
+#include <opencv2/highgui.hpp>
 #include "opencv2/highgui/highgui.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
+#include "opencv2/videoio.hpp"
 
 #include "processing.h"
 
 #include "genetic/graph.h"
+#include "genetic/loaddata.h"
 
 #include "utils/includespdlog.h"
 #include "utils/configreader.h"
@@ -25,7 +31,7 @@ public:
 	DataMemory();
 	DataMemory(QJsonObject jDataset);
 	~DataMemory();
-	bool loadData(QJsonObject jDataset);
+	void configure(QJsonObject a_config);
 	bool preprocess(QJsonArray m_dataGraph);
 	bool getLoad() { return m_loaded; };
 
@@ -44,16 +50,16 @@ public:
 
 private:
 	void loadDataFromStream(cv::VideoCapture videoFromFile, std::vector<cv::Mat>& m_cleanData, bool resize);
-	bool configure(QJsonObject a_config);
+	
 	void createSplit();
+	QVector<QString> scanAllImages(QString path);
+	void loadDataFromStreamWindows(std::vector<cv::Mat> &data, bool resize);
+	void loadDataLinux(QJsonObject a_config);
 
 signals:
   void memoryLoaded();
 
 private:
-	cv::VideoCapture m_videoFromFile;
-	cv::VideoCapture m_videoFromFileGT;
-
 	std::vector<cv::Mat> m_cleanData;
 	std::vector<cv::Mat> m_gtCleanData;
 
@@ -90,6 +96,8 @@ private:
 	QString m_split;
 
 	Graph<Processing, _data> m_graph_processing;
+
+	LoadData m_loadData;
 };
 
 #endif // DATAMEMORY_H

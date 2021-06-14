@@ -11,8 +11,8 @@ constexpr auto DRON_NOISE{ "Noise" };
 constexpr auto DRON_CONTRAST{ "Contrast" };
 constexpr auto DRON_TYPE{ "DronType" };
 
-#define DEBUG
-
+//#define DEBUG
+//#define DEBUG_CONFIG
 
 void MainLoop::readConfig(QString configName, QJsonObject& jObject, QString graphType)
 {
@@ -41,8 +41,9 @@ void MainLoop::readConfig(QString configName, QJsonArray& jArray, QString graphT
 
 void MainLoop::loadConfigs(QJsonObject configPaths, QString graphType, QString boundsType)
 {
-    Logger->trace("MainLoop::loadConfigs()");
-
+	#ifdef DEBUG_CONFIG
+    Logger->debug("MainLoop::loadConfigs()");
+	#endif
 	m_geneticConfigName.dataset = configPaths["Dataset"].toString();
 	m_geneticConfigName.graph = configPaths["Graph"].toString();
 	m_geneticConfigName.bounds = configPaths["Bounds"].toString();
@@ -57,7 +58,7 @@ void MainLoop::loadConfigs(QJsonObject configPaths, QString graphType, QString b
 
 	m_geneticConfig.bounds = m_geneticConfig.bounds[boundsType].toObject();
 
-	#ifdef DEBUG
+	#ifdef DEBUG_CONFIG
 		qDebug() << "MainLoop::loadConfigs() m_geneticConfig.dataset:" << m_geneticConfig.dataset;
 		qDebug() << "MainLoop::loadConfigs() m_geneticConfig.bounds:" << m_geneticConfig.bounds;
 	#endif
@@ -65,21 +66,24 @@ void MainLoop::loadConfigs(QJsonObject configPaths, QString graphType, QString b
 
 void MainLoop::createConfig(QJsonObject const& a_config)
 {
-	Logger->trace("MainLoop::createConfig()");
+	#ifdef DEBUG_CONFIG
+		Logger->debug("MainLoop::createConfig()");
+	#endif
+
     #ifdef _WIN32
     QJsonObject configPaths = a_config["ConfigWin"].toObject();
     #endif // _WIN32
     #ifdef __linux__
     QJsonObject configPaths = a_config["ConfigUnix"].toObject();
     #endif // __linux__
-	#ifdef DEBUG
+	#ifdef DEBUG_CONFIG
 		qDebug() << "MainLoop::createConfig(a_config) a_config:" << a_config;
 	#endif
 	
 	std::vector<QString> grafConfigs{"Graph_estimator_with_filters"};
 	//std::vector<QString> grafConfigs{"Graph_estimator_with_filters", "Graph_estimator"};
-	//std::vector<QString> dronConfigs{"BLACK", "BLACK_WHITE",  "WHITE"};
-	std::vector<QString> dronConfigs{  "WHITE"};
+	std::vector<QString> dronConfigs{"BLACK", "BLACK_WHITE",  "WHITE"};
+	//std::vector<QString> dronConfigs{  "WHITE"};
 	//std::vector<QString> boundConfigs{"ViBe", "MOG2", "CNT", "NONE", "MOG", "KNN", "GMG"};
 
 	//std::vector<QString> boundConfigs{"ViBe"};
@@ -96,16 +100,15 @@ void MainLoop::createConfig(QJsonObject const& a_config)
 				obj[BOUNDS_TYPE] = boundConfigs[bounds];
 				obj[DRON_TYPE] = dronConfigs[dron];
 				obj[GRAPH_TYPE] = grafConfigs[graf];
-				//qDebug() << "boundConfigs:" <<boundConfigs[bounds]; 
-				qDebug() << "genetic:" << obj; 
+				#ifdef DEBUG_CONFIG
+					qDebug() << "genetic:" << obj; 
+				#endif
 				m_config[GENETIC] = obj;
-				
 				m_geneticConfig.config = m_config;
 				
-				MainLoop::loadConfigs(configPaths, m_graphType, boundConfigs[bounds]);
+				MainLoop::loadConfigs(configPaths, grafConfigs[graf], boundConfigs[bounds]);
 
 				//fill dron config:
-
 				for (int i = 0; i < 101; i += 10)
 				{
 					for(int j = 0 ; j < m_geneticConfig.preprocess.size() ; j++)
@@ -123,9 +126,11 @@ void MainLoop::createConfig(QJsonObject const& a_config)
 							obj[CONFIG] = config;
 							arrObj[j] = obj;
 							m_geneticConfig.preprocess = arrObj;
+							#ifdef DEBUG_CONFIG
 							qDebug() << "config[DRON_NOISE]:" << config[DRON_NOISE];
 							qDebug() << "config[DRON_CONTRAST]:" << config[DRON_CONTRAST];
 							qDebug() << "config[DRON_TYPE]:" << config[DRON_TYPE];
+							#endif
 						}
 					}
 					m_geneticConfigs.push_back(m_geneticConfig);
@@ -133,7 +138,9 @@ void MainLoop::createConfig(QJsonObject const& a_config)
 			}
 		}
 	}
-	Logger->info("MainLoop::createConfig() createConfig() m_geneticConfigs.size():{}", m_geneticConfigs.size());
+	#ifdef DEBUG_CONFIG
+	Logger->debug("MainLoop::createConfig() createConfig() m_geneticConfigs.size():{}", m_geneticConfigs.size());
+	#endif
 }
 
 void MainLoop::createStartupThreads()
@@ -250,7 +257,7 @@ void MainLoop::onUpdate()
 		m_validTask = true;
 		if (m_geneticConfigs.size() > 0)
 		{
-			m_dataMemory->loadData(m_geneticConfigs[0].dataset);
+			m_dataMemory->configure(m_geneticConfigs[0].dataset);
 		}
 	}
 

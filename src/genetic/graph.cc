@@ -43,7 +43,6 @@ void Graph<T, T_data>::loadGraph(QJsonArray &a_graph, std::vector<T*> &a_block)
 	#ifdef DEBUG_POST_PROCESSING
 		Logger->debug("Graph<T, T_data>::loadGraph(graph, config, block)");
 		qDebug()<< "a_graph:" << a_graph;
-
 	#endif
 
 	a_block.clear();
@@ -61,7 +60,9 @@ void Graph<T, T_data>::loadGraph(QJsonArray &a_graph, std::vector<T*> &a_block)
 template<typename T, typename T_data>
 bool Graph<T, T_data>::checkIfLoadInputs(const QJsonArray & prevActive, std::vector<T_data> & dataVec, cv::Mat &input)
 {
-	Logger->trace("Graph<T, T_data>::checkIfLoadInputs() ");
+	#ifdef DEBUG
+	Logger->debug("Graph<T, T_data>::checkIfLoadInputs()");
+	#endif
 	bool _flagNotStart{true};
 	for (int j = 0; j < prevActive.size(); j++)
 	{
@@ -72,14 +73,18 @@ bool Graph<T, T_data>::checkIfLoadInputs(const QJsonArray & prevActive, std::vec
 			dataVec.push_back(data);
 		}
 	}
-	Logger->trace("Graph<T, T_data>::checkIfLoadInputs() return:{}", _flagNotStart);
+	#ifdef DEBUG
+	Logger->debug("Graph<T, T_data>::checkIfLoadInputs() return:{}", _flagNotStart);
+	#endif
 	return _flagNotStart;
 }
 
 template<typename T, typename T_data>
 bool Graph<T, T_data>::checkIfLoadInputs(const QJsonArray & prevActive, std::vector<T_data> & dataVec, std::vector<cv::Mat> &input, int i)
 {
-	Logger->trace("Graph<T, T_data>::checkIfLoadInputs()");
+	#ifdef DEBUG
+	Logger->debug("Graph<T, T_data>::checkIfLoadInputs()");
+	#endif
 	bool _flagNotStart{true};
 	for (int j = 0; j < prevActive.size(); j++)
 	{
@@ -91,9 +96,15 @@ bool Graph<T, T_data>::checkIfLoadInputs(const QJsonArray & prevActive, std::vec
 				T_data data{ input[i].clone(), "temp1" };
 				dataVec.push_back(data);
 			}
+			else
+			{
+				Logger->error("input too short:{}", i);
+			}
 		}
 	}
-	Logger->trace("Graph<T, T_data>::checkIfLoadInputs() return:{}", _flagNotStart);
+	#ifdef DEBUG
+	Logger->debug("Graph<T, T_data>::checkIfLoadInputs() return:{}", _flagNotStart);
+	#endif
 	return _flagNotStart;
 }
 
@@ -108,6 +119,7 @@ void Graph<T, T_data>::loadInputs(const QJsonArray &prevActive, std::vector<T_da
 		qDebug()<< "prevActive:" << prevActive;
 		qDebug()<< "a_graph:" << a_graph;
 	#endif
+
 	for (int prevIter = 0; prevIter < prevActive.size(); prevIter++)
 	{
 		int _prevIterator = prevActive[prevIter].toObject()[ACTIVE].toInt();
@@ -117,26 +129,44 @@ void Graph<T, T_data>::loadInputs(const QJsonArray &prevActive, std::vector<T_da
 			Logger->error("Graph<T, T_data>::loadInputs() load unsupported graph: _prevIterator:{}, signalToCopy:{}", 
 			_prevIterator, signalToCopy);
 		}
+		#ifdef DEBUG
+			Logger->debug("Graph<T, T_data>::loadInputs() _prevIterator:{}", _prevIterator);
+			qDebug()<< "a_graph[_prevIterator].toObject():" << a_graph[_prevIterator].toObject();
+			qDebug()<< "a_graph[_prevIterator].toObject()[NEXT].toArray():" << a_graph[_prevIterator].toObject()[NEXT].toArray();
+		#endif
 		const QJsonArray _nextActivePrevArray = a_graph[_prevIterator].toObject()[NEXT].toArray();
+		#ifdef DEBUG
+		qDebug()<<  "_nextActivePrevArray:" << _nextActivePrevArray;
+		#endif
 		if (_nextActivePrevArray.size() > 1)
 		{
 			T_data data;
 			data = a_data[_prevIterator][signalToCopy];
 			data.processing = a_data[_prevIterator][signalToCopy].processing.clone();
 			dataVec.push_back(data);
+			#ifdef DEBUG
+			Logger->debug("Graph<T, T_data>::loadInputs() copy()");
+			#endif
 		}
 		else
 		{
+			#ifdef DEBUG
+			Logger->debug("Graph<T, T_data>::loadInputs() move()");
+			#endif
 			dataVec.push_back(std::move(a_data[_prevIterator][signalToCopy]));
 		}
 	}
-	Logger->trace("Graph<T, T_data>::loadInputs() done");
+	#ifdef DEBUG
+	Logger->debug("Graph<T, T_data>::loadInputs() done");
+	#endif
 }
 
 template<typename T, typename T_data>
 bool Graph<T, T_data>::checkIfReturnData(const QJsonArray &nextActive)
 {
-	Logger->trace("Graph<T, T_data>::checkIfReturnData()");
+	#ifdef DEBUG
+	Logger->debug("Graph<T, T_data>::checkIfReturnData()");
+	#endif
 	bool _flagReturnData{false};
 	for (int j = 0; j < nextActive.size(); j++)
 	{
@@ -145,7 +175,9 @@ bool Graph<T, T_data>::checkIfReturnData(const QJsonArray &nextActive)
 			_flagReturnData = true;
 		}
 	}
-	Logger->trace("Graph<T, T_data>::checkIfReturnData() return:{}", _flagReturnData);
+	#ifdef DEBUG
+	Logger->debug("Graph<T, T_data>::checkIfReturnData() return:{}", _flagReturnData);
+	#endif
 	return _flagReturnData;
 }
 

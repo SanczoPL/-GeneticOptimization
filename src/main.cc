@@ -7,7 +7,12 @@
 #include "genetic/mainloop.h"
 #include "postprocessing.h"
 
+#ifdef __linux__
 #include <X11/Xlib.h>
+#endif // __linux__
+#ifdef _WIN32
+#endif // _WIN32
+
 
 constexpr auto CONFIG{ "config.json" };
 constexpr auto PREPROCESS{ "preprocess.json" };
@@ -21,7 +26,12 @@ QJsonObject readConfig(QString name);
 
 int main(int argc, char* argv[])
 {
+	
+	#ifdef __linux__
 	XInitThreads();
+	#endif // __linux__
+	#ifdef _WIN32
+	#endif // _WIN32
 	QCoreApplication app(argc, argv);
 	
 	qRegisterMetaType<fitness>("fitness");

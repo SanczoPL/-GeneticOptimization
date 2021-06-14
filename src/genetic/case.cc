@@ -4,6 +4,8 @@
 //#define DEBUG 
 //#define DEBUG_CASE
 //#define DEBUG_SINGLE_CASE
+//#define DEBUG_OPENCV
+//#define DEBUG_POSTPROCESSING
 
 constexpr auto GRAPH{ "Graph" };
 constexpr auto NAME{ "Name" };
@@ -27,6 +29,9 @@ void Case::onUpdate() {}
 
 void Case::configure(QJsonArray a_graph, QJsonArray a_config, QJsonArray a_postprocess)
 {
+	#ifdef DEBUG
+	Logger->debug("Case::configure() change()");
+	#endif
 	m_graph_config = a_graph;
 	m_config = a_config;
 	m_postprocess_config = a_postprocess;
@@ -121,8 +126,9 @@ fitness Case::process()
 			const QJsonObject _obj = m_graph_config[i].toObject();
 			const QJsonArray _prevActive = _obj[PREV].toArray();
 			const QJsonArray _nextActive = _obj[NEXT].toArray();
-
-
+			#ifdef DEBUG_CASE
+			Logger->info("Case::process() i:{}, _prevActive.size:{}", i, _prevActive.size());
+			#endif	
 			if (m_graph_processing.checkIfLoadInputs(_prevActive, dataVec, input))
 			{
 				m_graph_processing.loadInputs(_prevActive, dataVec, m_graph_config, m_data);		
@@ -160,45 +166,55 @@ fitness Case::process()
 		cv::Mat inputImage = m_dataMemory->input(iteration).clone();
 		m_outputData.push_back(inputImage.clone());
 		#ifdef DEBUG_CASE
-			Logger->debug("Case::process() m_outputData.size():{}", m_outputData.size());
 			if(m_outputData.size() != 2 )
 			{
 				Logger->error("Case::process() m_outputData.size():{}", m_outputData.size());
 			}
+			Logger->info("Case::process() postprocess iteration:{}, m_outputData.size:{}", iteration, m_outputData.size());
 		#endif
 		
-		#ifdef DEBUG
-		cv::imshow("output", m_outputData[0]);
-		cv::imshow("gt-case", m_outputData[1]);
-		cv::waitKey(1);
+		#ifdef DEBUG_OPENCV
+			cv::imshow("output", m_outputData[0]);
+			cv::imshow("gt-case", m_outputData[1]);
+			cv::imshow("input", m_outputData[2]);
+			cv::waitKey(1);
 		#endif
-
+		
 		if (iteration>50)
 		{
 			// POSTPROCESSING:
 			m_dataPostprocess.clear();
 
-			#ifdef DEBUG_CASE
+			#ifdef DEBUG_POSTPROCESSING
 				Logger->debug("Case::process() graph[{}] PostProcessing:", iteration);
 			#endif
 			for (int i = 0; i < m_postprocess_config.size(); i++)
 			{
-				//qDebug() << "loop1 : m_dataPostprocess["<< i << "].testStr:" << m_dataPostprocess[i].testStr;
+				#ifdef DEBUG_POSTPROCESSING
+				qDebug() << "m_postprocess_config[i]:" << m_postprocess_config[i];
+				for (int z = 0; z < m_dataPostprocess.size(); z++)
+				{
+					for (int zz = 0; zz < m_dataPostprocess[z].size(); zz++)
+					{
+						Logger->debug("post [{}][{}].():{}", z, zz, m_dataPostprocess[z][zz].processing.cols);
+					}
+				}
+				#endif
+
 				std::vector<_postData> dataVec;
 				const QJsonObject _obj = m_postprocess_config[i].toObject();
 				const QJsonArray _prevActive = _obj[PREV].toArray();
 				const QJsonArray _nextActive = _obj[NEXT].toArray();
-				bool _flagNotStart = true;
-				bool _flagReturnData = false;
-
+				#ifdef DEBUG_POSTPROCESSING
+				Logger->debug("Case::process() postprocess i:{}, _prevActive.size:{}", i, _prevActive.size());
+				#endif
 				if (m_graph_postprocessing.checkIfLoadInputs(_prevActive, dataVec, m_outputData, i))
 				{
 					m_graph_postprocessing.loadInputs(_prevActive, dataVec, m_graph_config, m_dataPostprocess);				
 				}
-
 				try
 				{
-					#ifdef DEBUG_CASE
+					#ifdef DEBUG_POSTPROCESSING
 					Logger->debug("Case::process() graph[{}] postProcessing: block[{}]->process", iteration, i);
 					#endif
 					m_blockPostprocess[i]->process((dataVec));
@@ -212,17 +228,16 @@ fitness Case::process()
 			}
 		}
 	}
-	#ifdef DEBUG_CASE
+	#ifdef DEBUG_POSTPROCESSING
 	for (int z = 0; z < m_dataPostprocess.size(); z++)
 	{
 		for (int zz = 0; zz < m_dataPostprocess[z].size(); zz++)
 		{
 			Logger->debug("pre [{}][{}].():{}", z, zz, m_dataPostprocess[z][zz].processing.cols);
 		}
-
 	}
 	#endif
-	#ifdef DEBUG_CASE
+	#ifdef DEBUG_POSTPROCESSING
 	Logger->debug("Case::process() Calculate fitness:");
 	#endif
 	struct fitness fs;
@@ -232,25 +247,24 @@ fitness Case::process()
 		QString _type = _obj[TYPE].toString();
 		if (_type == "Fitness")
 		{
-			#ifdef DEBUG_CASE
+			#ifdef DEBUG_POSTPROCESSING
 			Logger->debug("Case::process() Calculate Fitness endProcess:");
 			#endif
 			m_blockPostprocess[i]->endProcess(m_dataPostprocess[i]);
 			fs = m_dataPostprocess[i][0].fs;
-			#ifdef DEBUG_CASE
+			#ifdef DEBUG_POSTPROCESSING
 			Logger->debug("Case::process() fs:{}", fs.fitness);
 			#endif
 		}
 		if (_type == "Encoder")
 		{
-			#ifdef DEBUG_CASE
+			#ifdef DEBUG_POSTPROCESSING
 			Logger->debug("Case::process() Calculate Encoder endProcess:");
 			#endif
 			m_blockPostprocess[i]->endProcess(m_dataPostprocess[i]);
-			//fs = m_dataPostprocess[i][0].fs;
 		}
 	}
-	#ifdef DEBUG_CASE
+	#ifdef DEBUG_POSTPROCESSING
 	for (int z = 0; z < m_dataPostprocess.size(); z++)
 	{
 		for (int zz = 0; zz < m_dataPostprocess[z].size(); zz++)
@@ -279,7 +293,7 @@ fitness Case::process()
 	m_outputData.clear();
 	m_outputDataVector.clear();*/
 
-	#ifdef DEBUG__CASE
+	#ifdef DEBUG_CASE
 		qDebug() << "fitness.fitness:" << fs.fitness;
 	#endif
 
