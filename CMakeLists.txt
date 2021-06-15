@@ -4,6 +4,8 @@ project(GeneticOptimization VERSION 3.0 DESCRIPTION "GeneticOptimization v3.0 Wi
 set(DEFAULT_BUILD_TYPE "Release")
 set(CMAKE_BUILD_TYPE "Debug")
 
+
+
 #STNDARD STUFF
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -20,20 +22,22 @@ set(CMAKE_AUTOUIC ON)
 file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}")
 
+macro(copy_json jsonname)
+	configure_file(${jsonname} ${CMAKE_BINARY_DIR}/${jsonname})
+	configure_file(${jsonname} ${CMAKE_BUILD_TYPE}/${jsonname})
+	configure_file(${jsonname} ${CMAKE_BINARY_DIR}${CMAKE_BUILD_TYPE}/${jsonname})
+endmacro()
 
-configure_file(config.json ${CMAKE_BINARY_DIR}/config.json)
-configure_file(config.json ${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE}/config.json)
-
-configure_file(preprocess.json ${CMAKE_BINARY_DIR}/preprocess.json)
-configure_file(preprocess.json ${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE}/preprocess.json)
-
-configure_file(gtest/test_graph.json ${CMAKE_BINARY_DIR}/test_graph.json)
-configure_file(gtest/test_graph_config.json ${CMAKE_BINARY_DIR}/test_graph_config.json)
-configure_file(gtest/test_dataset.json ${CMAKE_BINARY_DIR}/test_dataset.json)
-configure_file(gtest/test_preprocess.json ${CMAKE_BINARY_DIR}/test_preprocess.json)
-configure_file(gtest/test_graph_postprocessing.json ${CMAKE_BINARY_DIR}/test_graph_postprocessing.json)
-configure_file(gtest/test_graph_config_postprocesssing.json ${CMAKE_BINARY_DIR}/test_graph_config_postprocesssing.json)
-configure_file(gtest/test_addmultipledron.json ${CMAKE_BINARY_DIR}/test_addmultipledron.json)
+copy_json("config.json")
+copy_json("preprocess.json")
+copy_json("gtest/test.json")
+copy_json("gtest/test_graph.json")
+copy_json("gtest/test_graph_config.json")
+copy_json("gtest/test_dataset.json")
+copy_json("gtest/test_preprocess.json")
+copy_json("gtest/test_graph_postprocessing.json")
+copy_json("gtest/test_graph_config_postprocesssing.json")
+copy_json("gtest/test_addmultipledron.json")
 
 
 #file(COPY test_images DESTINATION ${CMAKE_BINARY_DIR})
