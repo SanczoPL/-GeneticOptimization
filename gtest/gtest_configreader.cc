@@ -1,6 +1,8 @@
 #include "gtest_configreader.h"
 
-constexpr auto CONFIG{ "test.json" };
+//#define DEBUG_CONFIG
+
+constexpr auto CONFIG{ "gtest/test.json" };
 constexpr auto TEST_DATA{ "TestData" };
 
 using ::testing::AtLeast;
@@ -15,7 +17,9 @@ namespace gtest_configreader {
         ConfigReader * _configreader = new ConfigReader();
         QJsonObject obj{};
         _configreader->readConfig(CONFIG, obj);
+        #ifdef DEBUG_CONFIG
         qDebug() << "obj:" << obj;
+        #endif
         
         EXPECT_EQ (obj[TEST_DATA], 123);
     }

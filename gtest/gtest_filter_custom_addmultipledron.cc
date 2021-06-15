@@ -4,7 +4,7 @@
 #include "../ProcessingModules/src/Filter/filter.h"
 #include "../ProcessingModules/src/Filter/filterlist.h"
 
-constexpr auto CONFIG{ "test_addmultipledron.json" };
+constexpr auto CONFIG{ "gtest/test_addmultipledron.json" };
 constexpr auto TEST_DATA{ "TestData" };
 
 using ::testing::AtLeast;
@@ -46,4 +46,5 @@ namespace gtest_filter_custom_addmultipledron {
 	{
 
 	}
+	
 }  // namespace gtest_filter_custom_addmultipledron

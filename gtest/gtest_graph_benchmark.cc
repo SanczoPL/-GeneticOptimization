@@ -1,13 +1,13 @@
 #include "gtest_graph_benchmark.h"
 
-constexpr auto TEST_GRAPH_CONFIG{ "test_graph_config.json" };
-constexpr auto TEST_GRAPH_CONFIG_POSTPROCESSING{ "test_graph_config_postprocesssing.json" };
-constexpr auto TEST_GRAPH{ "test_graph.json" };
-constexpr auto TEST_GRAPH_POSTPROCESSING{ "test_graph_postprocessing.json" };
+constexpr auto TEST_GRAPH_CONFIG{ "gtest/test_graph_config.json" };
+constexpr auto TEST_GRAPH_CONFIG_POSTPROCESSING{ "gtest/test_graph_config_postprocesssing.json" };
+constexpr auto TEST_GRAPH{ "gtest/test_graph.json" };
+constexpr auto TEST_GRAPH_POSTPROCESSING{ "gtest/test_graph_postprocessing.json" };
 constexpr auto TEST_DATA{ "TestData" };
 constexpr auto GRAPH{ "Graph" };
-constexpr auto TEST_DATASET{ "test_dataset.json" };
-constexpr auto TEST_PREPROCESS{ "test_preprocess.json" };
+constexpr auto TEST_DATASET{ "gtest/test_dataset.json" };
+constexpr auto TEST_PREPROCESS{ "gtest/test_preprocess.json" };
 
 constexpr auto NAME{ "Name" };
 constexpr auto ACTIVE{ "Active" };
@@ -22,12 +22,17 @@ constexpr auto HEIGHT{ "Height" };
 using ::testing::AtLeast;
 
 //#define DEBUG_GRAPH
+//#define DEBUG_CONFIG
 
 
 namespace gtest_graph_benchmark
 {
 	TEST_F(GTest_graph_benchmark, test_load_graph_processing)
 	{
+		cv::TickMeter m_timer;
+		m_timer.start();
+  
+
 		Graph<Processing, _data> m_graph_processing;
 		std::vector<Processing*> m_block;
 		std::vector<PostProcess*> m_blockPostprocess;
@@ -36,10 +41,10 @@ namespace gtest_graph_benchmark
 
 		Logger->set_level(static_cast<spdlog::level::level_enum>(3));
 		
-		QJsonArray m_graph_config = GTest_graph::readArray(TEST_GRAPH);
-		QJsonArray m_config = GTest_graph::readArray(TEST_GRAPH_CONFIG);
-		QJsonArray m_preprocess = GTest_graph::readArray(TEST_PREPROCESS);
-		QJsonObject m_dataset = GTest_graph::readConfig(TEST_DATASET);
+		QJsonArray m_graph_config = GTest_graph_benchmark::readArray(TEST_GRAPH);
+		QJsonArray m_config = GTest_graph_benchmark::readArray(TEST_GRAPH_CONFIG);
+		QJsonArray m_preprocess = GTest_graph_benchmark::readArray(TEST_PREPROCESS);
+		QJsonObject m_dataset = GTest_graph_benchmark::readConfig(TEST_DATASET);
 
 		DataMemory* m_dataMemory = new DataMemory();
 		m_dataMemory->configure(m_dataset);
@@ -101,6 +106,9 @@ namespace gtest_graph_benchmark
 			}
 			#endif
 		}
+		m_timer.stop();
+		double time = m_timer.getTimeMilli();
+  		Logger->critical("test_load_graph_processing:{:f}", time);
 	}
 
 
@@ -111,10 +119,12 @@ namespace gtest_graph_benchmark
 		QJsonObject jObject;
 		if (!cR->readConfig(configName, jObject))
 		{
-			Logger->error("File {} read confif failed", configName.toStdString());
+			Logger->error("File {} read config failed", configName.toStdString());
 			EXPECT_EQ(0,1);
 		}
-		qDebug() << name << ":" << jObject << "\n";
+		#ifdef DEBUG_CONFIG
+		qDebug() << name << ":" << jObject <<  "\n";
+		#endif
 		return jObject;
 	}
 
@@ -125,11 +135,12 @@ namespace gtest_graph_benchmark
 		QJsonArray jarray;
 		if (!cR->readConfig(configName, jarray))
 		{
-			Logger->error("File {} read confif failed", configName.toStdString());
+			Logger->error("File {} read config failed", configName.toStdString());
 			EXPECT_EQ(0,1);
-			
 		}
+		#ifdef DEBUG_CONFIG
 		qDebug() << name << ":" << jarray <<  "\n";
+		#endif
 		return jarray;
 	}
 
