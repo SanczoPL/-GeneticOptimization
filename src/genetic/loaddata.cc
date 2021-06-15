@@ -12,7 +12,7 @@ constexpr auto STOP_GT{"StopGT"};
 constexpr auto PATH_TO_DATASET{ "PathToDataset" };
 constexpr auto CONFIG_NAME{ "ConfigName" };
 
-#define DEBUG
+//#define DEBUG
 //#define DEBUG_PREPROCESS
 //#define DEBUG_OPENCV
 
