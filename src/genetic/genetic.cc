@@ -22,6 +22,9 @@ constexpr auto LOGS_FOLDER{ "LogsFolder" };
 
 constexpr auto CONFIG_UNIX{ "ConfigUnix" };
 constexpr auto CONFIG_WIN{ "ConfigWin" };
+constexpr auto SAVE_BEST_POPULATION_VIDEO{ "SaveBestPopulationVideo" };
+constexpr auto FITNESS_THRESHOLD{ "FitnessThreshold" };
+
 
 
 Genetic::~Genetic()
@@ -34,7 +37,8 @@ Genetic::Genetic(QVector<Case*> testCaseVector, DataMemory* data)
 	m_dataMemory(data),
 	m_randomGenerator{ new QRandomGenerator(123) },
 	m_configured{ false },
-	m_iterationGlobal{0}
+	m_iterationGlobal{0},
+	m_saveBestPopulationVideo(false)
 {
 	#ifdef DEBUG
 	Logger->debug("Genetic::Genetic()");
@@ -131,12 +135,13 @@ void Genetic::clearData()
 
 void Genetic::loadFromConfig(QJsonObject const& a_config)
 {
+	auto genetic = a_config[GENETIC].toObject();
 	m_resultsPath = a_config[RESULTS].toObject()[RESULTS_PATH].toString();
-	m_populationSize = a_config[GENETIC].toObject()[POPULATION_SIZE].toInt();
-	m_graphType = a_config[GENETIC].toObject()[GRAPH_TYPE].toString();
-	m_boundsType = a_config[GENETIC].toObject()[BOUNDS_TYPE].toString();
-	m_dronType = a_config[GENETIC].toObject()[DRON_TYPE].toString();
-	m_logsFolder = a_config[GENETIC].toObject()[LOGS_FOLDER].toString();
+	m_populationSize = genetic[POPULATION_SIZE].toInt();
+	m_graphType = genetic[GRAPH_TYPE].toString();
+	m_boundsType = genetic[BOUNDS_TYPE].toString();
+	m_dronType = genetic[DRON_TYPE].toString();
+	m_logsFolder = genetic[LOGS_FOLDER].toString();
 
 	#ifdef _WIN32
     QJsonObject configPaths = a_config[CONFIG_WIN].toObject();
@@ -145,6 +150,10 @@ void Genetic::loadFromConfig(QJsonObject const& a_config)
     QJsonObject configPaths = a_config[CONFIG_UNIX].toObject();
     #endif // __linux__
 	m_logsFolder = configPaths[LOGS_FOLDER].toString();
+
+	m_saveBestPopulationVideo = genetic[SAVE_BEST_POPULATION_VIDEO].toBool();
+	m_fitnessThreshold = genetic[FITNESS_THRESHOLD].toDouble();
+
 }
 void Genetic::onSignalOk(struct fitness fs, qint32 slot)
 {
@@ -227,15 +236,6 @@ void Genetic::iteration()
 		qDebug() << "before:" << endl<< " men " << man << ":" << m_geneticOperation.m_vectorBits[man][0];
 		#endif
 		int y = m_randomGenerator->bounded(0, m_probAll);
-		if (y >= 0 && y < m_probMutate)
-		{
-			m_geneticOperation.mutate(man);
-			#ifdef GENETIC_OPERATION_DEBUG
-			Logger->debug("men[{}] has mutate", man);
-			#endif
-			
-		}
-		y -= m_probMutate;
 		if (y >= 0 && y < m_probCrossover)
 		{
 			m_geneticOperation.crossover(man);
@@ -244,6 +244,16 @@ void Genetic::iteration()
 			#endif
 		}
 		y -= m_probCrossover;
+
+		if (y >= 0 && y < m_probMutate)
+		{
+			m_geneticOperation.mutate(man);
+			#ifdef GENETIC_OPERATION_DEBUG
+			Logger->debug("men[{}] has mutate", man);
+			#endif
+		}
+		y -= m_probMutate;
+		
 		if (y >= 0 && y < m_probGradient)
 		{
 			if (m_geneticOperation.gradient(man))
@@ -287,20 +297,29 @@ void Genetic::iteration()
 	logPopulation();
 
 
-	if ((m_bestNotChange >= 100) || m_geneticOperation.m_fitness[m_populationSize].fitness >= 3.99 )
+	if ((m_bestNotChange >= 100) || m_geneticOperation.m_fitness[m_populationSize].fitness >= m_fitnessThreshold)
 	{
-		// log the best guy: TODO:
-		#ifdef DEBUG
-		qDebug() << "m_geneticOperation.m_vectorBits[m_populationSize][0].toObject():" << 
-					m_geneticOperation.m_vectorBits[m_populationSize][0].toObject();
-		#endif
+		handleBestPopulation();
+		emit(newConfig()); // Send to mainloop that genetic finished work.
+	}
 
-		QJsonObject fromArray{ { "Best", m_geneticOperation.m_vectorBits[m_populationSize] }, 
-			{ "Config", m_graph}, {GENETIC, m_config[GENETIC].toObject()} };
+}
 
-		emit(logJsonBest(fromArray));
-		m_timer.stop();
+void Genetic::handleBestPopulation()
+{
+	#ifdef DEBUG
+	qDebug() << "m_geneticOperation.m_vectorBits[m_populationSize][0].toObject():" << 
+				m_geneticOperation.m_vectorBits[m_populationSize][0].toObject();
+	#endif
 
+	QJsonObject fromArray{ { "Best", m_geneticOperation.m_vectorBits[m_populationSize] }, 
+		{ "Config", m_graph}, {GENETIC, m_config[GENETIC].toObject()} };
+
+	emit(logJsonBest(fromArray));
+	m_timer.stop();
+
+	if(m_saveBestPopulationVideo)
+	{
 		//special test case:
 		for(int i = 0 ; i < m_postprocess.size() ; i++)
 		{
@@ -315,12 +334,11 @@ void Genetic::iteration()
 				qDebug() << "m_postprocess[i][CONFIG]:" << m_postprocess[i].toObject()[CONFIG];
 			}
 		}
-		
-		m_testCaseBest->onConfigureAndStart(m_graph, 
-					m_geneticOperation.m_vectorBits[m_populationSize], m_postprocess);
-		emit(newConfig()); // Send to mainloop that genetic finished work.
+
+		m_testCaseBest->onConfigureAndStart(m_graph, m_geneticOperation.m_vectorBits[m_populationSize], m_postprocess);
 	}
 }
+	
 
 void Genetic::logPopulation()
 {

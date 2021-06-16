@@ -14,8 +14,7 @@
 #endif // _WIN32
 
 
-constexpr auto CONFIG{ "config.json" };
-constexpr auto PREPROCESS{ "preprocess.json" };
+constexpr auto CONFIG{ "configs/config.json" };
 constexpr auto LOG_LEVEL{ "LogLevel" };
 constexpr auto GENERAL{ "General" };
 constexpr auto PID{ "Pid" };
@@ -41,7 +40,6 @@ int main(int argc, char* argv[])
 	Logger->set_pattern("[%Y-%m-%d] [%H:%M:%S.%e] [%t] [%^%l%$] %v");
 
 	QJsonObject config = readConfig(QString::fromStdString(CONFIG));
-	QJsonObject preConfig = readConfig(QString::fromStdString(PREPROCESS));
 	intro();
 	qint32 messageLevel{ config[GENERAL].toObject()[LOG_LEVEL].toInt() };
 	Logger->debug("messageLevel:{}", messageLevel);

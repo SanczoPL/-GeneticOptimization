@@ -44,6 +44,7 @@ public:
 
 private:
 	void createThreads();
+	void configure(QJsonObject const& a_config);
 	void createStartupThreads();
 	void getHostName();
 	void readConfig(QString configName, QJsonObject& jObject, QString graphType);
@@ -67,11 +68,6 @@ public slots:
 	void onQuit();
 	void onMemoryLoaded();
 	void onGeneticConfigured();
-	void configure(QJsonObject const& a_config);
-	void onCase(QJsonObject json);
-	void on_broadcast();
-	void on_register(QJsonObject json);
-	void on_task(QJsonObject json);
 	void onNextConfig();
 
 private:
@@ -103,6 +99,11 @@ private:
 	QJsonObject m_bounds;
 	QJsonObject m_preprocess;
 	QJsonObject m_postprocess;
+	QJsonObject m_configPaths;
+
+	QJsonArray m_graphTypes;
+	QJsonArray m_boundsTypes;
+	QJsonArray m_dronTypes;
 
 	bool m_standalone;
 
@@ -125,6 +126,7 @@ private:
 	QString m_boundsType{};
 	QString m_logsFolder;
 	QString m_split;
+	
 };
 
 #endif // MAINLOOP_H

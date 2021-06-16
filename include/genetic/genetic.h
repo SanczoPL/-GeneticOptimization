@@ -49,6 +49,7 @@ class Genetic : public QObject {
 		void iteration();
 		void logPopulation();
 		void clearData();
+		void handleBestPopulation();
 
 	private:
 		QRandomGenerator* m_randomGenerator;
@@ -67,14 +68,15 @@ class Genetic : public QObject {
 
 	private:
 		int m_populationSize{};
-		int m_bitFinishTest;
+		int m_bitFinishTest{};
 		int m_mutateCounter{};
 		int m_crossoverCounter{};
 		int m_gradientCounter{};
 		int m_actualPopulationIteration{};
-		int m_iterationGlobal;
+		int m_iterationGlobal{};
 		int m_bestNotChange{};
 		int m_bestChangeIteration{};
+		double m_fitnessThreshold{};
 
 		double m_bestChangeLast{};
 		double m_delta{};
@@ -95,6 +97,7 @@ class Genetic : public QObject {
 		QString m_resultsPath{};
 
 		bool m_configured{};
+		bool m_saveBestPopulationVideo{};
 
 };
 #endif // GENETIC_H
