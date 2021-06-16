@@ -7,7 +7,7 @@ constexpr auto POPULATION_SIZE{ "PopulationSize" };
 constexpr auto RESULTS_PATH{"ResultsPath"};
 
 
-#define DEBUG
+//#define DEBUG
 //#define GENETIC_OPERATION_DEBUG
 
 GeneticOperation::~GeneticOperation()
@@ -479,9 +479,9 @@ void GeneticOperation::select()
 
 std::vector<QJsonArray> GeneticOperation::createRandomProcessingPopulation(qint32 populationSize, const std::vector<QString>& optimizationTypes, const QJsonObject& m_boundsGraph)
 {
-#ifdef DEBUG
-	Logger->info(" GeneticOperation::createRandomProcessingPopulation");
-#endif
+	#ifdef DEBUG
+	Logger->debug("GeneticOperation::createRandomProcessingPopulation");
+	#endif
 	std::vector<QJsonArray> out;
 	for (int i = 0; i <= populationSize; i++)
 	{

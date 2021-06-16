@@ -2,6 +2,9 @@
 #include <QDebug>
 #include <QDateTime>
 
+//#define DEBUG
+//#define GENETIC_OPERATION_DEBUG
+
 constexpr auto GRAPH{ "Graph" };
 constexpr auto GENETIC{ "Genetic" };
 constexpr auto POPULATION_SIZE{ "PopulationSize" };
@@ -17,9 +20,9 @@ constexpr auto ENCODER{ "Encoder" };
 constexpr auto CONFIG{ "Config" };
 constexpr auto LOGS_FOLDER{ "LogsFolder" };
 
+constexpr auto CONFIG_UNIX{ "ConfigUnix" };
+constexpr auto CONFIG_WIN{ "ConfigWin" };
 
-//#define DEBUG
-//#define GENETIC_OPERATION_DEBUG
 
 Genetic::~Genetic()
 {
@@ -27,13 +30,16 @@ Genetic::~Genetic()
 }
 
 Genetic::Genetic(QVector<Case*> testCaseVector, DataMemory* data)
-	: m_randomGenerator{ new QRandomGenerator(123) },
+	: m_testCaseVector(testCaseVector),
 	m_dataMemory(data),
-	m_testCaseVector(testCaseVector),
+	m_randomGenerator{ new QRandomGenerator(123) },
 	m_configured{ false },
 	m_iterationGlobal{0}
 {
-	Logger->info("Genetic::Genetic()");
+	#ifdef DEBUG
+	Logger->debug("Genetic::Genetic()");
+	#endif
+
 	m_bestChangeLast = 0.0;
 	m_actualPopulationIteration = 0;
 	cv::theRNG().state = 123;
@@ -94,12 +100,11 @@ void Genetic::configure(QJsonObject const& a_config, QJsonObject  const& a_bound
 	QJsonObject config = obj[CONFIG].toObject();
 
 	qint64 _nowTime = qint64(QDateTime::currentMSecsSinceEpoch());
-	m_logsFolder = "logs/";
 
 	m_fileName = m_logsFolder+ m_graphType + "/" + m_dronType  + "/" + m_boundsType + "/" + QString::number(config[DRON_NOISE].toInt()) 
 	+ "_" + QString::number(config[DRON_CONTRAST].toInt()) + "_" + QString::number(_nowTime); 
 
-	Logger->warn("Genetic::configure() nameFile:{}", (m_fileName + ".txt").toStdString());
+	Logger->info("Genetic::configure() nameFile:{}", (m_fileName + ".txt").toStdString());
 	emit(configureLogger((m_fileName + ".txt"), false));
 	emit(configureLoggerJSON((m_fileName + ".json"), false));
 	
@@ -132,6 +137,14 @@ void Genetic::loadFromConfig(QJsonObject const& a_config)
 	m_boundsType = a_config[GENETIC].toObject()[BOUNDS_TYPE].toString();
 	m_dronType = a_config[GENETIC].toObject()[DRON_TYPE].toString();
 	m_logsFolder = a_config[GENETIC].toObject()[LOGS_FOLDER].toString();
+
+	#ifdef _WIN32
+    QJsonObject configPaths = a_config[CONFIG_WIN].toObject();
+    #endif // _WIN32
+    #ifdef __linux__
+    QJsonObject configPaths = a_config[CONFIG_UNIX].toObject();
+    #endif // __linux__
+	m_logsFolder = configPaths[LOGS_FOLDER].toString();
 }
 void Genetic::onSignalOk(struct fitness fs, qint32 slot)
 {
@@ -314,7 +327,7 @@ void Genetic::logPopulation()
 	if ((m_bestNotChange % 50) == 0)
 	{
 		m_timer.stop();
-		Logger->critical(
+		Logger->info(
 			"ID:{:04d} B:{:f} (fn:{},fp:{},tn:{},tp:{})",
 			m_actualPopulationIteration, m_geneticOperation.m_fitness[m_populationSize].fitness,
 			m_geneticOperation.m_fitness[m_populationSize].fn, m_geneticOperation.m_fitness[m_populationSize].fp,

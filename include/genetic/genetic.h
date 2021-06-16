@@ -55,42 +55,46 @@ class Genetic : public QObject {
 
 	private:
 		QVector<Case*> m_testCaseVector;
-		DataMemory* m_dataMemory;
-		QJsonArray m_graph;
-		QJsonArray m_postprocess;
-		QJsonObject m_boundsGraph;
-		int m_populationSize{};
-		bool m_configured{};
-		QString m_resultsPath{};
 		QVector<bool> m_bitFinish;
 		QVector<bool> m_threadProcessing;
-		qint32 m_bitFinishTest;
-		QVector<qint32> m_actualManProcessing;
+		QVector<int> m_actualManProcessing;
+
+		DataMemory* m_dataMemory;
+		QJsonObject m_config;
+		QJsonObject m_boundsGraph;
+		QJsonArray m_graph;
+		QJsonArray m_postprocess;
 
 	private:
-		qint32 m_mutateCounter{};
-		qint32 m_crossoverCounter{};
-		qint32 m_gradientCounter{};
-		qint32 m_actualPopulationIteration{};
-		
-		qint32 m_bestNotChange{};
-		qint32 m_bestChangeIteration{};
+		int m_populationSize{};
+		int m_bitFinishTest;
+		int m_mutateCounter{};
+		int m_crossoverCounter{};
+		int m_gradientCounter{};
+		int m_actualPopulationIteration{};
+		int m_iterationGlobal;
+		int m_bestNotChange{};
+		int m_bestChangeIteration{};
+
 		double m_bestChangeLast{};
 		double m_delta{};
 
 		FileLogger *m_fileLogger;
 		FileLogger* m_fileLoggerJSON;
-		int m_iterationGlobal;
-		QString m_fileName;
+		
 		GeneticOperation m_geneticOperation;
 		Case* m_testCaseBest;
+
 		cv::TickMeter m_timer;
 
+		QString m_fileName;
 		QString m_graphType;
 		QString m_boundsType;
 		QString m_dronType;
 		QString m_logsFolder;
-		QJsonObject m_config;
+		QString m_resultsPath{};
+
+		bool m_configured{};
 
 };
 #endif // GENETIC_H

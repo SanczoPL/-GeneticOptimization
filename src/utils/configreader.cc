@@ -1,14 +1,21 @@
 #include "utils/configreader.h"
 
-ConfigReader::ConfigReader() {
-	Logger->trace("ConfigReader::ConfigReader()");
+//#define DEBUG
+
+ConfigReader::ConfigReader()
+{
+	#ifdef DEBUG
+	Logger->debug("ConfigReader::ConfigReader()");
+	#endif
 }
 
 ConfigReader::~ConfigReader() {}
 
 bool ConfigReader::readConfig(QString configPathWithName, QJsonObject& obj) 
 {
-	Logger->trace("ConfigReader::readConfig() try to load {}", (configPathWithName).toStdString());
+	#ifdef DEBUG
+	Logger->debug("ConfigReader::readConfig(QJsonObject) try to load {}", (configPathWithName).toStdString());
+	#endif
 	QFile jConfigFile{ configPathWithName };
 	if (!jConfigFile.open(QIODevice::ReadOnly))
 	{
@@ -24,13 +31,17 @@ bool ConfigReader::readConfig(QString configPathWithName, QJsonObject& obj)
 	}
 	
 	obj = { jConfigDoc.object() };
-	Logger->debug("{} load successful", (configPathWithName).toStdString());
+	#ifdef DEBUG
+	Logger->debug("ConfigReader::readConfig() {} load successful", (configPathWithName).toStdString());
+	#endif
 	return true;
 }
 
 bool ConfigReader::readConfig(QString configPathWithName, QJsonArray& obj) 
 {
-	Logger->trace("ConfigReader::readConfig() try to load {}", (configPathWithName).toStdString());
+	#ifdef DEBUG
+	Logger->debug("ConfigReader::readConfig(QJsonArray) try to load {}", (configPathWithName).toStdString());
+	#endif
 	QFile jConfigFile{ configPathWithName };
 	if (!jConfigFile.open(QIODevice::ReadOnly))
 	{
@@ -46,6 +57,8 @@ bool ConfigReader::readConfig(QString configPathWithName, QJsonArray& obj)
 	}
 	
 	obj = { jConfigDoc.array() };
-	Logger->debug("{} load successful", (configPathWithName).toStdString());
+	#ifdef DEBUG
+	Logger->debug("ConfigReader::readConfig() {} load successful", (configPathWithName).toStdString());
+	#endif
 	return true;
 }

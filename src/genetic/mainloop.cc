@@ -1,5 +1,8 @@
 #include "genetic/mainloop.h"
 
+//#define DEBUG
+//#define DEBUG_CONFIG
+
 constexpr auto GENERAL{ "General" };
 constexpr auto GENETIC{ "Genetic" };
 constexpr auto GRAPH_TYPE{ "GraphType" };
@@ -10,9 +13,10 @@ constexpr auto STANDARD_DEVIATION{ "StandardDeviation" };
 constexpr auto DRON_NOISE{ "Noise" };
 constexpr auto DRON_CONTRAST{ "Contrast" };
 constexpr auto DRON_TYPE{ "DronType" };
+constexpr auto LOGS_FOLDER{ "LogsFolder" };
+constexpr auto CONFIG_UNIX{ "ConfigUnix" };
+constexpr auto CONFIG_WIN{ "ConfigWin" };
 
-//#define DEBUG
-//#define DEBUG_CONFIG
 
 void MainLoop::readConfig(QString configName, QJsonObject& jObject, QString graphType)
 {
@@ -44,6 +48,7 @@ void MainLoop::loadConfigs(QJsonObject configPaths, QString graphType, QString b
 	#ifdef DEBUG_CONFIG
     Logger->debug("MainLoop::loadConfigs()");
 	#endif
+
 	m_geneticConfigName.dataset = configPaths["Dataset"].toString();
 	m_geneticConfigName.graph = configPaths["Graph"].toString();
 	m_geneticConfigName.bounds = configPaths["Bounds"].toString();
@@ -64,6 +69,22 @@ void MainLoop::loadConfigs(QJsonObject configPaths, QString graphType, QString b
 	#endif
 }
 
+bool MainLoop::checkAndCreateFolder(QString name)
+{
+	#ifdef DEBUG_CONFIG
+	Logger->debug("MainLoop::checkAndCreateFolder({})",name.toStdString());
+	#endif
+	
+	if(!QDir(name).exists())
+	{
+		if (!QDir().mkdir(name))
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
 void MainLoop::createConfig(QJsonObject const& a_config)
 {
 	#ifdef DEBUG_CONFIG
@@ -71,31 +92,35 @@ void MainLoop::createConfig(QJsonObject const& a_config)
 	#endif
 
     #ifdef _WIN32
-    QJsonObject configPaths = a_config["ConfigWin"].toObject();
+    QJsonObject configPaths = a_config[CONFIG_WIN].toObject();
     #endif // _WIN32
     #ifdef __linux__
-    QJsonObject configPaths = a_config["ConfigUnix"].toObject();
+    QJsonObject configPaths = a_config[CONFIG_UNIX].toObject();
     #endif // __linux__
 	#ifdef DEBUG_CONFIG
 		qDebug() << "MainLoop::createConfig(a_config) a_config:" << a_config;
 	#endif
-	
-	std::vector<QString> grafConfigs{"Graph_estimator_with_filters"};
-	//std::vector<QString> grafConfigs{"Graph_estimator_with_filters", "Graph_estimator"};
-	std::vector<QString> dronConfigs{"BLACK", "BLACK_WHITE",  "WHITE"};
-	//std::vector<QString> dronConfigs{  "WHITE"};
-	//std::vector<QString> boundConfigs{"ViBe", "MOG2", "CNT", "NONE", "MOG", "KNN", "GMG"};
 
-	//std::vector<QString> boundConfigs{"ViBe"};
-	//std::vector<QString> boundConfigs{ "KNN", "MOG"};
-	std::vector<QString> boundConfigs{"MOG2", "CNT", "NONE", "MOG", "KNN", "GMG"};
+	m_logsFolder = configPaths[LOGS_FOLDER].toString();
+
+	std::vector<QString> grafConfigs{"Graph_estimator", "Graph_estimator_with_filters"};
+	std::vector<QString> dronConfigs{"BLACK", "BLACK_WHITE",  "WHITE"};
+	std::vector<QString> boundConfigs{"LOBSTER", "ABL", "ASBL", "MOG2", "CNT", "NONE", "MOG", "KNN", "GMG", "ViBe"};
+
+	if(checkAndCreateFolder(m_logsFolder))
+	{
+		Logger->error("checkAndCreateFolder cant create:{}", m_logsFolder.toStdString());
+	}
 
 	for (int graf = 0 ; graf < grafConfigs.size() ; graf++)
 	{
+		checkAndCreateFolder(m_logsFolder + grafConfigs[graf]);
 		for (int dron = 0 ; dron < dronConfigs.size() ; dron++)
 		{
+			checkAndCreateFolder(m_logsFolder + grafConfigs[graf] + m_split + dronConfigs[dron]);
 			for (int bounds = 0 ; bounds < boundConfigs.size() ; bounds++)
 			{
+				checkAndCreateFolder(m_logsFolder + grafConfigs[graf] + m_split + dronConfigs[dron] + m_split + boundConfigs[bounds]);
 				QJsonObject obj = m_config[GENETIC].toObject();
 				obj[BOUNDS_TYPE] = boundConfigs[bounds];
 				obj[DRON_TYPE] = dronConfigs[dron];
@@ -134,6 +159,7 @@ void MainLoop::createConfig(QJsonObject const& a_config)
 						}
 					}
 					m_geneticConfigs.push_back(m_geneticConfig);
+
 				}
 			}
 		}
@@ -217,7 +243,9 @@ MainLoop::MainLoop(QJsonObject a_config)
 	m_iterationGlobal{ 0 },
 	m_geneticRun{ true },
 	m_graphType{ a_config[GENETIC].toObject()[GRAPH_TYPE].toString()},
-	m_boundsType{ a_config[GENETIC].toObject()[BOUNDS_TYPE].toString()}
+	m_boundsType{ a_config[GENETIC].toObject()[BOUNDS_TYPE].toString()},
+	m_logsFolder("logs/"),
+	m_split("/")
 {
 	#ifdef DEBUG
 		qDebug() << "MainLoop::MainLoop() a_config:" << a_config;
@@ -226,6 +254,13 @@ MainLoop::MainLoop(QJsonObject a_config)
 		Logger->debug("MainLoop::MainLoop() m_boundsType:{}", m_boundsType.toStdString());
 	#endif
 	
+	#ifdef _WIN32
+	m_split = "\\";
+	#endif // _WIN32
+	#ifdef __linux__
+	m_split = "/";
+	#endif // _UNIX
+
 	MainLoop::createStartupThreads();
 }
 
@@ -313,13 +348,13 @@ void MainLoop::onQuit()
 
 void MainLoop::onMemoryLoaded()
 {
-	Logger->info("MainLoop::onMemoryLoaded()");
+	Logger->debug("MainLoop::onMemoryLoaded()");
 	m_dataMemoryLoaded = true;
 }
 
 void MainLoop::onGeneticConfigured()
 {
-	Logger->info("MainLoop::onGeneticConfigured()");
+	Logger->debug("MainLoop::onGeneticConfigured()");
 	m_geneticConfigured = true;
 }
 

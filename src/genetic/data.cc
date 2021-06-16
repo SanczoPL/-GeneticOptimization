@@ -1,5 +1,9 @@
 #include "genetic/data.h"
 
+//#define DEBUG
+//#define DEBUG_PREPROCESS
+//#define DEBUG_OPENCV
+
 constexpr auto GRAPH{ "Graph" };
 constexpr auto NAME{ "Name" };
 constexpr auto ACTIVE{ "Active" };
@@ -36,9 +40,6 @@ constexpr auto INPUT_PREFIX{ "InputPrefix" };
 constexpr auto DATASET_UNIX{ "DatasetLinux" };
 constexpr auto DATASET_WIN32{ "DatasetWin32" };
 
-//#define DEBUG
-//#define DEBUG_PREPROCESS
-//#define DEBUG_OPENCV
 
 DataMemory::DataMemory()
 {
@@ -95,11 +96,13 @@ bool DataMemory::preprocess(QJsonArray dataGraph)
 	
 	for (qint32 iteration = 0; iteration < m_cleanData.size(); iteration++)
 	{
+		#ifdef DEBUG_PREPROCESS
 		if (iteration % 100 == 0)
 		{
 			Logger->info("DataMemory::preprocess() processing:{}/{} m_inputData.size():{}", iteration, m_cleanData.size(), m_inputData.size());
 			Logger->info("DataMemory::preprocess() processing:{}/{} m_gtData.size():{}", iteration, m_gtData.size(), m_gtData.size());
 		}
+		#endif
 		std::vector<cv::Mat> input{ m_cleanData[iteration], m_gtCleanData[iteration] };
 
 		clearDataForNextIteration();

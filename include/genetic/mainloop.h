@@ -50,6 +50,7 @@ private:
 	void readConfig(QString configName, QJsonArray& jArray, QString graphType);
 	void loadConfigs(QJsonObject configPaths, QString graphType, QString boundsType);
 	void createConfig(QJsonObject const& a_config);
+	bool checkAndCreateFolder(QString name);
 	
 
 signals:
@@ -122,6 +123,8 @@ private:
 	int m_iterationGlobal{};
 	QString m_graphType{};
 	QString m_boundsType{};
+	QString m_logsFolder;
+	QString m_split;
 };
 
 #endif // MAINLOOP_H
