@@ -8,7 +8,6 @@
 #include <opencv2/imgproc.hpp>
 #include <opencv2/core.hpp>
 #include <opencv2/opencv.hpp>
-#include <opencv2\opencv.hpp>
 #include <opencv2/videoio.hpp>
 #include <opencv2/highgui.hpp>
 #include "opencv2/highgui/highgui.hpp"
@@ -45,7 +44,7 @@ private:
 
 	#ifdef __linux__
 		void loadDataFromStream(cv::VideoCapture videoFromFile, std::vector<cv::Mat>& m_cleanData, bool resize);
-		void loadDataLinux(QJsonObject a_config);
+		void loadDataLinux(std::vector<cv::Mat> &data, std::vector<cv::Mat> &gt);
 	#endif // _UNIX
 
 	#ifdef _WIN32

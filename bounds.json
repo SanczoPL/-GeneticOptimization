@@ -338,6 +338,90 @@
 				],
 				"NotUsed":[]
 			}
+		},
+		"ABL":
+		{
+			"Filter": 
+			{
+				"Used":
+				[
+					{"Name": "Threshold", "Parameters":[
+						{"Type": "ThresholdDecision","Min": 0,"Max": 255},
+						{"Type": "ThresholdTypes","Min": 0,"Max": 1},
+						{"Type": "ThresholdValue","Min": 0,"Max": 255}
+					]}
+				],
+				"NotUsed":
+				[]
+			},
+			"Estimator": 
+			{
+				"Used":
+				[	{"Name":"ABL", "Parameters":[
+					{"Type": "Alpha","Min": 0,"Max": 1, "IsDouble": 100}
+					]}
+				],
+				"NotUsed":[]
+			}
+		},
+		"ASBL":
+		{
+			"Filter": 
+			{
+				"Used":
+				[
+					{"Name": "Threshold", "Parameters":[
+						{"Type": "ThresholdDecision","Min": 2,"Max": 254},
+						{"Type": "ThresholdTypes","Min": 0,"Max": 1},
+						{"Type": "ThresholdValue","Min": 0,"Max": 255}
+					]}
+				],
+				"NotUsed":
+				[]
+			},
+			"Estimator": 
+			{
+				"Used":
+				[	{"Name":"ASBL", "Parameters":[
+					{"Type": "AlphaLearn","Min": 0,"Max": 1, "IsDouble": 100},
+					{"Type": "AlphaDetection","Min": 0,"Max": 1, "IsDouble": 100},
+					{"Type": "LearningFrames","Min": 1,"Max": 10},
+					{"Type": "Threshold","Min": 10,"Max": 50}
+					]}
+				],
+				"NotUsed":[]
+			}
+		},
+		"LOBSTER":
+		{
+			"Filter": 
+			{
+				"Used":
+				[
+					{"Name": "Threshold", "Parameters":[
+						{"Type": "ThresholdDecision","Min": 2,"Max": 254},
+						{"Type": "ThresholdTypes","Min": 0,"Max": 1},
+						{"Type": "ThresholdValue","Min": 0,"Max": 255}
+					]}
+				],
+				"NotUsed":
+				[]
+			},
+			"Estimator": 
+			{
+				"Used":
+				[	{"Name":"LOBSTER", "Parameters":[
+					{"Type": "RelSimilarityThreshold","Min": 0,"Max": 1, "IsDouble": 1000},
+					{"Type": "OffsetSimilarityThreshold","Min": 0,"Max": 5},
+					{"Type": "DescDistThreshold","Min": 3,"Max": 7},
+					{"Type": "ColorDistThreshold","Min": 10,"Max": 50},
+					{"Type": "NbBGSamples","Min": 20,"Max": 50},
+					{"Type": "RequiredNbBgSamples","Min": 1,"Max": 5},
+					{"Type": "LearningRate","Min": 8,"Max": 32}
+					]}
+				],
+				"NotUsed":[]
+			}
 		}
 	},
 	"Graph_estimator_with_filters":
@@ -828,6 +912,192 @@
 					{"Type": "MatchingThreshold","Min": 2,"Max": 40},
 					{"Type": "MatchingNumber","Min": 1,"Max": 10},
 					{"Type": "UpdateFactor","Min": 2,"Max": 40}
+					]}
+				],
+				"NotUsed":[]
+			}
+		},
+		"ABL":
+		{
+			"Filter": 
+			{
+				"Used":
+				[
+					{"Name": "MedianBlur", "Parameters":[{"Type": "KernelSize","Min": 1,"Max": 5,"IsOdd": true}
+					]},
+					{"Name": "Blur", "Parameters":[
+						{"Type": "KernelSizeX","Min": 1,"Max": 5,"IsOdd": true},
+						{"Type": "KernelSizeY","Min": 1,"Max": 5,"IsOdd": true},
+						{"Type": "BorderType","Min": 1,"Max": 2}
+					]},
+					{"Name": "GaussianBlur", "Parameters":[
+						{"Type": "KernelSizeX","Min": 1,"Max": 5,"IsOdd": true},
+						{"Type": "KernelSizeY","Min": 1,"Max": 5,"IsOdd": true},
+						{"Type": "SigmaX","Min": 0,"Max": 10,"IsDouble": 10},
+						{"Type": "SigmaY","Min": 0,"Max": 10,"IsDouble": 10},
+						{"Type": "BorderType","Min": 1,"Max": 2}
+					]},
+					{"Name": "Threshold", "Parameters":[
+						{"Type": "ThresholdDecision","Min": 2,"Max": 254},
+						{"Type": "ThresholdTypes","Min": 0,"Max": 1},
+						{"Type": "ThresholdValue","Min": 0,"Max": 255}
+					]},
+					{"Name": "None", "Parameters":[
+						{"Type": "None","Min": 0,"Max": 2}
+					]},
+					{"Name": "MorphologyOperation", "Parameters":[
+						{"Type": "MorphOperator","Min": 0,"Max": 5},
+						{"Type": "MorphSize","Min": 1,"Max": 3},
+						{"Type": "MorphElement","Min": 0,"Max": 2}
+					]},
+					{"Name": "Sobel", "Parameters":[
+						{"Type": "OrderDerivativeX","Min": 1,"Max": 2},
+						{"Type": "OrderDerivativeY","Min": 1,"Max": 2},
+						{"Type": "KernelSize","Min": 1,"Max": 2,"IsOdd": true},
+						{"Type": "BorderType","Min": 1,"Max": 2}
+					]},
+					{"Name": "BilateralFilter", "Parameters":[
+						{"Type": "Diameter","Min": 1,"Max": 5},
+						{"Type": "SigmaColor","Min": 0,"Max": 10,"IsDouble": 10},
+						{"Type": "SigmaSpace","Min": 0,"Max": 10,"IsDouble": 10},
+						{"Type": "BorderType","Min": 1,"Max": 2}
+					]}
+				],
+				"NotUsed":
+				[]
+			},
+			"Estimator": 
+			{
+				"Used":
+				[	{"Name":"ABL", "Parameters":[
+					{"Type": "Aplpha","Min": 0,"Max": 1, "IsDouble": 100}
+					]}
+				],
+				"NotUsed":[]
+			}
+		},
+		"ASBL":
+		{
+			"Filter": 
+			{
+				"Used":
+				[
+					{"Name": "MedianBlur", "Parameters":[{"Type": "KernelSize","Min": 1,"Max": 5,"IsOdd": true}
+					]},
+					{"Name": "Blur", "Parameters":[
+						{"Type": "KernelSizeX","Min": 1,"Max": 5,"IsOdd": true},
+						{"Type": "KernelSizeY","Min": 1,"Max": 5,"IsOdd": true},
+						{"Type": "BorderType","Min": 1,"Max": 2}
+					]},
+					{"Name": "GaussianBlur", "Parameters":[
+						{"Type": "KernelSizeX","Min": 1,"Max": 5,"IsOdd": true},
+						{"Type": "KernelSizeY","Min": 1,"Max": 5,"IsOdd": true},
+						{"Type": "SigmaX","Min": 0,"Max": 10,"IsDouble": 10},
+						{"Type": "SigmaY","Min": 0,"Max": 10,"IsDouble": 10},
+						{"Type": "BorderType","Min": 1,"Max": 2}
+					]},
+					{"Name": "Threshold", "Parameters":[
+						{"Type": "ThresholdDecision","Min": 2,"Max": 254},
+						{"Type": "ThresholdTypes","Min": 0,"Max": 1},
+						{"Type": "ThresholdValue","Min": 0,"Max": 255}
+					]},
+					{"Name": "None", "Parameters":[
+						{"Type": "None","Min": 0,"Max": 2}
+					]},
+					{"Name": "MorphologyOperation", "Parameters":[
+						{"Type": "MorphOperator","Min": 0,"Max": 5},
+						{"Type": "MorphSize","Min": 1,"Max": 3},
+						{"Type": "MorphElement","Min": 0,"Max": 2}
+					]},
+					{"Name": "Sobel", "Parameters":[
+						{"Type": "OrderDerivativeX","Min": 1,"Max": 2},
+						{"Type": "OrderDerivativeY","Min": 1,"Max": 2},
+						{"Type": "KernelSize","Min": 1,"Max": 2,"IsOdd": true},
+						{"Type": "BorderType","Min": 1,"Max": 2}
+					]},
+					{"Name": "BilateralFilter", "Parameters":[
+						{"Type": "Diameter","Min": 1,"Max": 5},
+						{"Type": "SigmaColor","Min": 0,"Max": 10,"IsDouble": 10},
+						{"Type": "SigmaSpace","Min": 0,"Max": 10,"IsDouble": 10},
+						{"Type": "BorderType","Min": 1,"Max": 2}
+					]}
+				],
+				"NotUsed":
+				[]
+			},
+			"Estimator": 
+			{
+				"Used":
+				[	{"Name":"ASBL", "Parameters":[
+					{"Type": "AlphaLearn","Min": 0,"Max": 1, "IsDouble": 100},
+					{"Type": "AlphaDetection","Min": 0,"Max": 1, "IsDouble": 100},
+					{"Type": "LearningFrames","Min": 1,"Max": 10},
+					{"Type": "Threshold","Min": 10,"Max": 50}
+					]}
+				],
+				"NotUsed":[]
+			}
+		},
+		"LOBSTER":
+		{
+			"Filter": 
+			{
+				"Used":
+				[
+					{"Name": "MedianBlur", "Parameters":[{"Type": "KernelSize","Min": 1,"Max": 5,"IsOdd": true}
+					]},
+					{"Name": "Blur", "Parameters":[
+						{"Type": "KernelSizeX","Min": 1,"Max": 5,"IsOdd": true},
+						{"Type": "KernelSizeY","Min": 1,"Max": 5,"IsOdd": true},
+						{"Type": "BorderType","Min": 1,"Max": 2}
+					]},
+					{"Name": "GaussianBlur", "Parameters":[
+						{"Type": "KernelSizeX","Min": 1,"Max": 5,"IsOdd": true},
+						{"Type": "KernelSizeY","Min": 1,"Max": 5,"IsOdd": true},
+						{"Type": "SigmaX","Min": 0,"Max": 10,"IsDouble": 10},
+						{"Type": "SigmaY","Min": 0,"Max": 10,"IsDouble": 10},
+						{"Type": "BorderType","Min": 1,"Max": 2}
+					]},
+					{"Name": "Threshold", "Parameters":[
+						{"Type": "ThresholdDecision","Min": 2,"Max": 254},
+						{"Type": "ThresholdTypes","Min": 0,"Max": 1},
+						{"Type": "ThresholdValue","Min": 0,"Max": 255}
+					]},
+					{"Name": "None", "Parameters":[
+						{"Type": "None","Min": 0,"Max": 2}
+					]},
+					{"Name": "MorphologyOperation", "Parameters":[
+						{"Type": "MorphOperator","Min": 0,"Max": 5},
+						{"Type": "MorphSize","Min": 1,"Max": 3},
+						{"Type": "MorphElement","Min": 0,"Max": 2}
+					]},
+					{"Name": "Sobel", "Parameters":[
+						{"Type": "OrderDerivativeX","Min": 1,"Max": 2},
+						{"Type": "OrderDerivativeY","Min": 1,"Max": 2},
+						{"Type": "KernelSize","Min": 1,"Max": 2,"IsOdd": true},
+						{"Type": "BorderType","Min": 1,"Max": 2}
+					]},
+					{"Name": "BilateralFilter", "Parameters":[
+						{"Type": "Diameter","Min": 1,"Max": 5},
+						{"Type": "SigmaColor","Min": 0,"Max": 10,"IsDouble": 10},
+						{"Type": "SigmaSpace","Min": 0,"Max": 10,"IsDouble": 10},
+						{"Type": "BorderType","Min": 1,"Max": 2}
+					]}
+				],
+				"NotUsed":
+				[]
+			},
+			"Estimator": 
+			{
+				"Used":
+				[	{"Name":"LOBSTER", "Parameters":[
+					{"Type": "RelSimilarityThreshold","Min": 0,"Max": 1, "IsDouble": 1000},
+					{"Type": "OffsetSimilarityThreshold","Min": 0,"Max": 5},
+					{"Type": "DescDistThreshold","Min": 3,"Max": 7},
+					{"Type": "ColorDistThreshold","Min": 10,"Max": 50},
+					{"Type": "NbBGSamples","Min": 20,"Max": 50},
+					{"Type": "RequiredNbBgSamples","Min": 1,"Max": 5},
+					{"Type": "LearningRate","Min": 8,"Max": 32}
 					]}
 				],
 				"NotUsed":[]

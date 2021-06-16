@@ -61,7 +61,6 @@ void LoadData::configure(QJsonObject a_config)
 		qDebug() << "LoadData::configure() m_datasetConfig:"<< m_datasetConfig;
 	#endif
 
-
 	m_startGT = m_datasetConfig[START_GT].toInt();
 	m_stopGT = m_datasetConfig[STOP_GT].toInt();
 	m_inputType = m_datasetConfig[OUTPUT_TYPE].toString();
@@ -70,13 +69,11 @@ void LoadData::configure(QJsonObject a_config)
 
 bool LoadData::loadData(std::vector<cv::Mat> &data, std::vector<cv::Mat> &gt)
 {
-	int ret{ 1 };
-
 	data.clear();
 	gt.clear();
 
 	#ifdef __linux__ 
-		LoadData::loadDataLinux(QJsonObject a_config);
+		LoadData::loadDataLinux(data, gt);
 	#endif // _UNIX
 
 	#ifdef _WIN32
@@ -118,15 +115,15 @@ void LoadData::loadDataFromStream(cv::VideoCapture videoFromFile, std::vector<cv
 	}
 }
 
-void LoadData::loadDataLinux(QJsonObject a_config)
+void LoadData::loadDataLinux(std::vector<cv::Mat> &data, std::vector<cv::Mat> &gt)
 {
 	m_data = m_pathToConfig + m_datasetConfig[CLEAN].toString() + m_split + m_datasetConfig[INPUT_PREFIX].toString();
 	m_gt = m_pathToConfig + m_datasetConfig[GT].toString() + m_split + m_datasetConfig[INPUT_PREFIX].toString();
 
-	ret = m_videoFromFile.open(m_clean.toStdString());
+	int ret = m_videoFromFile.open(m_data.toStdString());
 	if (ret < 0)
 	{
-		Logger->error("input data failed to open:{}", (m_clean).toStdString());
+		Logger->error("input data failed to open:{}", (m_data).toStdString());
 	}
 
 	ret = m_videoFromFileGT.open(m_gt.toStdString());
@@ -135,8 +132,8 @@ void LoadData::loadDataLinux(QJsonObject a_config)
 		Logger->error("input data failed to open:{}", (m_gt).toStdString());
 	}
 	
-	loadDataFromStream(m_videoFromFile, m_cleanData, true);
-	loadDataFromStream(m_videoFromFileGT, m_gtCleanData, true);
+	loadDataFromStream(m_videoFromFile, data, true);
+	loadDataFromStream(m_videoFromFileGT, gt, true);
 }
 #endif
 

@@ -44,10 +44,10 @@ int main(int argc, char* argv[])
 	QJsonObject preConfig = readConfig(QString::fromStdString(PREPROCESS));
 	intro();
 	qint32 messageLevel{ config[GENERAL].toObject()[LOG_LEVEL].toInt() };
-	Logger->info("messageLevel:{}", messageLevel);
+	Logger->debug("messageLevel:{}", messageLevel);
 	Logger->set_level(static_cast<spdlog::level::level_enum>(messageLevel));
 
-	Logger->info("start DataMemory:");
+	Logger->debug("run mainloop...");
 	MainLoop mainLoop{ config};
 
 	return app.exec();

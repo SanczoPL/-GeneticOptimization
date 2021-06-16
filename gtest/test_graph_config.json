@@ -1,7 +1,32 @@
 [
-    {"Name": "None"},
-    {"Name": "None"},
-    {"Name": "None"},
-    {"Name": "None"},
-    {"Name": "None"}
+    {"Type": "INPUT_1", "Name": "RegionOfInterest", "X": 100, "Y": 100,"Width": 200,"Height": 200},
+    {"Type": "INPUT_2", "Name": "RegionOfInterest", "X": 100, "Y": 100,"Width": 200,"Height": 200},
+
+    {"Type": "FILTER_1", "Name": "None"},
+    {"Type": "FILTER_2", "Name": "None"},
+    {"Type": "FILTER_3", "Name": "None"},
+    {"Type": "FILTER_4", "Name": "None"},
+    {"Type": "FILTER_5", "Name": "None"},
+    {"Type": "FILTER_6", "Name": "None"},
+    {"Type": "FILTER_7", "Name": "None"},
+    {"Type": "FILTER_8", "Name": "None"},
+
+    {"Name": "ABL", 
+        "Alpha": 0.1},
+    {"Name": "ASBL", 
+        "AlphaLearn": 0.1, 
+        "AlphaDetection": 0.1, 
+        "LearningFrames": 10, 
+        "Threshold":15},
+    {"Name": "LOBSTER", 
+        "RelSimilarityThreshold": 0.365, 
+        "OffsetSimilarityThreshold": 0, 
+        "DescDistThreshold": 4, 
+        "ColorDistThreshold":30,
+        "NbBGSamples": 35, 
+        "RequiredNbBgSamples": 2, 
+        "LearningRate": 16}
 ]
+
+
+
