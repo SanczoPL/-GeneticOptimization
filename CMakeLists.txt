@@ -27,7 +27,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}")
 macro(copy_json jsonname)
 	configure_file(${jsonname} ${CMAKE_BINARY_DIR}/${jsonname})
 	configure_file(${jsonname} ${CMAKE_BUILD_TYPE}/${jsonname})
-	configure_file(${jsonname} ${CMAKE_BINARY_DIR}${CMAKE_BUILD_TYPE}/${jsonname})
+	configure_file(${jsonname} ${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE}/${jsonname})
 endmacro()
 
 copy_json("config.json")

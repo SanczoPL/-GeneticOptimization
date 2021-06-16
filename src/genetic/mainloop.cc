@@ -103,9 +103,9 @@ void MainLoop::createConfig(QJsonObject const& a_config)
 
 	m_logsFolder = configPaths[LOGS_FOLDER].toString();
 
-	std::vector<QString> grafConfigs{"Graph_estimator", "Graph_estimator_with_filters"};
+	std::vector<QString> grafConfigs{"Graph_estimator_with_filters", "Graph_estimator"};
 	std::vector<QString> dronConfigs{"BLACK", "BLACK_WHITE",  "WHITE"};
-	std::vector<QString> boundConfigs{"LOBSTER", "ABL", "ASBL", "MOG2", "CNT", "NONE", "MOG", "KNN", "GMG", "ViBe"};
+	std::vector<QString> boundConfigs{"NONE", "MOG2","LOBSTER", "ABL", "ASBL", "MOG2", "CNT" , "MOG", "KNN", "GMG", "ViBe"};
 
 	if(checkAndCreateFolder(m_logsFolder))
 	{
