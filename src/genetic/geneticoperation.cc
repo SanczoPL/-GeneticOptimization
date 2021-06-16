@@ -1,14 +1,23 @@
 #include "genetic/geneticoperation.h"
 #include <QDebug>
 
+//#define DEBUG
+//#define GENETIC_OPERATION_DEBUG
+
 constexpr auto GRAPH{ "Graph" };
 constexpr auto GENETIC{ "Genetic" };
 constexpr auto POPULATION_SIZE{ "PopulationSize" };
 constexpr auto RESULTS_PATH{"ResultsPath"};
+constexpr auto MIN{"Min"};
+constexpr auto MAX{"Max"};
+constexpr auto IS_DOUBLE{"IsDouble"};
+constexpr auto TYPE{"Type"};
+constexpr auto IS_BOOL{"IsBool"};
+constexpr auto NAME{"Name"};
+constexpr auto PARAMETERS{"Parameters"};
+constexpr auto USED{"Used"};
+constexpr auto IS_ODD{"IsOdd"};
 
-
-//#define DEBUG
-//#define GENETIC_OPERATION_DEBUG
 
 GeneticOperation::~GeneticOperation()
 {
@@ -18,11 +27,16 @@ GeneticOperation::~GeneticOperation()
 GeneticOperation::GeneticOperation()
 : m_randomGenerator{ new QRandomGenerator(123)}
 {
-
+	#ifdef GENETIC_OPERATION_DEBUG
+	Logger->debug("GeneticOperation::GeneticOperation()");
+	#endif
 }
 
 void GeneticOperation::configure(QJsonObject const& a_config, QJsonObject  const& a_boundsGraph, QJsonArray  const& a_graph)
 {
+	#ifdef GENETIC_OPERATION_DEBUG
+	Logger->debug("GeneticOperation::configure()");
+	#endif
     m_optimizationTypes.clear();
     m_boundsGraph = a_boundsGraph;
 
@@ -31,41 +45,51 @@ void GeneticOperation::configure(QJsonObject const& a_config, QJsonObject  const
     for (int i = 0; i < a_graph.size(); i++)
 	{
 		QJsonObject obj = a_graph[i].toObject();
-		m_optimizationTypes.push_back(obj["Type"].toString());
+		m_optimizationTypes.push_back(obj[TYPE].toString());
 	}
     
     m_vectorBits = createRandomProcessingPopulation(m_populationSize, m_optimizationTypes, m_boundsGraph);
     #ifdef DEBUG
         qDebug() << "vectorBits.size()" << m_vectorBits.size();
+		Logger->debug("GeneticOperation::configure() done");
     #endif
 }
 
 void GeneticOperation::mutate() 
 {
-	Logger->trace("GeneticOperation::mutate() ");
+	#ifdef GENETIC_OPERATION_DEBUG
+	Logger->debug("GeneticOperation::mutate()");
+	#endif
+	
 	for (qint32 man = 0; man < m_populationSize; man++)
     {
 		double y = m_randomGenerator->bounded(0, 100) / 100.0;
-		if (y < 0.2) {
-			Logger->trace("mutate: change:{} man", man);
+		if (y < 0.2)
+		{
+			#ifdef GENETIC_OPERATION_DEBUG
+			Logger->debug("GeneticOperation::xOver() done");
+			#endif
 			m_vectorBits[man] = createRandomProcessing(m_optimizationTypes, m_boundsGraph);
 		}
 	}
+	#ifdef GENETIC_OPERATION_DEBUG
+	Logger->debug("GeneticOperation::mutate() done");
+	#endif
 }
 
 void GeneticOperation::mutate(int men) 
 {
 	#ifdef GENETIC_OPERATION_DEBUG
-	Logger->info("mutate: change:{} man", men);
+	Logger->debug("GeneticOperation::mutate({})", men);
 	#endif
 	m_vectorBits[men] = createRandomProcessing(m_optimizationTypes, m_boundsGraph);
 }
 
 void GeneticOperation::crossover()
 {
-#ifdef GENETIC_OPERATION_DEBUG
-	Logger->trace("crossover");
-#endif
+	#ifdef GENETIC_OPERATION_DEBUG
+	Logger->debug("GeneticOperation::crossover()");
+	#endif
 	// double x;
 	for (qint32 man1 = 0; man1 < m_populationSize; man1++)
     {
@@ -81,182 +105,188 @@ void GeneticOperation::crossover()
 			}
 		}
 	}
-	Logger->trace("crossover done");
+	#ifdef GENETIC_OPERATION_DEBUG
+	Logger->debug("GeneticOperation::crossover() done");
+	#endif
 }
 
 void GeneticOperation::crossover(int men)
 {
-#ifdef GENETIC_OPERATION_DEBUG
-	Logger->info("crossover");
-#endif
+	#ifdef GENETIC_OPERATION_DEBUG
+	Logger->debug("GeneticOperation::crossover({})", men),;
+	#endif
 	for (qint32 man2 = m_populationSize; man2 >= 0; man2--)
 	{
 		if (men != man2) {
 			double x = m_randomGenerator->bounded(0, 10) / 10.0;
+			#ifdef GENETIC_OPERATION_DEBUG
 			Logger->trace("m_randomGenerator GeneticOperation::crossover() x:{}", x);
-			if (x < 0.5) {
+			#endif
+			if (x < 0.5)
+			{
 				xOver(men, man2);
 				break;
 			}
 		}
 	}
-	Logger->trace("crossover done");
+	#ifdef GENETIC_OPERATION_DEBUG
+	Logger->debug("GeneticOperation::crossover({}) done", men),;
+	#endif
 }
 
 void GeneticOperation::gradient()
 {
-	Logger->trace("gradient");
+	#ifdef GENETIC_OPERATION_DEBUG
+	Logger->debug("GeneticOperation::gradient()");
+	#endif
 	for (qint32 man = 0; man < m_vectorBits.size(); man++)
 	{
 		double y = m_randomGenerator->bounded(0, 100) / 100.0;
-		if (y < 0.5) {
-			Logger->trace("gradient: change:{} man", man);
+		if (y < 0.5)
+		{
+			#ifdef GENETIC_OPERATION_DEBUG
+			Logger->debug("gradient: change:{} man", man);
+			#endif
 			//m_vectorBits[man] = createRandomProcessing(m_optimizationTypes, m_boundsGraph);
 			qint32 sizeOfBit = m_vectorBits[man].size();
 			int prob = m_randomGenerator->bounded(0, sizeOfBit);
 			//m_optimizationTypes
-			Logger->trace("prob:{}, max:{}", prob, m_vectorBits[man].size());
-			QString filterType = m_vectorBits[man][prob].toObject()["Type"].toString(); // Filter
+			#ifdef GENETIC_OPERATION_DEBUG
+			Logger->debug("prob:{}, max:{}", prob, m_vectorBits[man].size());
+			#endif
+			QString filterType = m_vectorBits[man][prob].toObject()[TYPE].toString(); // Filter
 			QJsonObject config = m_vectorBits[man][prob].toObject()["Config"].toObject();
-			QString filterName = config["Name"].toString();// Threshold
+			QString filterName = config[NAME].toString();// Threshold
 			for(int opt = 0; opt < m_optimizationTypes.size(); opt++)
 			{
 				if (m_optimizationTypes[opt] == filterType)
 				{
-					Logger->trace("gradient change filter type:{}", filterType.toStdString());
+					#ifdef GENETIC_OPERATION_DEBUG
+					Logger->debug("gradient change filter type:{}", filterType.toStdString());
+					#endif
 					QJsonObject dataObject = m_boundsGraph[m_optimizationTypes[opt]].toObject();
-					QJsonArray dataUsed = dataObject["Used"].toArray();
+					QJsonArray dataUsed = dataObject[USED].toArray();
 					for (int par = 0; par < dataUsed.size(); par++)
 					{
-
-						if (dataUsed[par].toObject()["Name"].toString() == filterName) // if  Threshold == Threshold
+						if (dataUsed[par].toObject()[NAME].toString() == filterName) // if  Threshold == Threshold
 						{
-							QJsonArray bounds = dataUsed[par].toObject()["Parameters"].toArray();
+							QJsonArray bounds = dataUsed[par].toObject()[PARAMETERS].toArray();
 							int probParam = m_randomGenerator->bounded(0, bounds.size() + 1);
-							QString parameter =  bounds[probParam].toObject()["Type"].toString();
-							//QJsonObject parameterObj = gradientOnConfig(bounds[probParam].toObject());
+							QString parameter =  bounds[probParam].toObject()[TYPE].toString();
 						}
 					}
 				}
 			}
 		}
 	}
-	Logger->trace("gradient done");
+	#ifdef GENETIC_OPERATION_DEBUG
+	Logger->debug("GeneticOperation::gradient() done");
+	#endif
 }
 
-
-bool GeneticOperation::gradient(int men) {
-#ifdef GENETIC_OPERATION_DEBUG
-	Logger->info("gradient: change:{} man", men);
-#endif
+bool GeneticOperation::gradient(int men)
+{
+	#ifdef GENETIC_OPERATION_DEBUG
+	Logger->debug("GeneticOperation::gradient({})", men);
+	#endif
 	
 	qint32 sizeOfBit = m_vectorBits[men].size();
-	//int prob = m_randomGenerator->bounded(0, sizeOfBit);
 
-
-	// TO co jest w caonfigu:
-	QString filterType = m_vectorBits[men][0].toObject()["Type"].toString(); // Filter
+	QString filterType = m_vectorBits[men][0].toObject()[TYPE].toString(); // Filter
 	QJsonObject config = m_vectorBits[men][0].toObject();
-	QString filterName = config["Name"].toString();// Threshold
-#ifdef GENETIC_OPERATION_DEBUG
-/*
+	QString filterName = config[NAME].toString();
+
+	#ifdef GENETIC_OPERATION_DEBUG
 	qDebug() << "m_vectorBits[men]:" << m_vectorBits[men];
 	qDebug() << "m_vectorBits[men][0].toObject():" << m_vectorBits[men][0].toObject();
-	qDebug() << "config:" << config;*/
-
-#endif
+	qDebug() << "config:" << config;
+	#endif
 
 	for (int opt = 0; opt < m_optimizationTypes.size(); opt++)
 	{
 		if (m_optimizationTypes[opt] == filterType)
 		{
-#ifdef GENETIC_OPERATION_DEBUG
-			Logger->info("gradient change filter type:{}", filterType.toStdString());
-#endif
+			#ifdef GENETIC_OPERATION_DEBUG
+			Logger->debug("gradient change filter type:{}", filterType.toStdString());
+			#endif
 			
 			QJsonObject dataObject = m_boundsGraph[m_optimizationTypes[opt]].toObject();
-			QJsonArray dataUsed = dataObject["Used"].toArray();
-#ifdef GENETIC_OPERATION_DEBUG
-			Logger->info("dataUsed:{}", dataUsed.size());
-#endif
+			QJsonArray dataUsed = dataObject[USED].toArray();
+			#ifdef GENETIC_OPERATION_DEBUG
+			Logger->debug("dataUsed:{}", dataUsed.size());
+			#endif
 
 			for (int par = 0; par < dataUsed.size(); par++)
 			{
-#ifdef GENETIC_OPERATION_DEBUG
-				Logger->info("check dataUsed[par].toObject()[Name].toString():{}", dataUsed[par].toObject()["Name"].toString().toStdString());
-				Logger->info("filterName:{}", filterName.toStdString());
-#endif
-				if (dataUsed[par].toObject()["Name"].toString() == filterName) // if  Threshold == Threshold
+				#ifdef GENETIC_OPERATION_DEBUG
+				Logger->debug("check dataUsed[par].toObject()[Name].toString():{}", dataUsed[par].toObject()[NAME].toString().toStdString());
+				Logger->debug("filterName:{}", filterName.toStdString());
+				#endif
+				if (dataUsed[par].toObject()[NAME].toString() == filterName) // if  Threshold == Threshold
 				{
-#ifdef GENETIC_OPERATION_DEBUG
-					Logger->info("name == name");
-					/*
+					#ifdef GENETIC_OPERATION_DEBUG
 					qDebug() << "dataUsed[par].toObject():" << dataUsed[par].toObject();
-					qDebug() << "dataUsed[par].toObject()[Parameters].toArray():" << dataUsed[par].toObject()["Parameters"].toArray();
-*/
-#endif
-					QJsonArray bounds = dataUsed[par].toObject()["Parameters"].toArray();
+					qDebug() << "dataUsed[par].toObject()[Parameters].toArray():" << dataUsed[par].toObject()[PARAMETERS].toArray();
+					#endif
+					QJsonArray bounds = dataUsed[par].toObject()[PARAMETERS].toArray();
 					int probParam = m_randomGenerator->bounded(0, bounds.size() );
-#ifdef GENETIC_OPERATION_DEBUG
-					Logger->info("probParam:{}", probParam);
-#endif
-					QString parameter = bounds[probParam].toObject()["Type"].toString(); // KernelSizeX
-#ifdef GENETIC_OPERATION_DEBUG
-					Logger->info("parameter:{}", parameter.toStdString());
-#endif
+					#ifdef GENETIC_OPERATION_DEBUG
+					Logger->debug("probParam:{}", probParam);
+					#endif
+					QString parameter = bounds[probParam].toObject()[TYPE].toString(); // KernelSizeX
+					#ifdef GENETIC_OPERATION_DEBUG
+					Logger->debug("parameter:{}", parameter.toStdString());
+					#endif
 					//QJsonObject parameterObj = gradientOnConfig(bounds[probParam].toObject(), parameter, config);
 					if (gradientOnConfig(bounds[probParam].toObject(), config))
 					{
-#ifdef GENETIC_OPERATION_DEBUG
-						Logger->info("gradientOnConfig return true");
-#endif					
+						#ifdef GENETIC_OPERATION_DEBUG
+						Logger->debug("gradientOnConfig return true");
+						#endif					
 						return true;
-						
-						//qDebug() << "parameterObj:" << parameterObj;
 					}
-					else {
-#ifdef GENETIC_OPERATION_DEBUG
-						Logger->info("gradientOnConfig return false");
-#endif	
+					else
+					{
+						#ifdef GENETIC_OPERATION_DEBUG
+						Logger->debug("gradientOnConfig return false");
+						#endif	
 						return false;
 					}
 				}
 			}
 		}
 	}
-	Logger->trace("gradient done");
+	#ifdef GENETIC_OPERATION_DEBUG
+	Logger->debug("GeneticOperation::gradient({}) done", men);
+	#endif
 }
 
 
-bool  GeneticOperation::gradientOnConfig(QJsonObject bounds, QJsonObject config)
+bool GeneticOperation::gradientOnConfig(QJsonObject bounds, QJsonObject config)
 {
-	int min = bounds["Min"].toInt();
-	int max = bounds["Max"].toInt();
-	int isDouble = bounds["IsDouble"].toInt();
-	QString parameter = bounds["Type"].toString();
+	int min = bounds[MIN].toInt();
+	int max = bounds[MAX].toInt();
+	int isDouble = bounds[IS_DOUBLE].toInt();
+	QString parameter = bounds[TYPE].toString();
 	int value{ 1 };
-	//QJsonObject parameterObj;
-	if (bounds["IsBool"].toBool() == true)
+	if (bounds[IS_BOOL].toBool() == true)
 	{
-#ifdef GENETIC_OPERATION_DEBUG
-		Logger->info("Gradient initial bool:{}", config[parameter].toBool());
-#endif
+		#ifdef GENETIC_OPERATION_DEBUG
+		Logger->indebugfo("Gradient initial bool:{}", config[parameter].toBool());
+		#endif
 		bool actualData = config[parameter].toBool();
-		//qDebug() << "IsBool!!";
-		//bool boolValue = m_randomGenerator->bounded(0, 1);
 		bool boolValue = !actualData;
-		//parameterObj.insert(bounds["Type"].toString(), boolValue);
 		config[parameter] = boolValue;
-#ifdef GENETIC_OPERATION_DEBUG
-		Logger->info("Gradient change bool:{}", config[parameter].toBool());
-#endif
+		#ifdef GENETIC_OPERATION_DEBUG
+		Logger->debug("Gradient change bool:{}", config[parameter].toBool());
+		#endif
 		return true;
 	}
 	else if (isDouble > 0)
 	{
-#ifdef GENETIC_OPERATION_DEBUG
-		Logger->info("Gradient initial double:{}", int(config[parameter].toDouble() * isDouble));
-#endif
+		#ifdef GENETIC_OPERATION_DEBUG
+		Logger->debug("Gradient initial double:{}", int(config[parameter].toDouble() * isDouble));
+		#endif
 		int actualData = int(config[parameter].toDouble() * isDouble);
 		int minValue{ 1 };
 		if (min == 0)
@@ -268,211 +298,237 @@ bool  GeneticOperation::gradientOnConfig(QJsonObject bounds, QJsonObject config)
 		}
 		double doubleValue = actualData;
 		double y = m_randomGenerator->bounded(0, 10) / 10.0;
-		if (y < 0.5) {
+		if (y < 0.5)
+		{
 			doubleValue = actualData + minValue;
 		}
-		else {
+		else
+		{
 			doubleValue = actualData - minValue;
 		}
 		if (doubleValue > max)
 		{
 			if (doubleValue <min)
 			{
-#ifdef GENETIC_OPERATION_DEBUG
 				Logger->error("Gradient Min Max error");
+				#ifdef GENETIC_OPERATION_DEBUG
 				return false;
-#endif
+				#endif
 			}
-			else {
-				//parameterObj.insert(bounds["Type"].toString(), doubleValueMinus);
+			else
+			{
+				//parameterObj.insert(bounds[TYPE].toString(), doubleValueMinus);
 				config[parameter] = doubleValue;
-#ifdef GENETIC_OPERATION_DEBUG
-				Logger->info("Gradient doubleValueMinus change to double:{}", int(config[parameter].toDouble() * isDouble));
-#endif
+				#ifdef GENETIC_OPERATION_DEBUG
+				Logger->debug("Gradient doubleValueMinus change to double:{}", int(config[parameter].toDouble() * isDouble));
+				#endif
 				return true;
 			}
 		}
 		else
 		{
-			//parameterObj.insert(bounds["Type"].toString(), doubleValuePlus);
 			config[parameter] = doubleValue;
-#ifdef GENETIC_OPERATION_DEBUG
-			Logger->info("Gradient doubleValuePlus change to double:{}", int(config[parameter].toDouble() * isDouble));
-#endif
+			#ifdef GENETIC_OPERATION_DEBUG
+			Logger->debug("Gradient doubleValuePlus change to double:{}", int(config[parameter].toDouble() * isDouble));
+			#endif
 			return true;
 		}
 	}
-	else if (bounds["IsOdd"].toBool() == true)
+	else if (bounds[IS_ODD].toBool() == true)
 	{
-#ifdef GENETIC_OPERATION_DEBUG
-		Logger->info("Gradient initial IsOdd:{}", config[parameter].toInt());
-#endif
-		//value = m_randomGenerator->bounded(bounds["Min"].toInt(), bounds["Max"].toInt() + 1);
+		#ifdef GENETIC_OPERATION_DEBUG
+		Logger->debug("Gradient initial IsOdd:{}", config[parameter].toInt());
+		#endif
+		//value = m_randomGenerator->bounded(bounds[MIN].toInt(), bounds[MAX].toInt() + 1);
 		value = config[parameter].toInt();
 		double y = m_randomGenerator->bounded(0, 10) / 10.0;
-		if (y < 0.5) {
+		if (y < 0.5)
+		{
 			value++;
 		}
-		else {
+		else
+		{
 			value--;
 		}
 		if (value % 2 == 0)
 		{
 			double y = m_randomGenerator->bounded(0, 10) / 10.0;
-			if (y < 0.5) {
+			if (y < 0.5)
+			{
 				value++;
 			}
-			else {
+			else
+			{
 				value--;
 			}
 		}
-		
 	}
 	else
 	{
-#ifdef GENETIC_OPERATION_DEBUG
-		Logger->info("Gradient initial normal operation:{}", config[parameter].toInt());
-#endif
-		//value = m_randomGenerator->bounded(bounds["Min"].toInt(), bounds["Max"].toInt() + 1);
+		#ifdef GENETIC_OPERATION_DEBUG
+		Logger->debug("Gradient initial normal operation:{}", config[parameter].toInt());
+		#endif
 		value = config[parameter].toInt();
 		double y = m_randomGenerator->bounded(0, 10) / 10.0;
-		if (y < 0.5) {
+		if (y < 0.5)
+		{
 			value++;
 		}
-		else {
+		else
+		{
 			value--;
 		}
-		
 	}
-#ifdef GENETIC_OPERATION_DEBUG
-	Logger->info("Gradient try to change normal operation:{}", value);
-#endif
+	#ifdef GENETIC_OPERATION_DEBUG
+	Logger->debug("Gradient try to change normal operation:{}", value);
+	#endif
 	if (value < min && value > max)
 	{
 		return false;
 	}
 	config[parameter] = value;
-#ifdef GENETIC_OPERATION_DEBUG
-	Logger->info("Gradient change to:{}", config[parameter].toInt());
-#endif
+	#ifdef GENETIC_OPERATION_DEBUG
+	Logger->debug("Gradient change to:{}", config[parameter].toInt());
+	#endif
 	return true;
 }
 
 void GeneticOperation::xOver(qint32 one, qint32 two)
 {
+	#ifdef GENETIC_OPERATION_DEBUG
+	Logger->debug("GeneticOperation::xOver({}:{})", one, two);
+	#endif
 	int x = m_randomGenerator->bounded(0, m_vectorBits[one].size());
 
-#ifdef GENETIC_OPERATION_DEBUG
-	Logger->info("xOver {}:{}", one, two);
-
-#endif
+	
 	QJsonArray tempArray1 = m_vectorBits[one];
 	QJsonArray tempArray2 = m_vectorBits[two];
 
-	//QJsonObject temp1 = tempArray1[x].toObject();
-	//QJsonObject temp2 = tempArray2[x].toObject();
-
-#ifdef GENETIC_OPERATION_DEBUG
-/*
-	qDebug() << "Try to change:" << tempArray1[x] << " into:" << tempArray2[x].toObject();*/
-#endif
+	#ifdef GENETIC_OPERATION_DEBUG
+	qDebug() << "Try to change:" << tempArray1[x] << " into:" << tempArray2[x].toObject();
+	#endif
 
 	tempArray1[x] = tempArray2[x].toObject();
 
 	m_vectorBits[one] = tempArray1;
-	//m_vectorBits[two].replace(x, m_vectorBits[one].at(x));
-
-	Logger->trace("xOver done");
+	#ifdef GENETIC_OPERATION_DEBUG
+	Logger->debug("GeneticOperation::xOver() done");
+	#endif
 }
 
 
 void GeneticOperation::elitist()
 {
-#ifdef GENETIC_OPERATION_DEBUG
-	Logger->debug("elitist");
-#endif
+	#ifdef GENETIC_OPERATION_DEBUG
+	Logger->debug("GeneticOperation::elitist()");
+	#endif
 	double d_best = m_fitness[0].fitness;
 	double d_worst = m_fitness[0].fitness;
 	qint32 best_men = 0;
 	qint32 worst_men = 0;
-	for (qint32 man = 0; man < m_populationSize - 1; man++) {
-		if (m_fitness[man].fitness > m_fitness[man + 1].fitness) {
-			if (m_fitness[man].fitness >= d_best) {
+	for (qint32 man = 0; man < m_populationSize - 1; man++)
+	{
+		if (m_fitness[man].fitness > m_fitness[man + 1].fitness)
+		{
+			if (m_fitness[man].fitness >= d_best)
+			{
 				d_best = m_fitness[man].fitness;
 				best_men = man;
 			}
-			if (m_fitness[man + 1].fitness <= d_worst) {
+			if (m_fitness[man + 1].fitness <= d_worst)
+			{
 				d_worst = m_fitness[man + 1].fitness;
 				worst_men = man + 1;
 			}
 		}
-		else {
-			if (m_fitness[man].fitness <= d_worst) {
+		else
+		{
+			if (m_fitness[man].fitness <= d_worst)
+			{
 				d_worst = m_fitness[man].fitness;
 				worst_men = man;
 			}
-			if (m_fitness[man + 1].fitness >= d_best) {
+			if (m_fitness[man + 1].fitness >= d_best)
+			{
 				d_best = m_fitness[man + 1].fitness;
 				best_men = man + 1;
 			}
 		}
 	}
 
-	if (d_best >= m_fitness[m_populationSize].fitness) {
+	if (d_best >= m_fitness[m_populationSize].fitness)
+	{
 		m_vectorBits[m_populationSize] = m_vectorBits[best_men];
 		m_fitness[m_populationSize] = m_fitness[best_men];
 	}
-	else {
+	else 
+	{
 		m_vectorBits[worst_men] = m_vectorBits[m_populationSize];
 		m_fitness[worst_men] = m_fitness[m_populationSize];
 	}
+	#ifdef GENETIC_OPERATION_DEBUG
+	Logger->debug("GeneticOperation::elitist() done");
+	#endif
 }
-
 
 void GeneticOperation::select()
 {
-#ifdef GENETIC_OPERATION_DEBUG
-	Logger->debug("select");
-#endif
-	// ca\B3kowite dopasowanie populacji
+	#ifdef GENETIC_OPERATION_DEBUG
+	Logger->debug("GeneticOperation::select()");
+	#endif
+	// population fitness:
 	double sum = 0;
-	for (qint32 man = 0; man < m_populationSize; man++) {
+	for (qint32 man = 0; man < m_populationSize; man++)
+	{
 		sum += m_fitness[man].fitness;
 	}
 	m_fitnessAllPopulation = sum;
-	for (qint32 man = 0; man < m_populationSize; man++) {
+	for (qint32 man = 0; man < m_populationSize; man++)
+	{
 		m_fitness[man].rfitness = m_fitness[man].fitness / sum;
 	}
 	m_fitness[0].cfitness = m_fitness[0].rfitness;
-	for (qint32 man = 1; man < m_populationSize; man++) {
-		m_fitness[man].cfitness =
-			(m_fitness[man - 1].cfitness + m_fitness[man].rfitness);
+	for (qint32 man = 1; man < m_populationSize; man++)
+	{
+		m_fitness[man].cfitness = (m_fitness[man - 1].cfitness + m_fitness[man].rfitness);
 	}
-	Logger->trace("select() loop:");
+
 	std::vector<QJsonArray> m_vectorBitsNew = m_vectorBits;
 
-	for (qint32 man = 0; man < m_populationSize; man++) {
+	for (qint32 man = 0; man < m_populationSize; man++)
+	{
 		double p = m_randomGenerator->bounded(0, 1000) / 1000.0;
-		Logger->trace("select m_randomGen GeneticOperation::select() :{}", p);
-		if (p < m_fitness[0].cfitness) {
+		#ifdef GENETIC_OPERATION_DEBUG
+		Logger->debug("GeneticOperation::select() p:{}", p);
+		#endif
+		if (p < m_fitness[0].cfitness)
+		{
 			m_vectorBitsNew[man] = m_vectorBits[0];
 		}
-		else {
-			Logger->trace("select else:");
-			for (qint32 manNew = 0; manNew < m_populationSize; manNew++) {
-				if (p >= m_fitness[manNew].cfitness &&
-					p < m_fitness[manNew + 1].cfitness) {
+		else
+		{
+			#ifdef GENETIC_OPERATION_DEBUG
+			Logger->debug("select else:");
+			#endif
+			for (qint32 manNew = 0; manNew < m_populationSize; manNew++)
+			{
+				if (p >= m_fitness[manNew].cfitness && p < m_fitness[manNew + 1].cfitness)
+					{
 					m_vectorBitsNew[man] = m_vectorBits[manNew + 1];
 				}
 			}
 		}
 	}
-	Logger->trace("select() copy population");
-	for (qint32 man = 0; man < m_populationSize; man++) {
+	#ifdef GENETIC_OPERATION_DEBUG
+	Logger->debug("GeneticOperation::select() copy population");
+	#endif
+	for (qint32 man = 0; man < m_populationSize; man++)
+	{
 		m_vectorBits[man] = m_vectorBitsNew[man];
-		//m_populationJson[man] = m_populationJsonNew[man];
 	}
-	Logger->trace("select() done");
+	#ifdef GENETIC_OPERATION_DEBUG
+	Logger->debug("GeneticOperation::select() done");
+	#endif
 }
 
 
@@ -480,46 +536,33 @@ void GeneticOperation::select()
 std::vector<QJsonArray> GeneticOperation::createRandomProcessingPopulation(qint32 populationSize, const std::vector<QString>& optimizationTypes, const QJsonObject& m_boundsGraph)
 {
 	#ifdef DEBUG
-	Logger->debug("GeneticOperation::createRandomProcessingPopulation");
+	Logger->debug("GeneticOperation::createRandomProcessingPopulation()");
 	#endif
 	std::vector<QJsonArray> out;
 	for (int i = 0; i <= populationSize; i++)
 	{
 		out.push_back(createRandomProcessing(optimizationTypes, m_boundsGraph));
 	}
+	#ifdef DEBUG
+	Logger->debug("GeneticOperation::createRandomProcessingPopulation() done");
+	#endif
 	return out;
 }
 
 QJsonArray GeneticOperation::createRandomProcessing(const std::vector<QString>& optimizationTypes, const QJsonObject& m_boundsGraph)
 {
 	QJsonArray vectorBits;
-	//qDebug() << optimizationTypes;
-
-	for (qint32 i = 0; i < optimizationTypes.size(); i++) {
-		//qDebug() << "optimizationTypes[i]:" << optimizationTypes[i];
-
+	for (qint32 i = 0; i < optimizationTypes.size(); i++)
+	{
 		QJsonObject dataObject = m_boundsGraph[optimizationTypes[i]].toObject();
-		QJsonArray dataUsed = dataObject["Used"].toArray();
+		QJsonArray dataUsed = dataObject[USED].toArray();
 		qint32 usedFiltersSize = dataUsed.size();
-		//qDebug() << "usedFiltersSize:" << usedFiltersSize;
-
-		for (qint32 j = 0; j < usedFiltersSize; j++) {
-			//QJsonObject dataUsedObj = dataUsed[j].toObject();
-			//qDebug() << "dataUsedObj[Name]:" << dataUsedObj["Name"].toString();
-		}
-		//qDebug() << "m_randomGenerator\n";
 		int blockType = m_randomGenerator->bounded(0, usedFiltersSize);
-		//qDebug() << "blockType:" << blockType;
 		QJsonObject bounds = dataUsed[blockType].toObject();
-		//qDebug() << "bounds:" << bounds;
 
 		QJsonObject parameterObj = createRandomProcessingBlock(bounds);
-		// Add filter information in configs:
-		parameterObj["Type"] = optimizationTypes[i];
+		parameterObj[TYPE] = optimizationTypes[i];
 		vectorBits.append(parameterObj);
-
-		//qDebug() << "parameterObj:" << parameterObj;
-		//qDebug() << "\n";
 	}
 	return vectorBits;
 }
@@ -527,38 +570,34 @@ QJsonArray GeneticOperation::createRandomProcessing(const std::vector<QString>& 
 QJsonObject GeneticOperation::createRandomProcessingBlock(const QJsonObject& bounds)
 {
 	QJsonObject parameterObj;
-	parameterObj.insert("Name", bounds["Name"].toString());
-	QJsonArray parameters = bounds["Parameters"].toArray();
+	parameterObj.insert(NAME, bounds[NAME].toString());
+	QJsonArray parameters = bounds[PARAMETERS].toArray();
 	for (qint32 j = 0; j < parameters.size(); j++) {
 		QJsonObject parameterIter = parameters[j].toObject();
-		if (parameterIter["IsBool"].toBool() == true)
+		if (parameterIter[IS_BOOL].toBool() == true)
 		{
-			//qDebug() << "IsBool!!";
 			bool boolValue = m_randomGenerator->bounded(0, 1);
-			parameterObj.insert(parameterIter["Type"].toString(), boolValue);
+			parameterObj.insert(parameterIter[TYPE].toString(), boolValue);
 			continue;
 		}
 
-		int value = m_randomGenerator->bounded(parameterIter["Min"].toInt(), parameterIter["Max"].toInt() + 1);
-		if (parameterIter["IsDouble"].toInt() > 0)
+		int value = m_randomGenerator->bounded(parameterIter[MIN].toInt(), parameterIter[MAX].toInt() + 1);
+		if (parameterIter[IS_DOUBLE].toInt() > 0)
 		{
-			//qDebug() << "IsDouble!!:" << parameterIter["IsDouble"].toDouble();
-
-			double doubleValue = value / parameterIter["IsDouble"].toDouble();
-			parameterObj.insert(parameterIter["Type"].toString(), doubleValue);
+			double doubleValue = value / parameterIter[IS_DOUBLE].toDouble();
+			parameterObj.insert(parameterIter[TYPE].toString(), doubleValue);
 			continue;
 		}
-		if (parameterIter["IsOdd"].toBool() == true)
+		if (parameterIter[IS_ODD].toBool() == true)
 		{
-			//qDebug() << "IsOdd!!";
 			if (value % 2 == 0)
 			{
 				value++;
 			}
-			parameterObj.insert(parameterIter["Type"].toString(), value);
+			parameterObj.insert(parameterIter[TYPE].toString(), value);
 			continue;
 		}
-		parameterObj.insert(parameterIter["Type"].toString(), value);
+		parameterObj.insert(parameterIter[TYPE].toString(), value);
 	}
 	return parameterObj;
 }

@@ -1,0 +1,38 @@
+{
+	"General": 
+	{
+		"LogLevel": 1,
+		"ThreadsMax": 12,
+		"Standalone": false
+	},
+	"Genetic":
+	{
+		"PopulationSize" : 36,
+		"GraphType" : "",
+		"DronType" : "",
+		"BoundsType" : "",
+		"GraphTypes":["Graph_estimator_with_filters", "Graph_estimator"],
+		"DronTypes" : ["BLACK", "BLACK_WHITE",  "WHITE"],
+		"BoundsTypes" : ["NONE", "MOG2","LOBSTER", "ABL", "ASBL", "MOG2", "CNT" , "MOG", "KNN", "GMG", "ViBe"],
+		"SaveBestPopulationVideo": false,
+		"FitnessThreshold": 3.99
+	},
+	"ConfigUnix": 
+	{
+		"Dataset": "/home/gm/repo/GeneticOptimization/configs/dataset.json",
+		"Graph": "/home/gm/repo/GeneticOptimization/configs/graph.json",
+		"Bounds": "/home/gm/repo/GeneticOptimization/configs/bounds.json",
+		"Preprocess": "/home/gm/repo/GeneticOptimization/configs/preprocess.json",
+		"Postprocess": "/home/gm/repo/GeneticOptimization/configs/postprocess.json",
+		"LogsFolder" : "/home/gm/repo/logs/"
+	},
+	"ConfigWin": 
+	{
+		"Dataset": "E:\\repo\\GeneticOptimization\\configs\\dataset.json",
+		"Graph": "E:\\repo\\GeneticOptimization\\configs\\graph.json",
+		"Bounds": "E:\\repo\\GeneticOptimization\\configs\\bounds.json",
+		"Preprocess": "E:\\repo\\GeneticOptimization\\configs\\preprocess.json",
+		"Postprocess": "E:\\repo\\GeneticOptimization\\configs\\postprocess.json",
+		"LogsFolder" : "E:\\repo\\logs\\"
+	}
+}

@@ -7,12 +7,17 @@ constexpr auto GENERAL{ "General" };
 constexpr auto GENETIC{ "Genetic" };
 constexpr auto GRAPH_TYPE{ "GraphType" };
 constexpr auto BOUNDS_TYPE{ "BoundsType" };
+constexpr auto DRON_TYPE{ "DronType" };
+constexpr auto GRAPH_TYPES{ "GraphTypes" };
+constexpr auto BOUNDS_TYPES{ "BoundsTypes" };
+constexpr auto DRON_TYPES{ "DronTypes" };
+
 constexpr auto CONFIG{ "Config" };
 constexpr auto NAME{ "Name" };
 constexpr auto STANDARD_DEVIATION{ "StandardDeviation" };
 constexpr auto DRON_NOISE{ "Noise" };
 constexpr auto DRON_CONTRAST{ "Contrast" };
-constexpr auto DRON_TYPE{ "DronType" };
+
 constexpr auto LOGS_FOLDER{ "LogsFolder" };
 constexpr auto CONFIG_UNIX{ "ConfigUnix" };
 constexpr auto CONFIG_WIN{ "ConfigWin" };
@@ -87,51 +92,40 @@ bool MainLoop::checkAndCreateFolder(QString name)
 
 void MainLoop::createConfig(QJsonObject const& a_config)
 {
-	#ifdef DEBUG_CONFIG
-		Logger->debug("MainLoop::createConfig()");
-	#endif
 
-    #ifdef _WIN32
-    QJsonObject configPaths = a_config[CONFIG_WIN].toObject();
-    #endif // _WIN32
-    #ifdef __linux__
-    QJsonObject configPaths = a_config[CONFIG_UNIX].toObject();
-    #endif // __linux__
-	#ifdef DEBUG_CONFIG
-		qDebug() << "MainLoop::createConfig(a_config) a_config:" << a_config;
-	#endif
-
-	m_logsFolder = configPaths[LOGS_FOLDER].toString();
-
-	std::vector<QString> grafConfigs{"Graph_estimator", "Graph_estimator_with_filters"};
-	std::vector<QString> dronConfigs{"BLACK", "BLACK_WHITE",  "WHITE"};
-	std::vector<QString> boundConfigs{"LOBSTER", "ABL", "ASBL", "MOG2", "CNT", "NONE", "MOG", "KNN", "GMG", "ViBe"};
+	//m_graphTypes = a_config[GENETIC].toObject()[GRAPH_TYPES].toArray()},
+	//m_boundsTypes = a_config[GENETIC].toObject()[BOUNDS_TYPES].toArray()},
+	//m_dronTypes = a_config[GENETIC].toObject()[DRON_TYPES].toArray()},
+	//std::vector<QString> grafConfigs{"Graph_estimator_with_filters", "Graph_estimator"};
+	//std::vector<QString> dronConfigs{"BLACK", "BLACK_WHITE",  "WHITE"};
+	//std::vector<QString> boundConfigs{"NONE", "MOG2","LOBSTER", "ABL", "ASBL", "MOG2", "CNT" , "MOG", "KNN", "GMG", "ViBe"};
 
 	if(checkAndCreateFolder(m_logsFolder))
 	{
 		Logger->error("checkAndCreateFolder cant create:{}", m_logsFolder.toStdString());
 	}
 
-	for (int graf = 0 ; graf < grafConfigs.size() ; graf++)
+	for (int graf = 0 ; graf < m_graphTypes.size() ; graf++)
 	{
-		checkAndCreateFolder(m_logsFolder + grafConfigs[graf]);
-		for (int dron = 0 ; dron < dronConfigs.size() ; dron++)
+		checkAndCreateFolder(m_logsFolder + m_graphTypes[graf].toString());
+		for (int dron = 0 ; dron < m_dronTypes.size() ; dron++)
 		{
-			checkAndCreateFolder(m_logsFolder + grafConfigs[graf] + m_split + dronConfigs[dron]);
-			for (int bounds = 0 ; bounds < boundConfigs.size() ; bounds++)
+			checkAndCreateFolder(m_logsFolder + m_graphTypes[graf].toString() + m_split + m_dronTypes[dron].toString());
+			for (int bounds = 0 ; bounds < m_boundsTypes.size() ; bounds++)
 			{
-				checkAndCreateFolder(m_logsFolder + grafConfigs[graf] + m_split + dronConfigs[dron] + m_split + boundConfigs[bounds]);
+				checkAndCreateFolder(m_logsFolder + m_graphTypes[graf].toString() + m_split + m_dronTypes[dron].toString() + 
+				m_split + m_boundsTypes[bounds].toString());
 				QJsonObject obj = m_config[GENETIC].toObject();
-				obj[BOUNDS_TYPE] = boundConfigs[bounds];
-				obj[DRON_TYPE] = dronConfigs[dron];
-				obj[GRAPH_TYPE] = grafConfigs[graf];
+				obj[BOUNDS_TYPE] = m_boundsTypes[bounds].toString();
+				obj[DRON_TYPE] = m_dronTypes[dron].toString();
+				obj[GRAPH_TYPE] = m_graphTypes[graf].toString();
 				#ifdef DEBUG_CONFIG
 					qDebug() << "genetic:" << obj; 
 				#endif
 				m_config[GENETIC] = obj;
 				m_geneticConfig.config = m_config;
 				
-				MainLoop::loadConfigs(configPaths, grafConfigs[graf], boundConfigs[bounds]);
+				MainLoop::loadConfigs(m_configPaths, m_graphTypes[graf].toString(), m_boundsTypes[bounds].toString());
 
 				//fill dron config:
 				for (int i = 0; i < 101; i += 10)
@@ -146,7 +140,7 @@ void MainLoop::createConfig(QJsonObject const& a_config)
 
 							config[DRON_NOISE] = i;
 							config[DRON_CONTRAST] = 100;
-							config[DRON_TYPE] = dronConfigs[dron];
+							config[DRON_TYPE] = m_dronTypes[dron].toString();
 
 							obj[CONFIG] = config;
 							arrObj[j] = obj;
@@ -262,25 +256,30 @@ MainLoop::MainLoop(QJsonObject a_config)
 	#endif // _UNIX
 
 	MainLoop::createStartupThreads();
+	MainLoop:configure(a_config);
 }
 
-void MainLoop::onCase(QJsonObject json)
+void MainLoop::configure(QJsonObject const& a_config)
 {
+	#ifdef DEBUG_CONFIG
+		Logger->debug("MainLoop::createConfig()");
+	#endif
+    #ifdef _WIN32
+    m_configPaths = a_config[CONFIG_WIN].toObject();
+    #endif // _WIN32
+    #ifdef __linux__
+    m_configPaths = a_config[CONFIG_UNIX].toObject();
+    #endif // __linux__
+	#ifdef DEBUG_CONFIG
+		qDebug() << "MainLoop::createConfig(a_config) a_config:" << a_config;
+	#endif
+
+	m_logsFolder = m_configPaths[LOGS_FOLDER].toString();
+
+	m_graphTypes = a_config[GENETIC].toObject()[GRAPH_TYPES].toArray();
+	m_boundsTypes = a_config[GENETIC].toObject()[BOUNDS_TYPES].toArray();
+	m_dronTypes = a_config[GENETIC].toObject()[DRON_TYPES].toArray();
 }
-
-void MainLoop::on_broadcast()
-{
-}
-
-void MainLoop::on_task(QJsonObject json)
-{
-}
-
-
-void MainLoop::on_register(QJsonObject json)
-{
-}
-
 
 void MainLoop::onUpdate()
 {
@@ -356,9 +355,4 @@ void MainLoop::onGeneticConfigured()
 {
 	Logger->debug("MainLoop::onGeneticConfigured()");
 	m_geneticConfigured = true;
-}
-
-void MainLoop::configure(QJsonObject const& a_config)
-{
-	Logger->info("MainLoop::configure()");
 }
