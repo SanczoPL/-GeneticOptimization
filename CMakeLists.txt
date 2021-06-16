@@ -11,8 +11,10 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${FLAGS_COMMON}" )
 if (UNIX)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lX11" )
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lX11 -O3 -Wall" )
 endif (UNIX)
+if (WIN32)
+endif (WIN32)
 set(TARGET_NAME "GeneticOptimization")
 
 set(CMAKE_AUTOMOC ON)
@@ -129,7 +131,6 @@ file(GLOB_RECURSE HEADERS_PROCESSING ProcessingModules/*.h)
 file(GLOB_RECURSE SRC_POST_PROCESSING PostProcessingModules/*.cc)
 file(GLOB_RECURSE HEADERS_POST_PROCESSING PostProcessingModules/*.h)
 
-
 add_library(${PROJECT_NAME}_lib STATIC
 	${SRC} ${HEADERS} 
 	${SRC_PROCESSING} ${HEADERS_PROCESSING}
@@ -155,7 +156,7 @@ target_link_libraries(${PROJECT_NAME}_lib ${QT_LIBRARIES} ${OpenCV_LIBS} Threads
 target_link_libraries(${PROJECT_NAME}_lib Qt5::Core Qt5::Network)
 
 if (UNIX)
-target_link_libraries(${PROJECT_NAME}_libX11)
+target_link_libraries(${PROJECT_NAME}_lib X11)
 endif (UNIX)
 
 target_link_libraries(${PROJECT_NAME} ${PROJECT_NAME}_lib ${QT_LIBRARIES} ${OpenCV_LIBS} Threads::Threads utils)
