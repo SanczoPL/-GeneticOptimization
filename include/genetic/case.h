@@ -25,21 +25,25 @@ class Case : public QObject
 
 public:
 	explicit Case(DataMemory* data);
-	fitness onConfigureAndStart(QJsonArray a_graph, QJsonArray a_config, QJsonArray a_postprocess);
+	fitness onConfigureAndStart(QJsonArray const& a_graph, QJsonArray const& a_config, QJsonArray const& a_postprocess);
 
 public slots:
 	void onUpdate();
-	void onConfigureAndStartSlot(QJsonArray a_graph, QJsonArray a_config, QJsonArray a_postprocess, int processSlot);
-	
+	void onConfigureAndStartSlot(QJsonArray const& a_graph, QJsonArray const& a_config, QJsonArray const& a_postprocess, int processSlot);
+
 private:
 	fitness process();
-	void configure(QJsonArray a_graph, QJsonArray a_config, QJsonArray a_postprocess);
+	void configure(QJsonArray const& a_graph, QJsonArray const& a_config, QJsonArray const& a_postprocess);
 	void clearDataForNextIteration();
+	void processing(const int iteration);
+	void postprocessing();
+	fitness finishPostProcessing();
+	void deleteData();
 
 signals:
 	void quit();
 	void signalOk(struct fitness fs, qint32 slot);
-	void configureAndStartSlot(QJsonArray a_graph, QJsonArray a_config, QJsonArray a_postprocess, qint32 processSlot);
+	void configureAndStartSlot(QJsonArray const& a_graph, QJsonArray const& a_config, QJsonArray const& a_postprocess, qint32 processSlot);
 
 private:
 	cv::TickMeter m_timer;
@@ -59,6 +63,9 @@ private:
 private:
 	Graph<Processing, _data> m_graph_processing;
 	Graph<PostProcess, _postData> m_graph_postprocessing;
+
+	double m_time;
+	double m_postTime;
 
 };
 
