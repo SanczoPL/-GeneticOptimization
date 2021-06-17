@@ -189,9 +189,6 @@ bool GeneticOperation::gradient(int men)
 	#ifdef GENETIC_OPERATION_DEBUG
 	Logger->debug("GeneticOperation::gradient({})", men);
 	#endif
-	
-	qint32 sizeOfBit = m_vectorBits[men].size();
-
 	QString filterType = m_vectorBits[men][0].toObject()[TYPE].toString(); // Filter
 	QJsonObject config = m_vectorBits[men][0].toObject();
 	QString filterName = config[NAME].toString();
@@ -237,7 +234,6 @@ bool GeneticOperation::gradient(int men)
 					#ifdef GENETIC_OPERATION_DEBUG
 					Logger->debug("parameter:{}", parameter.toStdString());
 					#endif
-					//QJsonObject parameterObj = gradientOnConfig(bounds[probParam].toObject(), parameter, config);
 					if (gradientOnConfig(bounds[probParam].toObject(), config))
 					{
 						#ifdef GENETIC_OPERATION_DEBUG
@@ -256,6 +252,7 @@ bool GeneticOperation::gradient(int men)
 			}
 		}
 	}
+	return false;
 	#ifdef GENETIC_OPERATION_DEBUG
 	Logger->debug("GeneticOperation::gradient({}) done", men);
 	#endif
@@ -308,7 +305,7 @@ bool GeneticOperation::gradientOnConfig(QJsonObject bounds, QJsonObject config)
 		}
 		if (doubleValue > max)
 		{
-			if (doubleValue <min)
+			if (doubleValue < min)
 			{
 				Logger->error("Gradient Min Max error");
 				#ifdef GENETIC_OPERATION_DEBUG

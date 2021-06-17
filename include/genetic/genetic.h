@@ -39,9 +39,7 @@ class Genetic : public QObject {
 
 	public slots:
 		void configure(QJsonObject const& a_config, QJsonObject  const& a_boundsGraph, QJsonArray  const& a_graph, 
-							QJsonArray a_postprocess, QJsonArray a_preprocess, int iterationGlobal);
-		void clearPopulation();
-		void clearFitness();
+							QJsonArray const& a_postprocess, QJsonArray const& a_preprocess, int iterationGlobal);
 		void onSignalOk(struct fitness fs, qint32 slot);
 
 	private:
@@ -72,12 +70,17 @@ class Genetic : public QObject {
 		int m_mutateCounter{};
 		int m_crossoverCounter{};
 		int m_gradientCounter{};
-		int m_actualPopulationIteration{};
+		int m_populationIteration{};
 		int m_iterationGlobal{};
 		int m_bestNotChange{};
 		int m_bestChangeIteration{};
-		double m_fitnessThreshold{};
+		int m_maxIteration{};
+		int m_maxBestNotChange{};
+		int m_dronNoise{};
+		int m_dronContrast{};
 
+
+		double m_fitnessThreshold{};
 		double m_bestChangeLast{};
 		double m_delta{};
 
@@ -98,6 +101,7 @@ class Genetic : public QObject {
 
 		bool m_configured{};
 		bool m_saveBestPopulationVideo{};
+		
 
 };
 #endif // GENETIC_H

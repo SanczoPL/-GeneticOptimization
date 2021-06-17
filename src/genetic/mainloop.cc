@@ -16,6 +16,7 @@ constexpr auto CONFIG{ "Config" };
 constexpr auto NAME{ "Name" };
 constexpr auto STANDARD_DEVIATION{ "StandardDeviation" };
 constexpr auto DRON_NOISE{ "Noise" };
+constexpr auto DRON_RAND_SEED{ "RandSeed" };
 constexpr auto DRON_CONTRAST{ "Contrast" };
 
 constexpr auto LOGS_FOLDER{ "LogsFolder" };
@@ -29,7 +30,7 @@ void MainLoop::readConfig(QString configName, QJsonObject& jObject, QString grap
 	QJsonObject _jObject{};
 	if (!configReader->readConfig(configName, _jObject))
 	{
-		Logger->error("MainLoop::readConfig() Open {} failed", configName.toStdString());
+		Logger->error("MainLoop::readConfig() open {} failed", configName.toStdString());
 	}
 	jObject = _jObject[graphType].toObject();
 	
@@ -42,7 +43,7 @@ void MainLoop::readConfig(QString configName, QJsonArray& jArray, QString graphT
 	QJsonObject _jObject{};
 	if (!configReader->readConfig(configName, _jObject))
 	{
-		Logger->error("MainLoop::readConfig() Open {} failed", configName.toStdString());
+		Logger->error("MainLoop::readConfig() open {} failed", configName.toStdString());
 	}
 	jArray = _jObject[graphType].toArray();
 	delete configReader;
@@ -100,6 +101,11 @@ void MainLoop::createConfig(QJsonObject const& a_config)
 	//std::vector<QString> dronConfigs{"BLACK", "BLACK_WHITE",  "WHITE"};
 	//std::vector<QString> boundConfigs{"NONE", "MOG2","LOBSTER", "ABL", "ASBL", "MOG2", "CNT" , "MOG", "KNN", "GMG", "ViBe"};
 
+	//qint64 _nowTime = qint64(QDateTime::currentMSecsSinceEpoch());
+
+	QTime now = QTime::currentTime();
+    int randNumber = now.msecsSinceStartOfDay();
+
 	if(checkAndCreateFolder(m_logsFolder))
 	{
 		Logger->error("checkAndCreateFolder cant create:{}", m_logsFolder.toStdString());
@@ -127,13 +133,13 @@ void MainLoop::createConfig(QJsonObject const& a_config)
 				
 				MainLoop::loadConfigs(m_configPaths, m_graphTypes[graf].toString(), m_boundsTypes[bounds].toString());
 
-				//fill dron config:
 				for (int i = 0; i < 101; i += 10)
 				{
 					for(int j = 0 ; j < m_geneticConfig.preprocess.size() ; j++)
 					{
 						if(m_geneticConfig.preprocess[j].toObject()[CONFIG].toObject()[NAME].toString() == "AddMultipleDron")
 						{
+							randNumber++;
 							QJsonArray arrObj = m_geneticConfig.preprocess;
 							QJsonObject obj = arrObj[j].toObject();
 							QJsonObject config = obj[CONFIG].toObject();
@@ -141,6 +147,7 @@ void MainLoop::createConfig(QJsonObject const& a_config)
 							config[DRON_NOISE] = i;
 							config[DRON_CONTRAST] = 100;
 							config[DRON_TYPE] = m_dronTypes[dron].toString();
+							config[DRON_RAND_SEED] = randNumber;
 
 							obj[CONFIG] = config;
 							arrObj[j] = obj;
@@ -153,7 +160,6 @@ void MainLoop::createConfig(QJsonObject const& a_config)
 						}
 					}
 					m_geneticConfigs.push_back(m_geneticConfig);
-
 				}
 			}
 		}
@@ -317,31 +323,30 @@ void MainLoop::onUpdate()
 
 void MainLoop::onNextConfig()
 {
-	qDebug() << "MainLoop::onNextConfig():"<< m_geneticConfigs.size();
+    Logger->debug("MainLoop::onNextConfig() configs left:{}", m_geneticConfigs.size());
 	m_dataMemoryLoaded = false;
 	m_geneticConfigured = false;
 	if (m_geneticConfigs.size() > 0)
 	{
-		qDebug() << "m_geneticConfigs.size() > 0:"<< m_geneticConfigs.size() ;
+		#ifdef DEBUG_CONFIG
+		Logger->debug("MainLoop::onNextConfig() pop config");
+		#endif
 		m_geneticConfigs.pop_front();
 		m_validTask = true;
-	}
-	else
-	{
-		qDebug() << "MainLoop::exit!!():"<< m_geneticConfigs.size();
 	}
 
 	if (m_geneticConfigs.size() == 0)
 	{
-		qDebug() << "No config left!:" << m_geneticConfigs.size();
+		#ifdef DEBUG_CONFIG
+		Logger->debug("MainLoop::onNextConfig() no config left, create new configs:");
+		#endif
 		createConfig(m_config);
 	}
 }
 
 void MainLoop::onQuit()
 {
-	qDebug() << "onQuit:";
-	Logger->error("MainLoop::onQuit()");
+	Logger->info("MainLoop::onQuit()");
 	emit(quit());
 }
 
