@@ -27,10 +27,9 @@ class DataMemory : public QObject {
   Q_OBJECT
 
 public:
-	DataMemory();
-	DataMemory(QJsonObject jDataset);
+	explicit DataMemory();
 	~DataMemory();
-	void configure(QJsonObject a_config);
+	void configure(QJsonObject const& a_config);
 	bool preprocess(QJsonArray m_dataGraph);
 	bool getLoad() { return m_loaded; };
 
@@ -49,11 +48,11 @@ public:
 
 private:
 	void loadDataFromStream(cv::VideoCapture videoFromFile, std::vector<cv::Mat>& m_cleanData, bool resize);
-	
-	void createSplit();
+	void loadConfig(QJsonObject const& a_config);
 	QVector<QString> scanAllImages(QString path);
 	void loadDataFromStreamWindows(std::vector<cv::Mat> &data, bool resize);
 	void loadDataLinux(QJsonObject a_config);
+	void createSplit();
 
 signals:
   void memoryLoaded();
@@ -61,12 +60,11 @@ signals:
 private:
 	std::vector<cv::Mat> m_cleanData;
 	std::vector<cv::Mat> m_gtCleanData;
-
 	std::vector<cv::Mat> m_inputData;
 	std::vector<cv::Mat> m_gtData;
 
 private:
-	bool m_loaded{};
+	
 	QString m_folderInput;
 	QString m_roi;
 	QString m_cleanTrain{};
@@ -75,10 +73,8 @@ private:
 	qint32 m_startFrame{};
 	qint32 m_startGT{};
 	qint32 m_stopGT{};
-	bool m_resize{};
 	qint32 m_width;
 	qint32 m_height;
-
 	QString m_clean;
 	QString m_gt;
 
@@ -86,7 +82,6 @@ private:
 	QJsonArray m_graph;
 	std::vector<Processing*> m_block;
 	std::vector<std::vector<_data>> m_data;
-
 	std::vector<cv::Mat> m_outputData;
 
 private:
@@ -97,6 +92,10 @@ private:
 	Graph<Processing, _data> m_graph_processing;
 
 	LoadData m_loadData;
+
+	bool m_loaded{};
+	bool m_resize{};
+	bool m_savePreprocessingDataset{};
 };
 
 #endif // DATAMEMORY_H
