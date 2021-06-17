@@ -16,6 +16,7 @@ constexpr auto STANDARD_DEVIATION{ "StandardDeviation" };
 constexpr auto DRON_NOISE{ "Noise" };
 constexpr auto DRON_CONTRAST{ "Contrast" };
 constexpr auto NAME{ "Name" };
+constexpr auto TYPE{ "Type" };
 constexpr auto ENCODER{ "Encoder" };
 constexpr auto CONFIG{ "Config" };
 constexpr auto LOGS_FOLDER{ "LogsFolder" };
@@ -25,12 +26,10 @@ constexpr auto CONFIG_WIN{ "ConfigWin" };
 constexpr auto SAVE_BEST_POPULATION_VIDEO{ "SaveBestPopulationVideo" };
 constexpr auto FITNESS_THRESHOLD{ "FitnessThreshold" };
 
+constexpr auto MAX_ITERATION{ "MaxIteration" };
+constexpr auto MAX_BEST_NOT_CHANGE{ "MaxBestNotChange" };
 
 
-Genetic::~Genetic()
-{
-	Logger->info(" Genetic::~Genetic()");
-}
 
 Genetic::Genetic(QVector<Case*> testCaseVector, DataMemory* data)
 	: m_testCaseVector(testCaseVector),
@@ -43,26 +42,21 @@ Genetic::Genetic(QVector<Case*> testCaseVector, DataMemory* data)
 	#ifdef DEBUG
 	Logger->debug("Genetic::Genetic()");
 	#endif
-
 	m_bestChangeLast = 0.0;
-	m_actualPopulationIteration = 0;
+	m_populationIteration = 0;
 	cv::theRNG().state = 123;
-	
 	m_testCaseBest = new Case(m_dataMemory);
 }
 
-void Genetic::clearPopulation()
+Genetic::~Genetic()
 {
-	Logger->trace(" Genetic::clearPopulation()");
-}
-
-void Genetic::clearFitness()
-{
-	Logger->trace(" Genetic::clearFitness()");
+	Logger->warn("Genetic::~Genetic()");
+	delete m_testCaseBest;
+	delete m_randomGenerator;
 }
 
 void Genetic::configure(QJsonObject const& a_config, QJsonObject  const& a_boundsGraph, QJsonArray  const& a_graph, 
-						QJsonArray a_postprocess, QJsonArray a_preprocess, int iterationGlobal)
+						QJsonArray const& a_postprocess, QJsonArray const& a_preprocess, int iterationGlobal)
 {
 	#ifdef DEBUG
 		Logger->debug("Genetic::configure()");
@@ -71,7 +65,6 @@ void Genetic::configure(QJsonObject const& a_config, QJsonObject  const& a_bound
 		qDebug() << "a_graph:" << a_graph;
 	#endif
 
-	
 	m_config = a_config;
 	Genetic::loadFromConfig(a_config);
 	Genetic::clearData();
@@ -99,14 +92,27 @@ void Genetic::configure(QJsonObject const& a_config, QJsonObject  const& a_bound
 		m_geneticOperation.m_fitness.append(fs);
 	}
 
-	QJsonArray arrObj = a_preprocess;
-	QJsonObject obj = arrObj[2].toObject();
-	QJsonObject config = obj[CONFIG].toObject();
+	m_dronNoise = 100;
+	m_dronContrast = 100;
+	QJsonArray preprocessArray = a_preprocess;
+	for (int prep = 0 ; prep < preprocessArray.size() ; prep++)
+	{
+		QJsonObject obj = preprocessArray[prep].toObject();
+		
+		if (obj[TYPE].toString()== "Filter")
+		{
+			if(obj[CONFIG].toObject()[NAME].toString() == "AddMultipleDron")
+			{
+				m_dronNoise = obj[CONFIG].toObject()[DRON_NOISE].toInt();
+				m_dronContrast = obj[CONFIG].toObject()[DRON_CONTRAST].toInt();
+			}
+		}
+	}
 
 	qint64 _nowTime = qint64(QDateTime::currentMSecsSinceEpoch());
 
-	m_fileName = m_logsFolder+ m_graphType + "/" + m_dronType  + "/" + m_boundsType + "/" + QString::number(config[DRON_NOISE].toInt()) 
-	+ "_" + QString::number(config[DRON_CONTRAST].toInt()) + "_" + QString::number(_nowTime); 
+	m_fileName = m_logsFolder+ m_graphType + "/" + m_dronType  + "/" + m_boundsType + "/" + QString::number(m_dronNoise) 
+	+ "_" + QString::number(m_dronContrast) + "_" + QString::number(_nowTime); 
 
 	Logger->info("Genetic::configure() nameFile:{}", (m_fileName + ".txt").toStdString());
 	emit(configureLogger((m_fileName + ".txt"), false));
@@ -124,7 +130,7 @@ void Genetic::clearData()
 {
 	m_configured = false;
 	m_bestChangeLast = 0.0;
-	m_actualPopulationIteration = 0;
+	m_populationIteration = 0;
 	m_bitFinishTest = 0;
 	m_bestNotChange = 0;
 	m_threadProcessing.clear();
@@ -153,6 +159,8 @@ void Genetic::loadFromConfig(QJsonObject const& a_config)
 
 	m_saveBestPopulationVideo = genetic[SAVE_BEST_POPULATION_VIDEO].toBool();
 	m_fitnessThreshold = genetic[FITNESS_THRESHOLD].toDouble();
+	m_maxIteration = genetic[MAX_ITERATION].toInt();
+	m_maxBestNotChange = genetic[MAX_BEST_NOT_CHANGE].toInt();
 
 }
 void Genetic::onSignalOk(struct fitness fs, qint32 slot)
@@ -212,8 +220,8 @@ void Genetic::process()
 
 void Genetic::iteration()
 {
-	Logger->trace("iteration():{}", m_actualPopulationIteration);
-	m_actualPopulationIteration++;
+	Logger->trace("iteration():{}", m_populationIteration);
+	m_populationIteration++;
 	#ifdef DEBUG
 	for (int i = 0; i < m_geneticOperation.m_fitness.size(); i++)
 	{
@@ -296,13 +304,12 @@ void Genetic::iteration()
 	}
 	logPopulation();
 
-
-	if ((m_bestNotChange >= 100) || m_geneticOperation.m_fitness[m_populationSize].fitness >= m_fitnessThreshold)
+	if (m_populationIteration >= m_maxIteration ||  m_bestNotChange >= m_maxBestNotChange || 
+		m_geneticOperation.m_fitness[m_populationSize].fitness >= m_fitnessThreshold)
 	{
 		handleBestPopulation();
 		emit(newConfig()); // Send to mainloop that genetic finished work.
 	}
-
 }
 
 void Genetic::handleBestPopulation()
@@ -346,20 +353,23 @@ void Genetic::logPopulation()
 	{
 		m_timer.stop();
 		Logger->info(
-			"ID:{:04d} B:{:f} (fn:{},fp:{},tn:{},tp:{})",
-			m_actualPopulationIteration, m_geneticOperation.m_fitness[m_populationSize].fitness,
+			"ID:{:04d} B:{:f} (fn:{},fp:{},tn:{},tp:{}) time:{:3.0f}[ms] ",
+			m_populationIteration, m_geneticOperation.m_fitness[m_populationSize].fitness,
 			m_geneticOperation.m_fitness[m_populationSize].fn, m_geneticOperation.m_fitness[m_populationSize].fp,
-			m_geneticOperation.m_fitness[m_populationSize].tn, m_geneticOperation.m_fitness[m_populationSize].tp);
+			m_geneticOperation.m_fitness[m_populationSize].tn, m_geneticOperation.m_fitness[m_populationSize].tp,
+			m_timer.getTimeMilli());
 
 		QStringList list;
-		list.push_back(QString::number(m_actualPopulationIteration)+ " ");
+		list.push_back(QString::number(m_populationIteration)+ " ");
 		list.push_back(QString().setNum(m_geneticOperation.m_fitness[m_populationSize].fitness, 'f', 4) + " ");
 
 		list.push_back(QString::number(m_geneticOperation.m_fitness[m_populationSize].fn) + " ");
 		list.push_back(QString::number(m_geneticOperation.m_fitness[m_populationSize].fp) + " ");
 		list.push_back(QString::number(m_geneticOperation.m_fitness[m_populationSize].tn) + " ");
 		list.push_back(QString::number(m_geneticOperation.m_fitness[m_populationSize].tp) + " ");
-		list.push_back(QString().setNum(m_timer.getTimeMilli(), 'f', 2) + " ");
+		//list.push_back(QString().setNum(m_geneticOperation.m_fitness[m_populationSize].time, 'f', 4) + " ");
+		//list.push_back(QString().setNum(m_geneticOperation.m_fitness[m_populationSize].postTime, 'f', 4) + " ");
+		list.push_back(QString().setNum(m_timer.getTimeMilli(), 'f', 0) + " ");
 		list.push_back("\n");
 		emit(appendToFileLogger(list));
 		m_timer.start();

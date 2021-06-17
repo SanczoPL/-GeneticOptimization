@@ -2,13 +2,13 @@
     {"Type": "INPUT_1", "Name": "RegionOfInterest", "X": 100, "Y": 100,"Width": 200,"Height": 200},
     {"Type": "INPUT_2", "Name": "RegionOfInterest", "X": 100, "Y": 100,"Width": 200,"Height": 200},
 
-    {"Type": "FILTER_1", "Name": "None"},
-    {"Type": "FILTER_2", "Name": "None"},
-    {"Type": "FILTER_3", "Name": "None"},
-    {"Type": "FILTER_4", "Name": "None"},
-    {"Type": "FILTER_5", "Name": "None"},
-    {"Type": "FILTER_6", "Name": "None"},
-    {"Type": "FILTER_7", "Name": "None"},
+    {"Type": "FILTER_1", "Name": "MedianBlur", "KernelSize": 3},
+    {"Type": "FILTER_2", "Name": "Blur", "KernelSizeX": 3, "KernelSizeY": 3, "BorderType": 1},
+    {"Type": "FILTER_3", "Name": "GaussianBlur", "KernelSizeX": 3, "KernelSizeY": 3, "SigmaX": 0.1, "SigmaY": 0.1, "BorderType": 1},
+    {"Type": "FILTER_4", "Name": "Threshold", "ThresholdDecision": 15, "ThresholdTypes": 0, "ThresholdValue": 254},
+    {"Type": "FILTER_5", "Name": "MorphologyOperation", "MorphOperator": 0, "MorphSize": 3, "MorphElement": 2},
+    {"Type": "FILTER_6", "Name": "Sobel", "OrderDerivativeX": 2, "OrderDerivativeY": 2, "KernelSize": 1, "BorderType": 1},
+    {"Type": "FILTER_7", "Name": "BilateralFilter", "Diameter": 2, "SigmaColor": 0.1, "SigmaSpace": 0.1, "BorderType": 1},
     {"Type": "FILTER_8", "Name": "None"},
 
     {"Name": "ABL", 
@@ -27,6 +27,3 @@
         "RequiredNbBgSamples": 2, 
         "LearningRate": 16}
 ]
-
-
-

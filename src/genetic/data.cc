@@ -39,6 +39,7 @@ constexpr auto OUTPUT_TYPE{ "OutputType" };
 constexpr auto INPUT_PREFIX{ "InputPrefix" };
 constexpr auto DATASET_UNIX{ "DatasetLinux" };
 constexpr auto DATASET_WIN32{ "DatasetWin32" };
+constexpr auto SAVE_PREPROCESSING_DATASET{ "SavePreprocessingDataset" };
 
 
 DataMemory::DataMemory()
@@ -49,17 +50,20 @@ DataMemory::DataMemory()
 	DataMemory::createSplit();
 }
 
-DataMemory::DataMemory(QJsonObject jDataset)
+DataMemory::~DataMemory(){}
+
+void DataMemory::createSplit()
 {
 	#ifdef DEBUG
-	Logger->debug("DataMemory::DataMemory()");
+	Logger->debug("DataMemory::createSplit()");
 	#endif
-	DataMemory::createSplit();
-	m_loadData.configure(jDataset);
-	m_loadData.loadData(m_cleanData, m_gtCleanData);
+	#ifdef _WIN32
+	m_split = "\\";
+	#endif // _WIN32
+	#ifdef __linux__
+	m_split = "/";
+	#endif // _UNIX
 }
-
-DataMemory::~DataMemory(){}
 
 void DataMemory::clearDataForNextIteration()
 {
@@ -67,14 +71,10 @@ void DataMemory::clearDataForNextIteration()
 	m_outputData.clear();
 }
 
-void DataMemory::createSplit()
+void DataMemory::loadConfig(QJsonObject const& a_config)
 {
-	#ifdef _WIN32
-	m_split = "\\";
-	#endif // _WIN32
-	#ifdef __linux__
-	m_split = "/";
-	#endif // _UNIX
+	m_savePreprocessingDataset = a_config[SAVE_PREPROCESSING_DATASET].toBool();
+
 }
 
 bool DataMemory::preprocess(QJsonArray dataGraph)
@@ -164,7 +164,7 @@ bool DataMemory::preprocess(QJsonArray dataGraph)
 	}
 	m_loaded = true;
 	
-	if(false)
+	if(m_savePreprocessingDataset)
 	{
 		for(int i = 0 ; i < m_inputData.size() ; i++)
 		{
@@ -182,8 +182,41 @@ bool DataMemory::preprocess(QJsonArray dataGraph)
 	return true;
 }
 
-void DataMemory::configure(QJsonObject a_config)
+void DataMemory::configure(QJsonObject const& a_config)
 {
-	m_loadData.configure(a_config);
+	#ifdef DEBUG
+	Logger->debug("DataMemory::configure()");
+	#endif
+	DataMemory::loadConfig(a_config);
+
+	#ifdef _WIN32
+	QJsonObject jDataset{ a_config[DATASET_WIN32].toObject() };
+	#endif // _WIN32
+	#ifdef __linux__ 
+	QJsonObject jDataset{ a_config[DATASET_UNIX].toObject() };
+	#endif // _UNIX
+	
+	QString configName = jDataset[CONFIG_NAME].toString();
+	QString pathToConfig = jDataset[PATH_TO_DATASET].toString();
+
+	#ifdef DEBUG
+		Logger->debug("DataMemory::configure() open config file:{}", (pathToConfig + configName).toStdString());
+		qDebug() << "DataMemory::configure() jDataset:"<< jDataset;
+	#endif
+	QJsonObject datasetConfig{};
+	std::shared_ptr<ConfigReader> cR = std::make_shared<ConfigReader>();
+	if (!cR->readConfig(pathToConfig + configName, datasetConfig))
+	{
+		Logger->error("DataMemory::configure() File {} not readed", (pathToConfig + configName).toStdString());
+	}
+	m_startGT = datasetConfig[START_GT].toInt();
+	m_stopGT = datasetConfig[STOP_GT].toInt();
+	m_inputType = datasetConfig[INPUT_TYPE].toString();
+	m_outputType = datasetConfig[OUTPUT_TYPE].toString();
+
+	m_loadData.configure(a_config, jDataset);
 	m_loadData.loadData(m_cleanData, m_gtCleanData);
+	#ifdef DEBUG
+	Logger->debug("DataMemory::configure() done");
+	#endif
 }

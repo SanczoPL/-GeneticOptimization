@@ -20,14 +20,16 @@ constexpr auto HEIGHT{ "Height" };
 
 Case::Case(DataMemory* data)
 	: m_dataMemory(data),
-	m_firstTime{ true }
+	m_firstTime{ true },
+	m_time(0),
+	m_postTime(0)
 {
 	connect(this, &Case::configureAndStartSlot, this, &Case::onConfigureAndStartSlot);
 }
 
 void Case::onUpdate() {}
 
-void Case::configure(QJsonArray a_graph, QJsonArray a_config, QJsonArray a_postprocess)
+void Case::configure(QJsonArray const& a_graph, QJsonArray const& a_config, QJsonArray const& a_postprocess)
 {
 	#ifdef DEBUG
 	Logger->debug("Case::configure() change()");
@@ -47,7 +49,7 @@ void Case::configure(QJsonArray a_graph, QJsonArray a_config, QJsonArray a_postp
 		m_firstTime = false;
 		if (m_graph_config.size() != a_config.size())
 		{
-			Logger->error("config not match with graph");
+			Logger->error("config not match with graph, please check graph");
 			return;
 		}
 		m_graph_processing.loadGraph(m_graph_config, m_config, m_block);
@@ -72,7 +74,7 @@ void Case::configure(QJsonArray a_graph, QJsonArray a_config, QJsonArray a_postp
 }
 
 
-void Case::onConfigureAndStartSlot(QJsonArray a_graph, QJsonArray a_config, QJsonArray a_postprocess, int processSlot)
+void Case::onConfigureAndStartSlot(QJsonArray const& a_graph, QJsonArray const& a_config, QJsonArray const& a_postprocess, int processSlot)
 {
 	configure(a_graph, a_config, a_postprocess);
 	fitness fs = Case::process();
@@ -80,7 +82,7 @@ void Case::onConfigureAndStartSlot(QJsonArray a_graph, QJsonArray a_config, QJso
 	Logger->trace("Case::onConfigureAndStart() done");
 }
 
-fitness Case::onConfigureAndStart(QJsonArray a_graph, QJsonArray a_config, QJsonArray a_postprocess)
+fitness Case::onConfigureAndStart(QJsonArray const& a_graph, QJsonArray const& a_config, QJsonArray const& a_postprocess)
 {
 	#ifdef DEBUG_SINGLE_CASE
 		Logger->debug("Case::onConfigureAndStart()");
@@ -101,142 +103,122 @@ void Case::clearDataForNextIteration()
 	//m_outputDataVector.clear();
 }
 
-fitness Case::process()
+void Case::processing(const int iteration)
 {
+	Case::clearDataForNextIteration();
+	cv::Mat input = m_dataMemory->input(iteration).clone();
+	Logger->trace("Case::process() iteration:{}", iteration);
+
 	#ifdef DEBUG_CASE
-		Logger->debug("Case::onConfigureAndStart()");
-		Logger->debug("Case::process() start processing {} frames", m_dataMemory->getSize());
-		Logger->debug("Case::process() m_block,size:{}", m_block.size());
+		Logger->debug("Case::process() graph[{}] Processing:", iteration);
 	#endif
-
-	
-	double time = 0;
-	for (int iteration = 0; iteration < m_dataMemory->getSize(); iteration++)
+	for (int i = 0; i < m_graph_config.size(); i++)
 	{
-		Case::clearDataForNextIteration();
-		cv::Mat input = m_dataMemory->input(iteration).clone();
-		Logger->trace("Case::process() iteration:{}", iteration);
-
+		std::vector<_data> dataVec;
+		const QJsonObject _obj = m_graph_config[i].toObject();
+		const QJsonArray _prevActive = _obj[PREV].toArray();
+		const QJsonArray _nextActive = _obj[NEXT].toArray();
 		#ifdef DEBUG_CASE
-			Logger->debug("Case::process() graph[{}] Processing:", iteration);
-		#endif
-		for (int i = 0; i < m_graph_config.size(); i++)
+		Logger->info("Case::process() i:{}, _prevActive.size:{}", i, _prevActive.size());
+		#endif	
+		if (m_graph_processing.checkIfLoadInputs(_prevActive, dataVec, input))
 		{
-			std::vector<_data> dataVec;
-			const QJsonObject _obj = m_graph_config[i].toObject();
-			const QJsonArray _prevActive = _obj[PREV].toArray();
-			const QJsonArray _nextActive = _obj[NEXT].toArray();
+			m_graph_processing.loadInputs(_prevActive, dataVec, m_graph_config, m_data);		
+		}
+		try
+		{
 			#ifdef DEBUG_CASE
-			Logger->info("Case::process() i:{}, _prevActive.size:{}", i, _prevActive.size());
-			#endif	
-			if (m_graph_processing.checkIfLoadInputs(_prevActive, dataVec, input))
-			{
-				m_graph_processing.loadInputs(_prevActive, dataVec, m_graph_config, m_data);		
-			}
-			try
-			{
-				#ifdef DEBUG_CASE
-				Logger->debug("Case::process() graph[{}] Processing: block[{}]->process", iteration, i);
-				#endif
-				m_block[i]->process((dataVec));
-			}
-			catch (cv::Exception& e)
-			{
-				const char* err_msg = e.what();
-				qDebug() << "exception caught: " << err_msg;
-			}
-			m_data.push_back((dataVec));
-
-			if (m_graph_processing.checkIfReturnData(_nextActive))
-			{
-				m_graph_processing.returnData(i, m_outputData, m_data);
-			}
-		
-			time += m_block[i]->getElapsedTime();
-			dataVec.clear();
-		}
-		#ifdef DEBUG_CASE
-			Logger->debug("Case::process() graph[{}] Intephase:", iteration);
-		#endif
-		
-		//m_outputData.clear();
-		cv::Mat gt = m_dataMemory->gt(iteration).clone();
-		//m_outputData.push_back(gt.clone());
-		m_outputData.push_back(gt.clone());
-		cv::Mat inputImage = m_dataMemory->input(iteration).clone();
-		m_outputData.push_back(inputImage.clone());
-		#ifdef DEBUG_CASE
-			if(m_outputData.size() != 2 )
-			{
-				Logger->error("Case::process() m_outputData.size():{}", m_outputData.size());
-			}
-			Logger->info("Case::process() postprocess iteration:{}, m_outputData.size:{}", iteration, m_outputData.size());
-		#endif
-		
-		#ifdef DEBUG_OPENCV
-			cv::imshow("output", m_outputData[0]);
-			cv::imshow("gt-case", m_outputData[1]);
-			cv::imshow("input", m_outputData[2]);
-			cv::waitKey(1);
-		#endif
-		
-		if (iteration>50)
-		{
-			// POSTPROCESSING:
-			m_dataPostprocess.clear();
-
-			#ifdef DEBUG_POSTPROCESSING
-				Logger->debug("Case::process() graph[{}] PostProcessing:", iteration);
+			Logger->debug("Case::process() graph[{}] Processing: block[{}]->process", iteration, i);
 			#endif
-			for (int i = 0; i < m_postprocess_config.size(); i++)
-			{
-				#ifdef DEBUG_POSTPROCESSING
-				qDebug() << "m_postprocess_config[i]:" << m_postprocess_config[i];
-				for (int z = 0; z < m_dataPostprocess.size(); z++)
-				{
-					for (int zz = 0; zz < m_dataPostprocess[z].size(); zz++)
-					{
-						Logger->debug("post [{}][{}].():{}", z, zz, m_dataPostprocess[z][zz].processing.cols);
-					}
-				}
-				#endif
+			m_block[i]->process((dataVec));
+		}
+		catch (cv::Exception& e)
+		{
+			const char* err_msg = e.what();
+			qDebug() << "exception caught: " << err_msg;
+		}
+		m_data.push_back((dataVec));
 
-				std::vector<_postData> dataVec;
-				const QJsonObject _obj = m_postprocess_config[i].toObject();
-				const QJsonArray _prevActive = _obj[PREV].toArray();
-				const QJsonArray _nextActive = _obj[NEXT].toArray();
-				#ifdef DEBUG_POSTPROCESSING
-				Logger->debug("Case::process() postprocess i:{}, _prevActive.size:{}", i, _prevActive.size());
-				#endif
-				if (m_graph_postprocessing.checkIfLoadInputs(_prevActive, dataVec, m_outputData, i))
-				{
-					m_graph_postprocessing.loadInputs(_prevActive, dataVec, m_graph_config, m_dataPostprocess);				
-				}
-				try
-				{
-					#ifdef DEBUG_POSTPROCESSING
-					Logger->debug("Case::process() graph[{}] postProcessing: block[{}]->process", iteration, i);
-					#endif
-					m_blockPostprocess[i]->process((dataVec));
-				}
-				catch (cv::Exception& e)
-				{
-					const char* err_msg = e.what();
-					qDebug() << "exception caught: " << err_msg;
-				}
-				m_dataPostprocess.push_back((dataVec));
+		if (m_graph_processing.checkIfReturnData(_nextActive))
+		{
+			m_graph_processing.returnData(i, m_outputData, m_data);
+		}
+	
+		m_time += m_block[i]->getElapsedTime();
+		dataVec.clear();
+	}
+	#ifdef DEBUG_CASE
+		Logger->debug("Case::process() graph[{}] Intephase:", iteration);
+	#endif
+	
+
+	cv::Mat gt = m_dataMemory->gt(iteration).clone();
+	m_outputData.push_back(gt.clone());
+	cv::Mat inputImage = m_dataMemory->input(iteration).clone();
+	m_outputData.push_back(inputImage.clone());
+	#ifdef DEBUG_CASE
+	Logger->info("Case::process() postprocess iteration:{}, m_outputData.size:{}", iteration, m_outputData.size());
+	#endif
+	
+	#ifdef DEBUG_OPENCV
+	cv::imshow("output", m_outputData[0]);
+	cv::imshow("gt-case", m_outputData[1]);
+	cv::imshow("input", m_outputData[2]);
+	cv::waitKey(1);
+	#endif
+}
+
+void Case::postprocessing()
+{
+	// POSTPROCESSING:
+	m_dataPostprocess.clear();
+
+	#ifdef DEBUG_POSTPROCESSING
+	Logger->debug("Case::process() PostProcessing:");
+	#endif
+	for (int i = 0; i < m_postprocess_config.size(); i++)
+	{
+		#ifdef DEBUG_POSTPROCESSING
+		qDebug() << "m_postprocess_config[i]:" << m_postprocess_config[i];
+		for (int z = 0; z < m_dataPostprocess.size(); z++)
+		{
+			for (int zz = 0; zz < m_dataPostprocess[z].size(); zz++)
+			{
+				Logger->debug("post [{}][{}].():{}", z, zz, m_dataPostprocess[z][zz].processing.cols);
 			}
 		}
-	}
-	#ifdef DEBUG_POSTPROCESSING
-	for (int z = 0; z < m_dataPostprocess.size(); z++)
-	{
-		for (int zz = 0; zz < m_dataPostprocess[z].size(); zz++)
+		#endif
+
+		std::vector<_postData> dataVec;
+		const QJsonObject _obj = m_postprocess_config[i].toObject();
+		const QJsonArray _prevActive = _obj[PREV].toArray();
+		const QJsonArray _nextActive = _obj[NEXT].toArray();
+		#ifdef DEBUG_POSTPROCESSING
+		Logger->debug("Case::process() postprocess i:{}, _prevActive.size:{}", i, _prevActive.size());
+		#endif
+		if (m_graph_postprocessing.checkIfLoadInputs(_prevActive, dataVec, m_outputData, i))
 		{
-			Logger->debug("pre [{}][{}].():{}", z, zz, m_dataPostprocess[z][zz].processing.cols);
+			m_graph_postprocessing.loadInputs(_prevActive, dataVec, m_graph_config, m_dataPostprocess);				
 		}
+		try
+		{
+			#ifdef DEBUG_POSTPROCESSING
+			Logger->debug("Case::process() postProcessing: block[{}]->process", i);
+			#endif
+			m_blockPostprocess[i]->process((dataVec));
+		}
+		catch (cv::Exception& e)
+		{
+			const char* err_msg = e.what();
+			qDebug() << "exception caught: " << err_msg;
+		}
+		m_dataPostprocess.push_back((dataVec));
+		m_postTime += m_blockPostprocess[i]->getElapsedTime();
 	}
-	#endif
+}
+
+fitness Case::finishPostProcessing()
+{
 	#ifdef DEBUG_POSTPROCESSING
 	Logger->debug("Case::process() Calculate fitness:");
 	#endif
@@ -272,12 +254,18 @@ fitness Case::process()
 			Logger->debug("m_dataPostprocess [{}][{}].():{}", z, zz, m_dataPostprocess[z][zz].processing.cols);
 			Logger->debug("m_dataPostprocess [{}][{}].():{}", z, zz, m_dataPostprocess[z][zz].testStr.toStdString());
 		}
-
 	}
 	#endif
+	return fs;
+}
+
+void Case::deleteData()
+{
 	#ifdef DEBUG_CASE
 	Logger->debug("Case::process() deletes:");
 	#endif
+
+	// TODO: not working properly:
 	for (int i = 0; i < m_block.size(); i++)
 	{
 		//m_block[i]->deleteLater();
@@ -288,10 +276,48 @@ fitness Case::process()
 		//m_block[i]->deleteLater();
 		//delete m_blockPostprocess[i];
 	}
-	/*
-	m_data.clear();
-	m_outputData.clear();
-	m_outputDataVector.clear();*/
+}
+
+fitness Case::process()
+{
+	#ifdef DEBUG_CASE
+		Logger->debug("Case::onConfigureAndStart()");
+		Logger->debug("Case::process() start processing {} frames", m_dataMemory->getSize());
+		Logger->debug("Case::process() m_block,size:{}", m_block.size());
+	#endif
+	m_time = 0;
+	m_postTime = 0;
+	
+	
+	for (int iteration = 0; iteration < m_dataMemory->getSize(); iteration++)
+	{
+		Case::processing(iteration);
+		
+		if (iteration>50)
+		{
+			Case::postprocessing();
+		}
+	}
+	#ifdef DEBUG_POSTPROCESSING
+	Logger->debug("Case::process() processing time:{}", m_time);
+	Logger->debug("Case::process() post processing timePost:{}", m_postTime);
+	#endif
+	#ifdef DEBUG_POSTPROCESSING
+	for (int z = 0; z < m_dataPostprocess.size(); z++)
+	{
+		for (int zz = 0; zz < m_dataPostprocess[z].size(); zz++)
+		{
+			Logger->debug("pre [{}][{}].():{}", z, zz, m_dataPostprocess[z][zz].processing.cols);
+		}
+	}
+	#endif
+	
+	struct fitness fs = Case::finishPostProcessing();
+
+	fs.time = m_time;
+	fs.postTime = m_postTime;
+
+	Case::deleteData();
 
 	#ifdef DEBUG_CASE
 		qDebug() << "fitness.fitness:" << fs.fitness;

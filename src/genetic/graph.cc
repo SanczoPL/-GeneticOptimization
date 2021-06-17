@@ -93,12 +93,12 @@ bool Graph<T, T_data>::checkIfLoadInputs(const QJsonArray & prevActive, std::vec
 			if( i < input.size())
 			{
 				_flagNotStart = false;
-				T_data data{ input[i].clone(), "temp1" };
+				T_data data{ input[i].clone(), "test1" };
 				dataVec.push_back(data);
 			}
 			else
 			{
-				Logger->error("input too short:{}", i);
+				Logger->error("Graph<T, T_data>::checkIfLoadInputs() input too short:{}", i);
 			}
 		}
 	}

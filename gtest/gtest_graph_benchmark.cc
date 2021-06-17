@@ -3,7 +3,6 @@
 constexpr auto TEST_GRAPH_CONFIG{ "gtest/test_graph_config.json" };
 constexpr auto TEST_GRAPH_CONFIG_POSTPROCESSING{ "gtest/test_graph_config_postprocesssing.json" };
 constexpr auto TEST_GRAPH{ "gtest/test_graph.json" };
-constexpr auto TEST_GRAPH_POSTPROCESSING{ "gtest/test_graph_postprocessing.json" };
 constexpr auto TEST_DATA{ "TestData" };
 constexpr auto GRAPH{ "Graph" };
 constexpr auto TEST_DATASET{ "gtest/test_dataset.json" };
@@ -61,6 +60,9 @@ namespace gtest_graph_benchmark
 		for (int iteration = 0; iteration < m_dataMemory->getSize(); iteration++)
 		{
 			cv::Mat input = m_dataMemory->input(iteration).clone();
+			cv::Mat gt = m_dataMemory->gt(iteration).clone();
+			std::vector<cv::Mat> inputMatrix{input, gt};
+
 			m_data.clear();
 			m_outputData.clear();
 			for (int i = 0; i < m_graph_config.size(); i++)
@@ -70,7 +72,7 @@ namespace gtest_graph_benchmark
 				const QJsonArray _prevActive = _obj[PREV].toArray();
 				const QJsonArray _nextActive = _obj[NEXT].toArray();
 
-				if (m_graph_processing.checkIfLoadInputs(_prevActive, dataVec, input))
+				if (m_graph_processing.checkIfLoadInputs(_prevActive, dataVec, inputMatrix, i))
 				{
 					m_graph_processing.loadInputs(_prevActive, dataVec, m_graph_config, m_data);	
 				}

@@ -37,7 +37,7 @@ public:
 	LoadData();
 	~LoadData();
 	bool loadData(std::vector<cv::Mat> &data, std::vector<cv::Mat> &gt);
-	void configure(QJsonObject a_config);
+	void configure(QJsonObject const& a_config, QJsonObject const& a_dataset);
 
 private:
 	

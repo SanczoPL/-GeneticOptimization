@@ -26,44 +26,32 @@ LoadData::LoadData()
 
 LoadData::~LoadData(){}
 
-void LoadData::configure(QJsonObject a_config)
+void LoadData::configure(QJsonObject const& a_config, QJsonObject const& a_dataset)
 {
 	#ifdef _WIN32
-		m_split = "\\";
+	m_split = "\\";
 	#endif // _WIN32
 	#ifdef __linux__
-		m_split = "/";
+	m_split = "/";
 	#endif // _UNIX
 
-	#ifdef _WIN32
-		QJsonObject jDataset{ a_config[DATASET_WIN32].toObject() };
-	#endif // _WIN32
-	#ifdef __linux__ 
-		QJsonObject jDataset{ a_config[DATASET_UNIX].toObject() };
-	#endif // _UNIX
-	
-	QString configName = jDataset[CONFIG_NAME].toString();
-	m_pathToConfig = jDataset[PATH_TO_DATASET].toString();
+	QString configName = a_dataset[CONFIG_NAME].toString();
+	m_pathToConfig = a_dataset[PATH_TO_DATASET].toString();
 
 	#ifdef DEBUG
-		Logger->debug("LoadData::configure() open config file:{}", (m_pathToConfig + configName).toStdString());
-		qDebug() << "LoadData::configure() jDataset:"<< jDataset;
+		Logger->debug("DataMemory::configure() open config file:{}", (m_pathToConfig + configName).toStdString());
+		qDebug() << "DataMemory::configure() jDataset:"<< jDataset;
 	#endif
 
-	ConfigReader* configReader = new ConfigReader();
-	if (!configReader->readConfig(m_pathToConfig + configName, m_datasetConfig))
+	std::shared_ptr<ConfigReader> cR = std::make_shared<ConfigReader>();
+	if (!cR->readConfig(m_pathToConfig + configName, m_datasetConfig))
 	{
-		Logger->error("LoadData::configure()  File {} not readed", (m_pathToConfig + configName).toStdString());
+		Logger->error("DataMemory::configure() File {} not readed", (m_pathToConfig + configName).toStdString());
 	}
-	delete configReader;
-
-	#ifdef DEBUG
-		qDebug() << "LoadData::configure() m_datasetConfig:"<< m_datasetConfig;
-	#endif
 
 	m_startGT = m_datasetConfig[START_GT].toInt();
 	m_stopGT = m_datasetConfig[STOP_GT].toInt();
-	m_inputType = m_datasetConfig[OUTPUT_TYPE].toString();
+	m_inputType = m_datasetConfig[INPUT_TYPE].toString();
 	m_outputType = m_datasetConfig[OUTPUT_TYPE].toString();
 }
 
@@ -81,8 +69,8 @@ bool LoadData::loadData(std::vector<cv::Mat> &data, std::vector<cv::Mat> &gt)
 	#endif // _WIN32
 
 	#ifdef DEBUG
-		Logger->debug("LoadData::loadData() data.size data:{}", (data).size());
-		Logger->debug("LoadData::loadData() gt.size data:{}", (gt).size());
+	Logger->debug("LoadData::loadData() data.size data:{}", (data).size());
+	Logger->debug("LoadData::loadData() gt.size data:{}", (gt).size());
 	#endif
 	
 	return true;

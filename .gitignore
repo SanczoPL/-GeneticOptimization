@@ -1957,3 +1957,6 @@ build/CMakeFiles/GeneticOptimization_lib.dir/ProcessingModules/src/Subtractor/su
 build/CMakeFiles/GeneticOptimization_lib.dir/ProcessingModules/src/Subtractor/subtractors/LBSP/LBSP.cc.o
 build/CMakeFiles/GeneticOptimization_lib.dir/src/genetic/loaddata.cc.o
 build/GeneticOptimization_lib_autogen/B3H3IKSQGO/moc_loaddata.cpp
+build/configs/config.json
+build/Debug/configs/config.json
+build/configs/config.json
