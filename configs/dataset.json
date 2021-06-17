@@ -1,7 +1,7 @@
 {
   "Graph_estimator":
   {
-    "FromVideo": true,
+    "SavePreprocessingDataset": true,
 
     "DatasetWin32": 
     {
@@ -16,7 +16,7 @@
   },
   "Graph_estimator_with_filters":
   {
-    "FromVideo": true,
+    "SavePreprocessingDataset": true,
 
     "DatasetWin32": 
     {
