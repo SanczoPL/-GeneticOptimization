@@ -10,12 +10,19 @@
             {"Name": "FILTER", "Active": 6, "Signal":0},
             {"Name": "FILTER", "Active": 7, "Signal":0},
             {"Name": "FILTER", "Active": 8, "Signal":0},
-            {"Name": "FILTER", "Active": 9, "Signal":0}
+            {"Name": "FILTER", "Active": 9, "Signal":0},
+            {"Name": "FILTER", "Active": 10, "Signal":0},
+            {"Name": "FILTER", "Active": 11, "Signal":0},
+            {"Name": "FILTER", "Active": 12, "Signal":0}
         ],
         "Prev":[{"Name": "IN", "Active": -1, "Signal":0}]
     },{
         "Name": "INPUT_2",        "Active": 1,        "Type": "Filter",
-        "Next":[],
+        "Next":[
+            {"Name": "FILTER", "Active": 10, "Signal":0},
+            {"Name": "FILTER", "Active": 11, "Signal":0},
+            {"Name": "FILTER", "Active": 12, "Signal":0}
+        ],
         "Prev":[{"Name": "IN", "Active": -1, "Signal":0}]
     },
     {
