@@ -11,6 +11,9 @@ constexpr auto START_GT{"StartGT"};
 constexpr auto STOP_GT{"StopGT"};
 constexpr auto PATH_TO_DATASET{ "PathToDataset" };
 constexpr auto CONFIG_NAME{ "ConfigName" };
+constexpr auto CLEAN_TRAIN{ "Clean_train" };
+constexpr auto GT_TRAIN{ "Gt_train" };
+constexpr auto SAVE_PREPROCESSING_DATASET{ "SavePreprocessingDataset" };
 
 //#define DEBUG
 //#define DEBUG_PREPROCESS
@@ -26,7 +29,7 @@ LoadData::LoadData()
 
 LoadData::~LoadData(){}
 
-void LoadData::configure(QJsonObject const& a_config, QJsonObject const& a_dataset)
+void LoadData::configure(QJsonObject const& a_config)
 {
 	#ifdef _WIN32
 	m_split = "\\";
@@ -35,24 +38,33 @@ void LoadData::configure(QJsonObject const& a_config, QJsonObject const& a_datas
 	m_split = "/";
 	#endif // _UNIX
 
-	QString configName = a_dataset[CONFIG_NAME].toString();
-	m_pathToConfig = a_dataset[PATH_TO_DATASET].toString();
+	#ifdef _WIN32
+	QJsonObject jDataset{ a_config[DATASET_WIN32].toObject() };
+	#endif // _WIN32
+	#ifdef __linux__ 
+	QJsonObject jDataset{ a_config[DATASET_UNIX].toObject() };
+	#endif // _UNIX
+	
+	QString configName = jDataset[CONFIG_NAME].toString();
+	m_pathToConfig = jDataset[PATH_TO_DATASET].toString();
 
-	#ifdef DEBUG
-		Logger->debug("DataMemory::configure() open config file:{}", (m_pathToConfig + configName).toStdString());
-		qDebug() << "DataMemory::configure() jDataset:"<< jDataset;
-	#endif
 
+	QJsonObject datasetConfig{};
 	std::shared_ptr<ConfigReader> cR = std::make_shared<ConfigReader>();
-	if (!cR->readConfig(m_pathToConfig + configName, m_datasetConfig))
+	if (!cR->readConfig(m_pathToConfig + configName, datasetConfig))
 	{
 		Logger->error("DataMemory::configure() File {} not readed", (m_pathToConfig + configName).toStdString());
 	}
 
-	m_startGT = m_datasetConfig[START_GT].toInt();
-	m_stopGT = m_datasetConfig[STOP_GT].toInt();
-	m_inputType = m_datasetConfig[INPUT_TYPE].toString();
-	m_outputType = m_datasetConfig[OUTPUT_TYPE].toString();
+	m_datasetConfig = datasetConfig;
+
+	m_startGT = datasetConfig[START_GT].toInt();
+	m_stopGT = datasetConfig[STOP_GT].toInt();
+	m_inputType = datasetConfig[INPUT_TYPE].toString();
+	m_outputType = datasetConfig[OUTPUT_TYPE].toString();
+	m_cleanTrain = datasetConfig[CLEAN_TRAIN].toString();
+	m_gtTrain = datasetConfig[GT_TRAIN].toString();
+	
 }
 
 bool LoadData::loadData(std::vector<cv::Mat> &data, std::vector<cv::Mat> &gt)
@@ -73,6 +85,8 @@ bool LoadData::loadData(std::vector<cv::Mat> &data, std::vector<cv::Mat> &gt)
 	Logger->debug("LoadData::loadData() gt.size data:{}", (gt).size());
 	#endif
 	
+	
+
 	return true;
 }
 
@@ -107,6 +121,12 @@ void LoadData::loadDataLinux(std::vector<cv::Mat> &data, std::vector<cv::Mat> &g
 {
 	m_data = m_pathToConfig + m_datasetConfig[CLEAN].toString() + m_split + m_datasetConfig[INPUT_PREFIX].toString();
 	m_gt = m_pathToConfig + m_datasetConfig[GT].toString() + m_split + m_datasetConfig[INPUT_PREFIX].toString();
+	//#ifdef DEBUG
+	Logger->debug("m_data:{}", m_data.toStdString());
+	Logger->debug("m_gt:{}", m_gt.toStdString());
+
+	//		#endif
+
 
 	int ret = m_videoFromFile.open(m_data.toStdString());
 	if (ret < 0)

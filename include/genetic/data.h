@@ -67,8 +67,7 @@ private:
 	
 	QString m_folderInput;
 	QString m_roi;
-	QString m_cleanTrain{};
-	QString m_gtTrain{};
+
 	qint32 m_stopFrame{};
 	qint32 m_startFrame{};
 	qint32 m_startGT{};
@@ -96,6 +95,11 @@ private:
 	bool m_loaded{};
 	bool m_resize{};
 	bool m_savePreprocessingDataset{};
+	QString m_pathToConfig;
+	QJsonObject m_datasetConfig;
+	QString m_cleanTrain{};
+	QString m_gtTrain{};
+
 };
 
 #endif // DATAMEMORY_H

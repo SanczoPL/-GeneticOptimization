@@ -133,8 +133,9 @@ void MainLoop::createConfig(QJsonObject const& a_config)
 				
 				MainLoop::loadConfigs(m_configPaths, m_graphTypes[graf].toString(), m_boundsTypes[bounds].toString());
 
-				for (int i = 0; i < 101; i += 10)
-				{
+				//for (int i = 0; i < 101; i += 10)
+				//{
+					/*
 					for(int j = 0 ; j < m_geneticConfig.preprocess.size() ; j++)
 					{
 						if(m_geneticConfig.preprocess[j].toObject()[CONFIG].toObject()[NAME].toString() == "AddMultipleDron")
@@ -159,8 +160,9 @@ void MainLoop::createConfig(QJsonObject const& a_config)
 							#endif
 						}
 					}
+					*/
 					m_geneticConfigs.push_back(m_geneticConfig);
-				}
+				//}
 			}
 		}
 	}

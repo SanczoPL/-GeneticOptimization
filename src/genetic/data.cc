@@ -17,8 +17,7 @@ constexpr auto HEIGHT{ "Height" };
 
 constexpr auto NOISE{"Noise"};
 constexpr auto FOLDER{"Input"};
-constexpr auto CLEAN_TRAIN{ "Clean_train" };
-constexpr auto GT_TRAIN{ "Gt_train" };
+
 
 constexpr auto CLEAN{ "Clean" };
 constexpr auto GT{ "Gt" };
@@ -39,6 +38,8 @@ constexpr auto OUTPUT_TYPE{ "OutputType" };
 constexpr auto INPUT_PREFIX{ "InputPrefix" };
 constexpr auto DATASET_UNIX{ "DatasetLinux" };
 constexpr auto DATASET_WIN32{ "DatasetWin32" };
+constexpr auto CLEAN_TRAIN{ "Clean_train" };
+constexpr auto GT_TRAIN{ "Gt_train" };
 constexpr auto SAVE_PREPROCESSING_DATASET{ "SavePreprocessingDataset" };
 
 
@@ -74,6 +75,39 @@ void DataMemory::clearDataForNextIteration()
 void DataMemory::loadConfig(QJsonObject const& a_config)
 {
 	m_savePreprocessingDataset = a_config[SAVE_PREPROCESSING_DATASET].toBool();
+	#ifdef _WIN32
+	m_split = "\\";
+	#endif // _WIN32
+	#ifdef __linux__
+	m_split = "/";
+	#endif // _UNIX
+
+	#ifdef _WIN32
+	QJsonObject jDataset{ a_config[DATASET_WIN32].toObject() };
+	#endif // _WIN32
+	#ifdef __linux__ 
+	QJsonObject jDataset{ a_config[DATASET_UNIX].toObject() };
+	#endif // _UNIX
+	
+	QString configName = jDataset[CONFIG_NAME].toString();
+	m_pathToConfig = jDataset[PATH_TO_DATASET].toString();
+
+
+	QJsonObject datasetConfig{};
+	std::shared_ptr<ConfigReader> cR = std::make_shared<ConfigReader>();
+	if (!cR->readConfig(m_pathToConfig + configName, datasetConfig))
+	{
+		Logger->error("DataMemory::configure() File {} not readed", (m_pathToConfig + configName).toStdString());
+	}
+
+	m_datasetConfig = datasetConfig;
+
+	m_startGT = datasetConfig[START_GT].toInt();
+	m_stopGT = datasetConfig[STOP_GT].toInt();
+	m_inputType = datasetConfig[INPUT_TYPE].toString();
+	m_outputType = datasetConfig[OUTPUT_TYPE].toString();
+	m_cleanTrain = datasetConfig[CLEAN_TRAIN].toString();
+	m_gtTrain = datasetConfig[GT_TRAIN].toString();
 
 }
 
@@ -168,12 +202,12 @@ bool DataMemory::preprocess(QJsonArray dataGraph)
 	{
 		for(int i = 0 ; i < m_inputData.size() ; i++)
 		{
-			QString name_all = (m_cleanTrain +  m_split + QString::number(i) + m_outputType);
-			Logger->trace("write:{}", (name_all).toStdString());
+			QString name_all = ( m_pathToConfig +m_cleanTrain +  m_split + QString::number(i) + m_outputType);
+			Logger->debug("write:{}", (name_all).toStdString());
 			cv::imwrite(name_all.toStdString(), m_inputData[i]);
 
-			name_all = (m_gtTrain + m_split + QString::number(i) + m_outputType);
-			Logger->trace("write:{}", (name_all).toStdString());
+			name_all = ( m_pathToConfig +m_gtTrain + m_split + QString::number(i) + m_outputType);
+			Logger->debug("write:{}", (name_all).toStdString());
 			cv::imwrite(name_all.toStdString(), m_gtData[i]);
 		}
 	}
@@ -189,32 +223,8 @@ void DataMemory::configure(QJsonObject const& a_config)
 	#endif
 	DataMemory::loadConfig(a_config);
 
-	#ifdef _WIN32
-	QJsonObject jDataset{ a_config[DATASET_WIN32].toObject() };
-	#endif // _WIN32
-	#ifdef __linux__ 
-	QJsonObject jDataset{ a_config[DATASET_UNIX].toObject() };
-	#endif // _UNIX
 	
-	QString configName = jDataset[CONFIG_NAME].toString();
-	QString pathToConfig = jDataset[PATH_TO_DATASET].toString();
-
-	#ifdef DEBUG
-		Logger->debug("DataMemory::configure() open config file:{}", (pathToConfig + configName).toStdString());
-		qDebug() << "DataMemory::configure() jDataset:"<< jDataset;
-	#endif
-	QJsonObject datasetConfig{};
-	std::shared_ptr<ConfigReader> cR = std::make_shared<ConfigReader>();
-	if (!cR->readConfig(pathToConfig + configName, datasetConfig))
-	{
-		Logger->error("DataMemory::configure() File {} not readed", (pathToConfig + configName).toStdString());
-	}
-	m_startGT = datasetConfig[START_GT].toInt();
-	m_stopGT = datasetConfig[STOP_GT].toInt();
-	m_inputType = datasetConfig[INPUT_TYPE].toString();
-	m_outputType = datasetConfig[OUTPUT_TYPE].toString();
-
-	m_loadData.configure(a_config, jDataset);
+	m_loadData.configure(a_config);
 	m_loadData.loadData(m_cleanData, m_gtCleanData);
 	#ifdef DEBUG
 	Logger->debug("DataMemory::configure() done");
