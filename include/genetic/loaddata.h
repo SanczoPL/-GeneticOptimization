@@ -37,7 +37,7 @@ public:
 	LoadData();
 	~LoadData();
 	bool loadData(std::vector<cv::Mat> &data, std::vector<cv::Mat> &gt);
-	void configure(QJsonObject const& a_config, QJsonObject const& a_dataset);
+	void configure(QJsonObject const& a_config);
 
 private:
 	
@@ -62,20 +62,20 @@ private:
 private:
 	QString m_data;
 	QString m_gt;
-
+	QString m_inputType;
+	QString m_outputType;
+	QString m_split;
+	QString m_cleanTrain{};
+	QString m_gtTrain{};
+	QString m_pathToConfig;
+	
 	int m_stopFrame{};
 	int m_startFrame{};
 	int m_startGT{};
 	int m_stopGT{};
-
+	
 
 private:
-
-	QString m_inputType;
-	QString m_outputType;
-	QString m_split;
-
-	QString m_pathToConfig;
 	QJsonObject m_datasetConfig;
 
 };
