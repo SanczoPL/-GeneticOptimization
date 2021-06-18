@@ -113,7 +113,6 @@ void Genetic::configure(QJsonObject const& a_config, QJsonObject  const& a_bound
 				m_dronContrast = obj[CONFIG].toObject()[DRON_CONTRAST_START].toInt();
 			}
 		}
-
 	}
 
 	qint64 _nowTime = qint64(QDateTime::currentMSecsSinceEpoch());
@@ -121,7 +120,7 @@ void Genetic::configure(QJsonObject const& a_config, QJsonObject  const& a_bound
 	m_fileName = m_logsFolder+ m_graphType + "/" + m_dronType  + "/" + m_boundsType + "/log_" + QString::number(m_dronNoise) 
 	+ "_" + QString::number(m_dronContrast) + "_" + QString::number(_nowTime); 
 
-	Logger->info("Genetic::configure() nameFile:{}", (m_fileName + ".txt").toStdString());
+	Logger->info("Genetic::configure() file:{}", (m_fileName + ".txt").toStdString());
 	emit(configureLogger((m_fileName + ".txt"), false));
 	emit(configureLoggerJSON((m_fileName + ".json"), false));
 	
@@ -345,14 +344,15 @@ void Genetic::handleBestPopulation()
 				config["Path"] = m_fileName + "_" + QString().setNum(m_geneticOperation.m_fitness[m_populationSize].fitness, 'f', 4);
 				obj[CONFIG] = config;
 				m_postprocess[i] = obj;
+				#ifdef DEBUG
 				qDebug() << "m_postprocess[i][CONFIG]:" << m_postprocess[i].toObject()[CONFIG];
+				#endif
 			}
 		}
 
 		m_testCaseBest->onConfigureAndStart(m_graph, m_geneticOperation.m_vectorBits[m_populationSize], m_postprocess);
 	}
 }
-	
 
 void Genetic::logPopulation()
 {
@@ -374,8 +374,6 @@ void Genetic::logPopulation()
 		list.push_back(QString::number(m_geneticOperation.m_fitness[m_populationSize].fp) + " ");
 		list.push_back(QString::number(m_geneticOperation.m_fitness[m_populationSize].tn) + " ");
 		list.push_back(QString::number(m_geneticOperation.m_fitness[m_populationSize].tp) + " ");
-		//list.push_back(QString().setNum(m_geneticOperation.m_fitness[m_populationSize].time, 'f', 4) + " ");
-		//list.push_back(QString().setNum(m_geneticOperation.m_fitness[m_populationSize].postTime, 'f', 4) + " ");
 		list.push_back(QString().setNum(m_timer.getTimeMilli(), 'f', 0) + " ");
 		list.push_back("\n");
 		emit(appendToFileLogger(list));

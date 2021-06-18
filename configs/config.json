@@ -2,18 +2,18 @@
 	"General": 
 	{
 		"LogLevel": 1,
-		"ThreadsMax": 40,
+		"ThreadsMax": 50,
 		"Standalone": false
 	},
 	"Genetic":
 	{
-		"PopulationSize" : 120,
+		"PopulationSize" : 150,
 		"GraphType" : "",
 		"DronType" : "",
 		"BoundsType" : "",
-		"GraphTypes":["Graph_estimator_with_filters", "Graph_estimator"],
+		"GraphTypes":["Graph_estimator", "Graph_estimator_with_filters"],
 		"DronTypes" : ["BLACK", "BLACK_WHITE", "WHITE"],
-		"BoundsTypes" : ["NONE", "MOG2","LOBSTER", "ABL", "ASBL", "MOG2", "CNT" , "MOG", "KNN", "GMG", "ViBe"],
+		"BoundsTypes" : ["MOG2", "CNT" , "MOG", "KNN", "NONE"," ABL", "ASBL", "ViBe", "LOBSTER", "GMG"],
 		"SaveBestPopulationVideo": true,
 		"FitnessThreshold": 3.99,
 		"MaxIteration": 1000,
