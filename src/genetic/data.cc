@@ -1,7 +1,7 @@
 #include "genetic/data.h"
 
 //#define DEBUG
-#define DEBUG_PREPROCESS
+//#define DEBUG_PREPROCESS
 //#define DEBUG_OPENCV
 
 constexpr auto GRAPH{ "Graph" };

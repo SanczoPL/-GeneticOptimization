@@ -140,7 +140,7 @@ void MainLoop::createConfig(QJsonObject const& a_config)
 				
 				MainLoop::loadConfigs(m_configPaths, m_graphTypes[graf].toString(), m_boundsTypes[bounds].toString());
 
-				for (int i = 10; i < 101; i += 10)
+				for (int i = 0; i < 101; i += 10)
 				{
 					for(int j = 0 ; j < m_geneticConfig.preprocess.size() ; j++)
 					{
@@ -150,14 +150,13 @@ void MainLoop::createConfig(QJsonObject const& a_config)
 							QJsonArray arrObj = m_geneticConfig.preprocess;
 							QJsonObject obj = arrObj[j].toObject();
 							QJsonObject config = obj[CONFIG].toObject();
-
 							//config[DRON_NOISE] = i;
 							//config[DRON_CONTRAST] = 100;
 							config[DRON_TYPE] = m_dronTypes[dron].toString();
 							config[BOUNDS_TYPE] = m_boundsTypes[bounds].toString();
 							config[DRON_TYPE] = m_dronTypes[dron].toString();
 							config[DRON_RAND_SEED] = randNumber;
-							//Noise:
+
 							config[DRON_NOISE_START] = double(i);
 							config[DRON_NOISE_STOP] = double(i + 0.06);
 							config[DRON_NOISE_DELTA] = double(0.01);
@@ -165,8 +164,6 @@ void MainLoop::createConfig(QJsonObject const& a_config)
 							config[DRON_CONTRAST_START] = 100.00;
 							config[DRON_CONTRAST_STOP] = 100.06;
 							config[DRON_CONTRAST_DELTA] = 0.01;
-
-
 
 							obj[CONFIG] = config;
 							arrObj[j] = obj;
@@ -178,7 +175,6 @@ void MainLoop::createConfig(QJsonObject const& a_config)
 							#endif
 						}
 					}
-					
 					m_geneticConfigs.push_back(m_geneticConfig);
 				}
 			}
