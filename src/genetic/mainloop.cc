@@ -23,6 +23,13 @@ constexpr auto LOGS_FOLDER{ "LogsFolder" };
 constexpr auto CONFIG_UNIX{ "ConfigUnix" };
 constexpr auto CONFIG_WIN{ "ConfigWin" };
 
+constexpr auto DRON_NOISE_START{ "DronNoiseStart" };
+constexpr auto DRON_NOISE_STOP{ "DronNoiseStop" };
+constexpr auto DRON_NOISE_DELTA{ "DronNoiseDelta" };
+constexpr auto DRON_CONTRAST_START{ "DronContrastStart" };
+constexpr auto DRON_CONTRAST_STOP{ "DronContrastStop" };
+constexpr auto DRON_CONTRAST_DELTA{ "DronContrastDelta" };
+
 
 void MainLoop::readConfig(QString configName, QJsonObject& jObject, QString graphType)
 {
@@ -133,9 +140,8 @@ void MainLoop::createConfig(QJsonObject const& a_config)
 				
 				MainLoop::loadConfigs(m_configPaths, m_graphTypes[graf].toString(), m_boundsTypes[bounds].toString());
 
-				//for (int i = 0; i < 101; i += 10)
-				//{
-					/*
+				for (int i = 10; i < 101; i += 10)
+				{
 					for(int j = 0 ; j < m_geneticConfig.preprocess.size() ; j++)
 					{
 						if(m_geneticConfig.preprocess[j].toObject()[CONFIG].toObject()[NAME].toString() == "AddMultipleDron")
@@ -145,24 +151,36 @@ void MainLoop::createConfig(QJsonObject const& a_config)
 							QJsonObject obj = arrObj[j].toObject();
 							QJsonObject config = obj[CONFIG].toObject();
 
-							config[DRON_NOISE] = i;
-							config[DRON_CONTRAST] = 100;
+							//config[DRON_NOISE] = i;
+							//config[DRON_CONTRAST] = 100;
+							config[DRON_TYPE] = m_dronTypes[dron].toString();
+							config[BOUNDS_TYPE] = m_boundsTypes[bounds].toString();
 							config[DRON_TYPE] = m_dronTypes[dron].toString();
 							config[DRON_RAND_SEED] = randNumber;
+							//Noise:
+							config[DRON_NOISE_START] = double(i);
+							config[DRON_NOISE_STOP] = double(i + 0.06);
+							config[DRON_NOISE_DELTA] = double(0.01);
+
+							config[DRON_CONTRAST_START] = 100.00;
+							config[DRON_CONTRAST_STOP] = 100.06;
+							config[DRON_CONTRAST_DELTA] = 0.01;
+
+
 
 							obj[CONFIG] = config;
 							arrObj[j] = obj;
 							m_geneticConfig.preprocess = arrObj;
 							#ifdef DEBUG_CONFIG
-							qDebug() << "config[DRON_NOISE]:" << config[DRON_NOISE];
-							qDebug() << "config[DRON_CONTRAST]:" << config[DRON_CONTRAST];
-							qDebug() << "config[DRON_TYPE]:" << config[DRON_TYPE];
+							qDebug() << "config[DRON_NOISE_START]:" << config[DRON_NOISE_START];
+							qDebug() << "config[DRON_NOISE_STOP]:" << config[DRON_NOISE_STOP];
+							qDebug() << "config[DRON_NOISE_DELTA]:" << config[DRON_NOISE_DELTA];
 							#endif
 						}
 					}
-					*/
+					
 					m_geneticConfigs.push_back(m_geneticConfig);
-				//}
+				}
 			}
 		}
 	}

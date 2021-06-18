@@ -29,6 +29,12 @@ constexpr auto FITNESS_THRESHOLD{ "FitnessThreshold" };
 constexpr auto MAX_ITERATION{ "MaxIteration" };
 constexpr auto MAX_BEST_NOT_CHANGE{ "MaxBestNotChange" };
 
+constexpr auto DRON_NOISE_START{ "DronNoiseStart" };
+constexpr auto DRON_NOISE_STOP{ "DronNoiseStop" };
+constexpr auto DRON_NOISE_DELTA{ "DronNoiseDelta" };
+constexpr auto DRON_CONTRAST_START{ "DronContrastStart" };
+constexpr auto DRON_CONTRAST_STOP{ "DronContrastStop" };
+constexpr auto DRON_CONTRAST_DELTA{ "DronContrastDelta" };
 
 
 Genetic::Genetic(QVector<Case*> testCaseVector, DataMemory* data)
@@ -103,15 +109,16 @@ void Genetic::configure(QJsonObject const& a_config, QJsonObject  const& a_bound
 		{
 			if(obj[CONFIG].toObject()[NAME].toString() == "AddMultipleDron")
 			{
-				m_dronNoise = obj[CONFIG].toObject()[DRON_NOISE].toInt();
-				m_dronContrast = obj[CONFIG].toObject()[DRON_CONTRAST].toInt();
+				m_dronNoise = obj[CONFIG].toObject()[DRON_NOISE_START].toInt();
+				m_dronContrast = obj[CONFIG].toObject()[DRON_CONTRAST_START].toInt();
 			}
 		}
+
 	}
 
 	qint64 _nowTime = qint64(QDateTime::currentMSecsSinceEpoch());
 
-	m_fileName = m_logsFolder+ m_graphType + "/" + m_dronType  + "/" + m_boundsType + "/" + QString::number(m_dronNoise) 
+	m_fileName = m_logsFolder+ m_graphType + "/" + m_dronType  + "/" + m_boundsType + "/log_" + QString::number(m_dronNoise) 
 	+ "_" + QString::number(m_dronContrast) + "_" + QString::number(_nowTime); 
 
 	Logger->info("Genetic::configure() nameFile:{}", (m_fileName + ".txt").toStdString());

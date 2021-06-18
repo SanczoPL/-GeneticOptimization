@@ -1,7 +1,7 @@
 {
   "Graph_estimator":
   {
-    "SavePreprocessingDataset": true,
+    "SavePreprocessingDataset": false,
 
     "DatasetWin32": 
     {
@@ -16,7 +16,7 @@
   },
   "Graph_estimator_with_filters":
   {
-    "SavePreprocessingDataset": true,
+    "SavePreprocessingDataset": false,
 
     "DatasetWin32": 
     {
