@@ -230,8 +230,9 @@ bool GeneticOperation::gradient(int men)
 					#ifdef GENETIC_OPERATION_DEBUG
 					Logger->debug("probParam:{}", probParam);
 					#endif
-					QString parameter = bounds[probParam].toObject()[TYPE].toString(); // KernelSizeX
+					
 					#ifdef GENETIC_OPERATION_DEBUG
+					QString parameter = bounds[probParam].toObject()[TYPE].toString(); // KernelSizeX
 					Logger->debug("parameter:{}", parameter.toStdString());
 					#endif
 					if (gradientOnConfig(bounds[probParam].toObject(), config))
@@ -265,11 +266,14 @@ bool GeneticOperation::gradientOnConfig(QJsonObject bounds, QJsonObject config)
 	int max = bounds[MAX].toInt();
 	int isDouble = bounds[IS_DOUBLE].toInt();
 	QString parameter = bounds[TYPE].toString();
-	int value{ 1 };
+	int value = config[parameter].toInt();
+
+	Logger->debug("Gradient normal pre value:{}", value);
+
 	if (bounds[IS_BOOL].toBool() == true)
 	{
 		#ifdef GENETIC_OPERATION_DEBUG
-		Logger->indebugfo("Gradient initial bool:{}", config[parameter].toBool());
+		Logger->debug("Gradient initial bool:{}", config[parameter].toBool());
 		#endif
 		bool actualData = config[parameter].toBool();
 		bool boolValue = !actualData;
@@ -281,19 +285,25 @@ bool GeneticOperation::gradientOnConfig(QJsonObject bounds, QJsonObject config)
 	}
 	else if (isDouble > 0)
 	{
+		//{"Type": "SigmaX","Min": 0,"Max": 10,"IsDouble": 10},
 		#ifdef GENETIC_OPERATION_DEBUG
+		Logger->debug("isDouble:{}", isDouble);
+		Logger->debug("config[parameter].toDouble():{}", config[parameter].toDouble());
 		Logger->debug("Gradient initial double:{}", int(config[parameter].toDouble() * isDouble));
 		#endif
+		
 		int actualData = int(config[parameter].toDouble() * isDouble);
 		int minValue{ 1 };
 		if (min == 0)
 		{
 			minValue = 1;
 		}
-		else {
+		else
+		{
 			minValue = double(min / isDouble);
 		}
 		double doubleValue = actualData;
+
 		double y = m_randomGenerator->bounded(0, 10) / 10.0;
 		if (y < 0.5)
 		{
@@ -303,33 +313,33 @@ bool GeneticOperation::gradientOnConfig(QJsonObject bounds, QJsonObject config)
 		{
 			doubleValue = actualData - minValue;
 		}
+		#ifdef GENETIC_OPERATION_DEBUG
+		Logger->debug("doubleValue:{}", doubleValue);
+		#endif
 		if (doubleValue > max)
 		{
+			doubleValue = doubleValue - 2 * minValue;
 			if (doubleValue < min)
 			{
-				Logger->error("Gradient Min Max error");
-				#ifdef GENETIC_OPERATION_DEBUG
+				Logger->warn("doubleValue not in range");
 				return false;
-				#endif
-			}
-			else
-			{
-				//parameterObj.insert(bounds[TYPE].toString(), doubleValueMinus);
-				config[parameter] = doubleValue;
-				#ifdef GENETIC_OPERATION_DEBUG
-				Logger->debug("Gradient doubleValueMinus change to double:{}", int(config[parameter].toDouble() * isDouble));
-				#endif
-				return true;
 			}
 		}
-		else
+		else if (doubleValue < min)
 		{
-			config[parameter] = doubleValue;
-			#ifdef GENETIC_OPERATION_DEBUG
-			Logger->debug("Gradient doubleValuePlus change to double:{}", int(config[parameter].toDouble() * isDouble));
-			#endif
-			return true;
+			doubleValue = doubleValue + 2 * minValue;
+			if (doubleValue > max)
+			{
+				Logger->warn("doubleValue not in range");
+				return false;
+			}
 		}
+		config[parameter] = doubleValue/isDouble;
+		#ifdef GENETIC_OPERATION_DEBUG
+		Logger->debug("Gradient doubleValuePlus change to double:{}", doubleValue/isDouble);
+		#endif
+		return true;
+		
 	}
 	else if (bounds[IS_ODD].toBool() == true)
 	{
@@ -341,11 +351,11 @@ bool GeneticOperation::gradientOnConfig(QJsonObject bounds, QJsonObject config)
 		double y = m_randomGenerator->bounded(0, 10) / 10.0;
 		if (y < 0.5)
 		{
-			value++;
+			value = value + 2;
 		}
 		else
 		{
-			value--;
+			value = value - 2;
 		}
 		if (value % 2 == 0)
 		{
@@ -359,6 +369,13 @@ bool GeneticOperation::gradientOnConfig(QJsonObject bounds, QJsonObject config)
 				value--;
 			}
 		}
+		if (value < min)
+		{value = max;}
+		if (value > max)
+		{value = min;}
+		#ifdef GENETIC_OPERATION_DEBUG
+		Logger->debug("Gradient  IS_ODD value:{}", value);
+		#endif
 	}
 	else
 	{
@@ -375,12 +392,21 @@ bool GeneticOperation::gradientOnConfig(QJsonObject bounds, QJsonObject config)
 		{
 			value--;
 		}
+
+		if (value < min)
+		{value = max;}
+		if (value > max)
+		{value = min;}
+		#ifdef GENETIC_OPERATION_DEBUG
+		Logger->debug("Gradient  normal value:{}", value);
+		#endif
 	}
 	#ifdef GENETIC_OPERATION_DEBUG
 	Logger->debug("Gradient try to change normal operation:{}", value);
 	#endif
 	if (value < min && value > max)
 	{
+		Logger->warn("value < min && value > max");
 		return false;
 	}
 	config[parameter] = value;
@@ -396,7 +422,6 @@ void GeneticOperation::xOver(qint32 one, qint32 two)
 	Logger->debug("GeneticOperation::xOver({}:{})", one, two);
 	#endif
 	int x = m_randomGenerator->bounded(0, m_vectorBits[one].size());
-
 	
 	QJsonArray tempArray1 = m_vectorBits[one];
 	QJsonArray tempArray2 = m_vectorBits[two];
@@ -412,7 +437,6 @@ void GeneticOperation::xOver(qint32 one, qint32 two)
 	Logger->debug("GeneticOperation::xOver() done");
 	#endif
 }
-
 
 void GeneticOperation::elitist()
 {
@@ -583,6 +607,7 @@ QJsonObject GeneticOperation::createRandomProcessingBlock(const QJsonObject& bou
 		{
 			double doubleValue = value / parameterIter[IS_DOUBLE].toDouble();
 			parameterObj.insert(parameterIter[TYPE].toString(), doubleValue);
+			//Logger->debug("doubleValue:{}={}/{}",doubleValue, value, parameterIter[IS_DOUBLE].toDouble());
 			continue;
 		}
 		if (parameterIter[IS_ODD].toBool() == true)

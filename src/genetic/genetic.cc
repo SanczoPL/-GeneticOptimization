@@ -278,7 +278,6 @@ void Genetic::iteration()
 			}
 			else
 			{
-				
 				m_geneticOperation.mutate(man);
 				#ifdef GENETIC_OPERATION_DEBUG
 				Logger->debug("men[{}] has gradient failed, its mutate!", man);
@@ -349,7 +348,6 @@ void Genetic::handleBestPopulation()
 				#endif
 			}
 		}
-
 		m_testCaseBest->onConfigureAndStart(m_graph, m_geneticOperation.m_vectorBits[m_populationSize], m_postprocess);
 	}
 }
