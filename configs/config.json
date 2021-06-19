@@ -11,9 +11,10 @@
 		"GraphType" : "",
 		"DronType" : "",
 		"BoundsType" : "",
-		"GraphTypes":["Graph_estimator", "Graph_estimator_with_filters"],
+		"GraphTypes":[ "Graph_estimator_with_filters", "Graph_estimator"],
+		"GraphTypes2":["Graph_estimator", "Graph_estimator_with_filters"],
 		"DronTypes" : ["BLACK", "BLACK_WHITE", "WHITE"],
-		"BoundsTypes" : ["MOG2", "CNT" , "MOG", "KNN", "NONE"," ABL", "ASBL", "ViBe", "LOBSTER", "GMG"],
+		"BoundsTypes" : ["MOG2", "CNT" , "MOG", "KNN", "NONE","ABL", "ASBL", "ViBe", "LOBSTER", "GMG"],
 		"SaveBestPopulationVideo": true,
 		"FitnessThreshold": 3.99,
 		"MaxIteration": 1000,
@@ -21,12 +22,12 @@
 	},
 	"ConfigUnix": 
 	{
-		"Dataset": "/home/gm/repo/GeneticOptimization/configs/dataset.json",
-		"Graph": "/home/gm/repo/GeneticOptimization/configs/graph.json",
-		"Bounds": "/home/gm/repo/GeneticOptimization/configs/bounds.json",
-		"Preprocess": "/home/gm/repo/GeneticOptimization/configs/preprocess.json",
-		"Postprocess": "/home/gm/repo/GeneticOptimization/configs/postprocess.json",
-		"LogsFolder" : "/home/gm/repo/logs/"
+		"Dataset": "/home/matczak/repo/GeneticOptimization/configs/dataset.json",
+		"Graph": "/home/matczak/repo/GeneticOptimization/configs/graph.json",
+		"Bounds": "/home/matczak/repo/GeneticOptimization/configs/bounds.json",
+		"Preprocess": "/home/matczak/repo/GeneticOptimization/configs/preprocess.json",
+		"Postprocess": "/home/matczak/repo/GeneticOptimization/configs/postprocess.json",
+		"LogsFolder" : "/home/matczak/repo/logs/"
 	},
 	"ConfigWin": 
 	{
