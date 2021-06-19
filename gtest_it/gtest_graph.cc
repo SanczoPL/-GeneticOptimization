@@ -1,13 +1,13 @@
 #include "gtest_graph.h"
 
-constexpr auto TEST_GRAPH_CONFIG{ "gtest/test_graph_config.json" };
-constexpr auto TEST_GRAPH_CONFIG_POSTPROCESSING{ "gtest/test_graph_config_postprocesssing.json" };
-constexpr auto TEST_GRAPH{ "gtest/test_graph.json" };
-constexpr auto TEST_GRAPH_POSTPROCESSING{ "gtest/test_graph_postprocessing.json" };
+constexpr auto TEST_GRAPH_CONFIG{ "gtest_it/test_graph_config.json" };
+constexpr auto TEST_GRAPH_CONFIG_POSTPROCESSING{ "gtest_it/test_graph_config_postprocesssing.json" };
+constexpr auto TEST_GRAPH{ "gtest_it/test_graph.json" };
+constexpr auto TEST_GRAPH_POSTPROCESSING{ "gtest_it/test_graph_postprocessing.json" };
 constexpr auto TEST_DATA{ "TestData" };
 constexpr auto GRAPH{ "Graph" };
-constexpr auto TEST_DATASET{ "gtest/test_dataset.json" };
-constexpr auto TEST_PREPROCESS{ "gtest/test_preprocess.json" };
+constexpr auto TEST_DATASET{ "gtest_it/test_dataset.json" };
+constexpr auto TEST_PREPROCESS{ "gtest_it/test_preprocess.json" };
 
 constexpr auto NAME{ "Name" };
 constexpr auto ACTIVE{ "Active" };
