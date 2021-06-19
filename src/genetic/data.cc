@@ -179,8 +179,8 @@ bool DataMemory::preprocess(QJsonArray dataGraph)
 		}
 		if (m_outputData.size() > 1)
 		{
-			m_inputData.push_back(m_outputData[0]);
-			m_gtData.push_back(m_outputData[1]);
+			m_inputData.push_back(m_outputData[0].clone());
+			m_gtData.push_back(m_outputData[1].clone());
 		}
 		#ifdef DEBUG
 		Logger->debug("DataMemory::preprocess() iteration done");

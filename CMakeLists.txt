@@ -4,8 +4,6 @@ project(GeneticOptimization VERSION 3.0 DESCRIPTION "GeneticOptimization v3.0 Wi
 set(DEFAULT_BUILD_TYPE "Release")
 set(CMAKE_BUILD_TYPE "Debug")
 
-
-
 #STNDARD STUFF
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -32,14 +30,17 @@ endmacro()
 
 copy_json("configs/config.json")
 copy_json("configs/preprocess.json")
+
 copy_json("gtest/test.json")
-copy_json("gtest/test_graph.json")
-copy_json("gtest/test_graph_config.json")
-copy_json("gtest/test_dataset.json")
-copy_json("gtest/test_preprocess.json")
-copy_json("gtest/test_graph_postprocessing.json")
-copy_json("gtest/test_graph_config_postprocesssing.json")
 copy_json("gtest/test_addmultipledron.json")
+
+copy_json("gtest_it/test_graph.json")
+copy_json("gtest_it/test_graph_config.json")
+copy_json("gtest_it/test_dataset.json")
+copy_json("gtest_it/test_preprocess.json")
+copy_json("gtest_it/test_graph_postprocessing.json")
+copy_json("gtest_it/test_graph_config_postprocesssing.json")
+
 
 
 #file(COPY test_images DESTINATION ${CMAKE_BINARY_DIR})
@@ -146,8 +147,10 @@ message(" cv_libs:     " ${OpenCV_LIBS})
 message(" cv_includes: " ${OPENCV_INCLUDE_DIRS})
 
 file(GLOB_RECURSE SRC_HEADERS_TEST gtest/*.cc gtest/*.h)
+file(GLOB_RECURSE SRC_HEADERS_TEST_IT gtest_it/*.cc gtest_it/*.h)
 
 add_executable(g_test ${SRC_HEADERS_TEST})
+add_executable(g_test_it ${SRC_HEADERS_TEST_IT})
 
 target_link_libraries(utils ${QT_LIBRARIES} spdlog)
 target_link_libraries(utils Qt5::Core )
@@ -165,6 +168,8 @@ target_link_libraries(${PROJECT_NAME} ${PROJECT_NAME}_lib Qt5::Core Qt5::Network
 target_link_libraries(g_test ${PROJECT_NAME}_lib gtest gmock utils)
 target_link_libraries(g_test ${PROJECT_NAME}_lib Qt5::Core Threads::Threads)
 
+target_link_libraries(g_test_it ${PROJECT_NAME}_lib gtest gmock utils)
+target_link_libraries(g_test_it ${PROJECT_NAME}_lib Qt5::Core Threads::Threads)
 
 message("CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE} ")
 
@@ -177,8 +182,6 @@ if (CMAKE_BUILD_TYPE STREQUAL "Release" AND WIN32)
 	set (CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 	set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 endif()
-
-
 
 
 if (WIN32)
