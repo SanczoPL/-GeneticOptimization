@@ -269,7 +269,7 @@ bool GeneticOperation::gradientOnConfig(QJsonObject bounds, QJsonObject config)
 	int value = config[parameter].toInt();
 	#ifdef GENETIC_OPERATION_DEBUG
 	Logger->debug("Gradient normal pre value:{}", value);
-	#endifz
+	#endif
 	if (bounds[IS_BOOL].toBool() == true)
 	{
 		#ifdef GENETIC_OPERATION_DEBUG
