@@ -10,7 +10,7 @@
     },
     "DatasetLinux": 
     {
-      "PathToDataset": "/home/gm/repo/datasets/NORM0010_1280x720_120/",
+      "PathToDataset": "/home/matczak/repo/datasets/NORM0010_1280x720_120/",
       "ConfigName": "config.json"
     }
   },
@@ -25,7 +25,7 @@
     },
     "DatasetLinux": 
     {
-      "PathToDataset": "/home/gm/repo/datasets/NORM0010_1280x720_120/",
+      "PathToDataset": "/home/matczak/repo/datasets/NORM0010_1280x720_120/",
       "ConfigName": "config.json"
     }
   }
