@@ -21,10 +21,10 @@
 				{"Name": "Threshold", "Parameters":[
 					{"Type": "ThresholdDecision","Min": 2,"Max": 254},
 					{"Type": "ThresholdTypes","Min": 0,"Max": 1},
-					{"Type": "ThresholdValue","Min": 0,"Max": 255}
+					{"Type": "ThresholdValue","Min": 255,"Max": 255}
 				]},
 				{"Name": "None", "Parameters":[
-					{"Type": "None","Min": 0,"Max": 2}
+					{"Type": "None","Min": 0,"Max": 0}
 					]},
 				{"Name": "MorphologyOperation", "Parameters":[
 					{"Type": "MorphOperator","Min": 0,"Max": 5},
@@ -72,10 +72,10 @@
 				{"Name": "Threshold", "Parameters":[
 					{"Type": "ThresholdDecision","Min": 2,"Max": 254},
 					{"Type": "ThresholdTypes","Min": 0,"Max": 1},
-					{"Type": "ThresholdValue","Min": 0,"Max": 255}
+					{"Type": "ThresholdValue","Min": 255,"Max": 255}
 				]},
 				{"Name": "None", "Parameters":[
-					{"Type": "None","Min": 0,"Max": 2}
+					{"Type": "None","Min": 0,"Max": 0}
 					]},
 				{"Name": "MorphologyOperation", "Parameters":[
 					{"Type": "MorphOperator","Min": 0,"Max": 5},
@@ -100,7 +100,7 @@
 				{"Name": "Threshold", "Parameters":[
 					{"Type": "ThresholdDecision","Min": 2,"Max": 254},
 					{"Type": "ThresholdTypes","Min": 0,"Max": 1},
-					{"Type": "ThresholdValue","Min": 0,"Max": 255}
+					{"Type": "ThresholdValue","Min": 255,"Max": 255}
 				]}
 			]
 		},
@@ -108,10 +108,9 @@
 		{
 			"Used":
 			[	{"Name":"MOG2", "Parameters":[
-					{"Type": "LearningRate","Min": 0,"Max": 10,"IsDouble": 10},
-					{"Type": "History","Min": 0,"Max": 1},
+					{"Type": "History","Min": 50,"Max": 50},
 					{"Type": "VarThreshold","Min": 0,"Max": 255},
-					{"Type": "DetectShadow","Min": 0,"Max": 2, "IsBool":true}
+					{"Type": "DetectShadow","Min": 0,"Max": 1, "IsBool":true}
 					]}
 				
 			],
@@ -129,7 +128,7 @@
 					{"Name": "Threshold", "Parameters":[
 						{"Type": "ThresholdDecision","Min": 1,"Max": 255},
 						{"Type": "ThresholdTypes","Min": 0,"Max": 1},
-						{"Type": "ThresholdValue","Min": 1,"Max": 255}
+						{"Type": "ThresholdValue","Min": 255,"Max": 255}
 					]}
 				],
 				"NotUsed":[]
@@ -138,10 +137,9 @@
 			{
 				"Used":
 				[	{"Name":"MOG2", "Parameters":[
-					{"Type": "LearningRate","Min": 0,"Max": 10,"IsDouble": 10},
-					{"Type": "History","Min": 0,"Max": 1},
-					{"Type": "VarThreshold","Min": 0,"Max": 255},
-					{"Type": "DetectShadow","Min": 0,"Max": 2, "IsBool":true}
+					{"Type": "History","Min": 50,"Max": 50},
+					{"Type": "VarThreshold","Min": 8,"Max": 32},
+					{"Type": "DetectShadow","Min": 0,"Max": 1, "IsBool":true}
 					]}
 				],
 				"NotUsed":[]
@@ -156,7 +154,7 @@
 					{"Name": "Threshold", "Parameters":[
 						{"Type": "ThresholdDecision","Min": 0,"Max": 255},
 						{"Type": "ThresholdTypes","Min": 0,"Max": 1},
-						{"Type": "ThresholdValue","Min": 0,"Max": 255}
+						{"Type": "ThresholdValue","Min": 255,"Max": 255}
 					]}
 				],
 				"NotUsed":
@@ -166,9 +164,8 @@
 			{
 				"Used":
 				[	{"Name":"KNN", "Parameters":[
-					{"Type": "LearningRate","Min": 0,"Max": 10,"IsDouble": 10},
-					{"Type": "History","Min": 0,"Max": 100},
-					{"Type": "VarThreshold","Min": 0,"Max": 255},
+					{"Type": "History","Min": 50,"Max": 50},
+					{"Type": "VarThreshold","Min": 1,"Max": 5000,"IsDouble": 10},
 					{"Type": "DetectShadow","Min": 0,"Max": 1, "IsBool":true}
 					]}
 				],
@@ -184,7 +181,7 @@
 					{"Name": "Threshold", "Parameters":[
 						{"Type": "ThresholdDecision","Min": 0,"Max": 255},
 						{"Type": "ThresholdTypes","Min": 0,"Max": 1},
-						{"Type": "ThresholdValue","Min": 0,"Max": 255}
+						{"Type": "ThresholdValue","Min": 255,"Max": 255}
 					]}
 				],
 				"NotUsed":
@@ -194,7 +191,7 @@
 			{
 				"Used":
 				[	{"Name":"Median", "Parameters":[
-					{"Type": "History","Min": 1,"Max": 3},
+					{"Type": "History","Min": 3,"Max": 3},
 					{"Type": "HistoryDelta","Min": 1,"Max": 3},
 					{"Type": "DecisionThreshold","Min": 1,"Max": 254}
 					]}
@@ -211,7 +208,7 @@
 					{"Name": "Threshold", "Parameters":[
 						{"Type": "ThresholdDecision","Min": 0,"Max": 255},
 						{"Type": "ThresholdTypes","Min": 0,"Max": 1},
-						{"Type": "ThresholdValue","Min": 0,"Max": 255}
+						{"Type": "ThresholdValue","Min": 255,"Max": 255}
 					]}
 				],
 				"NotUsed":
@@ -237,7 +234,7 @@
 					{"Name": "Threshold", "Parameters":[
 						{"Type": "ThresholdDecision","Min": 0,"Max": 255},
 						{"Type": "ThresholdTypes","Min": 0,"Max": 1},
-						{"Type": "ThresholdValue","Min": 0,"Max": 255}
+						{"Type": "ThresholdValue","Min": 255,"Max": 255}
 					]}
 				],
 				"NotUsed":
@@ -265,7 +262,7 @@
 					{"Name": "Threshold", "Parameters":[
 						{"Type": "ThresholdDecision","Min": 0,"Max": 255},
 						{"Type": "ThresholdTypes","Min": 0,"Max": 1},
-						{"Type": "ThresholdValue","Min": 0,"Max": 255}
+						{"Type": "ThresholdValue","Min": 255,"Max": 255}
 					]}
 				],
 				"NotUsed":
@@ -275,8 +272,8 @@
 			{
 				"Used":
 				[	{"Name":"GMG", "Parameters":[
-					{"Type": "InitializationFrames","Min": 10,"Max": 30},
-					{"Type": "DecisionThreshold","Min": 1,"Max": 255}
+					{"Type": "InitializationFrames","Min": 5,"Max": 50},
+					{"Type": "DecisionThreshold","Min": 0,"Max": 1, "IsDouble": 100}
 					]}
 				],
 				"NotUsed":[]
@@ -292,7 +289,7 @@
 					{"Name": "Threshold", "Parameters":[
 						{"Type": "ThresholdDecision","Min": 0,"Max": 255},
 						{"Type": "ThresholdTypes","Min": 0,"Max": 1},
-						{"Type": "ThresholdValue","Min": 0,"Max": 255}
+						{"Type": "ThresholdValue","Min": 255,"Max": 255}
 					]}
 				],
 				"NotUsed":
@@ -302,10 +299,10 @@
 			{
 				"Used":
 				[	{"Name":"MOG", "Parameters":[
-					{"Type": "History","Min": 1,"Max": 200},
-					{"Type": "Nmixtures","Min": 1,"Max": 10},
-					{"Type": "BackgroundRatio","Min": 1,"Max": 100, "IsDouble": 100},
-					{"Type": "NoiseSigma","Min": 1,"Max": 100, "IsDouble": 100}
+					{"Type": "History","Min": 50,"Max": 50},
+					{"Type": "Nmixtures","Min": 2,"Max": 10},
+					{"Type": "BackgroundRatio","Min": 1,"Max": 9, "IsDouble": 100},
+					{"Type": "NoiseSigma","Min": 0,"Max": 1, "IsDouble": 10}
 					]}
 				],
 				"NotUsed":[]
@@ -320,7 +317,7 @@
 					{"Name": "Threshold", "Parameters":[
 						{"Type": "ThresholdDecision","Min": 0,"Max": 255},
 						{"Type": "ThresholdTypes","Min": 0,"Max": 1},
-						{"Type": "ThresholdValue","Min": 0,"Max": 255}
+						{"Type": "ThresholdValue","Min": 255,"Max": 255}
 					]}
 				],
 				"NotUsed":
@@ -348,7 +345,7 @@
 					{"Name": "Threshold", "Parameters":[
 						{"Type": "ThresholdDecision","Min": 0,"Max": 255},
 						{"Type": "ThresholdTypes","Min": 0,"Max": 1},
-						{"Type": "ThresholdValue","Min": 0,"Max": 255}
+						{"Type": "ThresholdValue","Min": 255,"Max": 255}
 					]}
 				],
 				"NotUsed":
@@ -373,7 +370,7 @@
 					{"Name": "Threshold", "Parameters":[
 						{"Type": "ThresholdDecision","Min": 2,"Max": 254},
 						{"Type": "ThresholdTypes","Min": 0,"Max": 1},
-						{"Type": "ThresholdValue","Min": 0,"Max": 255}
+						{"Type": "ThresholdValue","Min": 255,"Max": 255}
 					]}
 				],
 				"NotUsed":
@@ -401,7 +398,7 @@
 					{"Name": "Threshold", "Parameters":[
 						{"Type": "ThresholdDecision","Min": 2,"Max": 254},
 						{"Type": "ThresholdTypes","Min": 0,"Max": 1},
-						{"Type": "ThresholdValue","Min": 0,"Max": 255}
+						{"Type": "ThresholdValue","Min": 255,"Max": 255}
 					]}
 				],
 				"NotUsed":
@@ -418,6 +415,72 @@
 					{"Type": "NbBGSamples","Min": 20,"Max": 50},
 					{"Type": "RequiredNbBgSamples","Min": 1,"Max": 5},
 					{"Type": "LearningRate","Min": 8,"Max": 32}
+					]}
+				],
+				"NotUsed":[]
+			}
+		},
+		"GSOC":
+		{
+			"Filter": 
+			{
+				"Used":
+				[
+					{"Name": "Threshold", "Parameters":[
+						{"Type": "ThresholdDecision","Min": 2,"Max": 254},
+						{"Type": "ThresholdTypes","Min": 0,"Max": 1},
+						{"Type": "ThresholdValue","Min": 255,"Max": 255}
+					]}
+				],
+				"NotUsed":
+				[]
+			},
+			"Estimator": 
+			{
+				"Used":
+				[	{"Name":"GSOC", "Parameters":[
+					{"Type": "CameraMotionCompensation","Min": 0,"Max": 1, "IsBool": true},
+					{"Type": "NumberOfSamples","Min": 10,"Max": 50},
+					{"Type": "ReplaceRate","Min": 0,"Max": 1, "IsDouble": 1000},
+					{"Type": "PropagationRate","Min": 0,"Max": 1, "IsDouble": 100},
+					{"Type": "HitsThreshold","Min": 1,"Max": 255}
+					]}
+				],
+				"NotUsed":[]
+			}
+		},
+		"LSBP":
+		{
+			"Filter": 
+			{
+				"Used":
+				[
+					{"Name": "Threshold", "Parameters":[
+						{"Type": "ThresholdDecision","Min": 2,"Max": 254},
+						{"Type": "ThresholdTypes","Min": 0,"Max": 1},
+						{"Type": "ThresholdValue","Min": 255,"Max": 255}
+					]}
+				],
+				"NotUsed":
+				[]
+			},
+			"Estimator": 
+			{
+				"Used":
+				[	{"Name":"LSBP", "Parameters":[
+					{"Type": "CameraMotionCompensation","Min": 0,"Max": 1},
+					{"Type": "NumberOfSamples","Min": 20,"Max": 50},
+					{"Type": "Radius","Min": 10,"Max": 20},
+					{"Type": "Tlower","Min": 1,"Max": 3, "IsDouble": 10},
+					{"Type": "Tupper","Min": 24,"Max": 36, "IsDouble": 10},
+					{"Type": "Tincrease","Min": 1,"Max": 2, "IsDouble": 10},
+					{"Type": "Tdecrease","Min": 1,"Max": 9, "IsDouble": 100},
+					{"Type": "Rscale","Min": 5,"Max": 15, "IsDouble": 10},
+					{"Type": "Rincrease","Min": 1,"Max": 9, "IsDouble": 1000},
+					{"Type": "NoiseBG","Min": 1,"Max": 9, "IsDouble": 1000},
+					{"Type": "NoiseFG","Min": 1,"Max": 9, "IsDouble": 1000},
+					{"Type": "BinaryThreshold","Min": 5,"Max": 50},
+					{"Type": "MinMatchesNumber","Min": 1, "Max": 5}
 					]}
 				],
 				"NotUsed":[]
@@ -449,10 +512,10 @@
 					{"Name": "Threshold", "Parameters":[
 						{"Type": "ThresholdDecision","Min": 2,"Max": 254},
 						{"Type": "ThresholdTypes","Min": 0,"Max": 1},
-						{"Type": "ThresholdValue","Min": 0,"Max": 255}
+						{"Type": "ThresholdValue","Min": 255,"Max": 255}
 					]},
 					{"Name": "None", "Parameters":[
-						{"Type": "None","Min": 0,"Max": 2}
+						{"Type": "None","Min": 0,"Max": 0}
 					]},
 					{"Name": "MorphologyOperation", "Parameters":[
 						{"Type": "MorphOperator","Min": 0,"Max": 5},
@@ -478,10 +541,9 @@
 			{
 				"Used":
 				[	{"Name":"MOG2", "Parameters":[
-					{"Type": "LearningRate","Min": 0,"Max": 10,"IsDouble": 10},
-					{"Type": "History","Min": 0,"Max": 1},
-					{"Type": "VarThreshold","Min": 0,"Max": 255},
-					{"Type": "DetectShadow","Min": 0,"Max": 2, "IsBool":true}
+					{"Type": "History","Min": 50,"Max": 50},
+					{"Type": "VarThreshold","Min": 8,"Max": 32},
+					{"Type": "DetectShadow","Min": 0,"Max": 1, "IsBool":true}
 					]}
 				],
 				"NotUsed":[]
@@ -510,10 +572,10 @@
 					{"Name": "Threshold", "Parameters":[
 						{"Type": "ThresholdDecision","Min": 2,"Max": 254},
 						{"Type": "ThresholdTypes","Min": 0,"Max": 1},
-						{"Type": "ThresholdValue","Min": 0,"Max": 255}
+						{"Type": "ThresholdValue","Min": 255,"Max": 255}
 					]},
 					{"Name": "None", "Parameters":[
-						{"Type": "None","Min": 0,"Max": 2}
+						{"Type": "None","Min": 0,"Max": 0}
 					]},
 					{"Name": "MorphologyOperation", "Parameters":[
 						{"Type": "MorphOperator","Min": 0,"Max": 5},
@@ -540,9 +602,8 @@
 			{
 				"Used":
 				[	{"Name":"KNN", "Parameters":[
-					{"Type": "LearningRate","Min": 0,"Max": 10,"IsDouble": 10},
-					{"Type": "History","Min": 0,"Max": 100},
-					{"Type": "VarThreshold","Min": 0,"Max": 255},
+					{"Type": "History","Min": 50,"Max": 50},
+					{"Type": "VarThreshold","Min": 3000,"Max": 5000,"IsDouble": 10},
 					{"Type": "DetectShadow","Min": 0,"Max": 1, "IsBool":true}
 					]}
 				],
@@ -572,10 +633,10 @@
 					{"Name": "Threshold", "Parameters":[
 						{"Type": "ThresholdDecision","Min": 2,"Max": 254},
 						{"Type": "ThresholdTypes","Min": 0,"Max": 1},
-						{"Type": "ThresholdValue","Min": 0,"Max": 255}
+						{"Type": "ThresholdValue","Min": 255,"Max": 255}
 					]},
 					{"Name": "None", "Parameters":[
-						{"Type": "None","Min": 0,"Max": 2}
+						{"Type": "None","Min": 0,"Max": 0}
 					]},
 					{"Name": "MorphologyOperation", "Parameters":[
 						{"Type": "MorphOperator","Min": 0,"Max": 5},
@@ -602,7 +663,7 @@
 			{
 				"Used":
 				[	{"Name":"Median", "Parameters":[
-					{"Type": "History","Min": 1,"Max": 3},
+					{"Type": "History","Min": 3,"Max": 3},
 					{"Type": "HistoryDelta","Min": 1,"Max": 3},
 					{"Type": "DecisionThreshold","Min": 1,"Max": 254}
 					]}
@@ -633,10 +694,10 @@
 					{"Name": "Threshold", "Parameters":[
 						{"Type": "ThresholdDecision","Min": 2,"Max": 254},
 						{"Type": "ThresholdTypes","Min": 0,"Max": 1},
-						{"Type": "ThresholdValue","Min": 0,"Max": 255}
+						{"Type": "ThresholdValue","Min": 255,"Max": 255}
 					]},
 					{"Name": "None", "Parameters":[
-						{"Type": "None","Min": 0,"Max": 2}
+						{"Type": "None","Min": 0,"Max": 0}
 					]},
 					{"Name": "MorphologyOperation", "Parameters":[
 						{"Type": "MorphOperator","Min": 0,"Max": 5},
@@ -664,7 +725,7 @@
 				"Used":
 				[	
 					{"Name": "None", "Parameters":[
-					{"Type": "None","Min": 0,"Max": 1}
+					{"Type": "None","Min": 0,"Max": 0}
 					]}
 				],
 				"NotUsed":[]
@@ -693,10 +754,10 @@
 					{"Name": "Threshold", "Parameters":[
 						{"Type": "ThresholdDecision","Min": 2,"Max": 254},
 						{"Type": "ThresholdTypes","Min": 0,"Max": 1},
-						{"Type": "ThresholdValue","Min": 0,"Max": 255}
+						{"Type": "ThresholdValue","Min": 255,"Max": 255}
 					]},
 					{"Name": "None", "Parameters":[
-						{"Type": "None","Min": 0,"Max": 2}
+						{"Type": "None","Min": 0,"Max": 0}
 					]},
 					{"Name": "MorphologyOperation", "Parameters":[
 						{"Type": "MorphOperator","Min": 0,"Max": 5},
@@ -755,10 +816,10 @@
 					{"Name": "Threshold", "Parameters":[
 						{"Type": "ThresholdDecision","Min": 2,"Max": 254},
 						{"Type": "ThresholdTypes","Min": 0,"Max": 1},
-						{"Type": "ThresholdValue","Min": 0,"Max": 255}
+						{"Type": "ThresholdValue","Min": 255,"Max": 255}
 					]},
 					{"Name": "None", "Parameters":[
-						{"Type": "None","Min": 0,"Max": 2}
+						{"Type": "None","Min": 0,"Max": 0}
 					]},
 					{"Name": "MorphologyOperation", "Parameters":[
 						{"Type": "MorphOperator","Min": 0,"Max": 5},
@@ -785,8 +846,8 @@
 			{
 				"Used":
 				[	{"Name":"GMG", "Parameters":[
-					{"Type": "InitializationFrames","Min": 10,"Max": 30},
-					{"Type": "DecisionThreshold","Min": 1,"Max": 255}
+					{"Type": "InitializationFrames","Min": 5,"Max": 50},
+					{"Type": "DecisionThreshold","Min": 0,"Max": 1, "IsDouble": 100}
 					]}
 				],
 				"NotUsed":[]
@@ -816,10 +877,10 @@
 					{"Name": "Threshold", "Parameters":[
 						{"Type": "ThresholdDecision","Min": 2,"Max": 254},
 						{"Type": "ThresholdTypes","Min": 0,"Max": 1},
-						{"Type": "ThresholdValue","Min": 0,"Max": 255}
+						{"Type": "ThresholdValue","Min": 255,"Max": 255}
 					]},
 					{"Name": "None", "Parameters":[
-						{"Type": "None","Min": 0,"Max": 2}
+						{"Type": "None","Min": 0,"Max": 0}
 					]},
 					{"Name": "MorphologyOperation", "Parameters":[
 						{"Type": "MorphOperator","Min": 0,"Max": 5},
@@ -846,10 +907,10 @@
 			{
 				"Used":
 				[	{"Name":"MOG", "Parameters":[
-					{"Type": "History","Min": 1,"Max": 200},
-					{"Type": "Nmixtures","Min": 1,"Max": 10},
-					{"Type": "BackgroundRatio","Min": 1,"Max": 100, "IsDouble": 100},
-					{"Type": "NoiseSigma","Min": 1,"Max": 100, "IsDouble": 100}
+					{"Type": "History","Min": 50,"Max": 50},
+					{"Type": "Nmixtures","Min": 2,"Max": 10},
+					{"Type": "BackgroundRatio","Min": 1,"Max": 9, "IsDouble": 100},
+					{"Type": "NoiseSigma","Min": 0,"Max": 1, "IsDouble": 10}
 					]}
 				],
 				"NotUsed":[]
@@ -878,10 +939,10 @@
 					{"Name": "Threshold", "Parameters":[
 						{"Type": "ThresholdDecision","Min": 2,"Max": 254},
 						{"Type": "ThresholdTypes","Min": 0,"Max": 1},
-						{"Type": "ThresholdValue","Min": 0,"Max": 255}
+						{"Type": "ThresholdValue","Min": 255,"Max": 255}
 					]},
 					{"Name": "None", "Parameters":[
-						{"Type": "None","Min": 0,"Max": 2}
+						{"Type": "None","Min": 0,"Max": 0}
 					]},
 					{"Name": "MorphologyOperation", "Parameters":[
 						{"Type": "MorphOperator","Min": 0,"Max": 5},
@@ -940,10 +1001,10 @@
 					{"Name": "Threshold", "Parameters":[
 						{"Type": "ThresholdDecision","Min": 2,"Max": 254},
 						{"Type": "ThresholdTypes","Min": 0,"Max": 1},
-						{"Type": "ThresholdValue","Min": 0,"Max": 255}
+						{"Type": "ThresholdValue","Min": 255,"Max": 255}
 					]},
 					{"Name": "None", "Parameters":[
-						{"Type": "None","Min": 0,"Max": 2}
+						{"Type": "None","Min": 0,"Max": 0}
 					]},
 					{"Name": "MorphologyOperation", "Parameters":[
 						{"Type": "MorphOperator","Min": 0,"Max": 5},
@@ -999,10 +1060,10 @@
 					{"Name": "Threshold", "Parameters":[
 						{"Type": "ThresholdDecision","Min": 2,"Max": 254},
 						{"Type": "ThresholdTypes","Min": 0,"Max": 1},
-						{"Type": "ThresholdValue","Min": 0,"Max": 255}
+						{"Type": "ThresholdValue","Min": 255,"Max": 255}
 					]},
 					{"Name": "None", "Parameters":[
-						{"Type": "None","Min": 0,"Max": 2}
+						{"Type": "None","Min": 0,"Max": 0}
 					]},
 					{"Name": "MorphologyOperation", "Parameters":[
 						{"Type": "MorphOperator","Min": 0,"Max": 5},
@@ -1031,7 +1092,7 @@
 				[	{"Name":"ASBL", "Parameters":[
 					{"Type": "AlphaLearn","Min": 0,"Max": 1, "IsDouble": 100},
 					{"Type": "AlphaDetection","Min": 0,"Max": 1, "IsDouble": 100},
-					{"Type": "LearningFrames","Min": 1,"Max": 10},
+					{"Type": "LearningFrames","Min": 10,"Max": 50},
 					{"Type": "Threshold","Min": 10,"Max": 50}
 					]}
 				],
@@ -1061,10 +1122,10 @@
 					{"Name": "Threshold", "Parameters":[
 						{"Type": "ThresholdDecision","Min": 2,"Max": 254},
 						{"Type": "ThresholdTypes","Min": 0,"Max": 1},
-						{"Type": "ThresholdValue","Min": 0,"Max": 255}
+						{"Type": "ThresholdValue","Min": 255,"Max": 255}
 					]},
 					{"Name": "None", "Parameters":[
-						{"Type": "None","Min": 0,"Max": 2}
+						{"Type": "None","Min": 0,"Max": 0}
 					]},
 					{"Name": "MorphologyOperation", "Parameters":[
 						{"Type": "MorphOperator","Min": 0,"Max": 5},
@@ -1091,13 +1152,76 @@
 			{
 				"Used":
 				[	{"Name":"LOBSTER", "Parameters":[
-					{"Type": "RelSimilarityThreshold","Min": 0,"Max": 1, "IsDouble": 1000},
+					{"Type": "RelSimilarityThreshold","Min": 0,"Max": 1, "IsDouble": 10},
 					{"Type": "OffsetSimilarityThreshold","Min": 0,"Max": 5},
 					{"Type": "DescDistThreshold","Min": 3,"Max": 7},
 					{"Type": "ColorDistThreshold","Min": 10,"Max": 50},
-					{"Type": "NbBGSamples","Min": 20,"Max": 50},
+					{"Type": "NbBGSamples","Min": 20,"Max": 30},
 					{"Type": "RequiredNbBgSamples","Min": 1,"Max": 5},
-					{"Type": "LearningRate","Min": 8,"Max": 32}
+					{"Type": "LearningRate","Min": 1,"Max": 8}
+					]}
+				],
+				"NotUsed":[]
+			}
+		},
+		"GSOC":
+		{
+			"Filter": 
+			{
+				"Used":
+				[
+					{"Name": "MedianBlur", "Parameters":[{"Type": "KernelSize","Min": 1,"Max": 5,"IsOdd": true}
+						]},
+						{"Name": "Blur", "Parameters":[
+							{"Type": "KernelSizeX","Min": 1,"Max": 5,"IsOdd": true},
+							{"Type": "KernelSizeY","Min": 1,"Max": 5,"IsOdd": true},
+							{"Type": "BorderType","Min": 1,"Max": 2}
+						]},
+						{"Name": "GaussianBlur", "Parameters":[
+							{"Type": "KernelSizeX","Min": 1,"Max": 5,"IsOdd": true},
+							{"Type": "KernelSizeY","Min": 1,"Max": 5,"IsOdd": true},
+							{"Type": "SigmaX","Min": 0,"Max": 10,"IsDouble": 10},
+							{"Type": "SigmaY","Min": 0,"Max": 10,"IsDouble": 10},
+							{"Type": "BorderType","Min": 1,"Max": 2}
+						]},
+						{"Name": "Threshold", "Parameters":[
+							{"Type": "ThresholdDecision","Min": 2,"Max": 254},
+							{"Type": "ThresholdTypes","Min": 0,"Max": 1},
+							{"Type": "ThresholdValue","Min": 255,"Max": 255}
+						]},
+						{"Name": "None", "Parameters":[
+							{"Type": "None","Min": 0,"Max": 0}
+						]},
+						{"Name": "MorphologyOperation", "Parameters":[
+							{"Type": "MorphOperator","Min": 0,"Max": 5},
+							{"Type": "MorphSize","Min": 1,"Max": 3},
+							{"Type": "MorphElement","Min": 0,"Max": 2}
+						]},
+						{"Name": "Sobel", "Parameters":[
+							{"Type": "OrderDerivativeX","Min": 1,"Max": 2},
+							{"Type": "OrderDerivativeY","Min": 1,"Max": 2},
+							{"Type": "KernelSize","Min": 1,"Max": 2,"IsOdd": true},
+							{"Type": "BorderType","Min": 1,"Max": 2}
+						]},
+						{"Name": "BilateralFilter", "Parameters":[
+							{"Type": "Diameter","Min": 1,"Max": 5},
+							{"Type": "SigmaColor","Min": 0,"Max": 10,"IsDouble": 10},
+							{"Type": "SigmaSpace","Min": 0,"Max": 10,"IsDouble": 10},
+							{"Type": "BorderType","Min": 1,"Max": 2}
+						]}
+				],
+				"NotUsed":
+				[]
+			},
+			"Estimator": 
+			{
+				"Used":
+				[	{"Name":"GSOC", "Parameters":[
+					{"Type": "CameraMotionCompensation","Min": 0,"Max": 1, "IsBool": true},
+					{"Type": "NumberOfSamples","Min": 10,"Max": 50},
+					{"Type": "ReplaceRate","Min": 0,"Max": 1, "IsDouble": 1000},
+					{"Type": "PropagationRate","Min": 0,"Max": 1, "IsDouble": 100},
+					{"Type": "HitsThreshold","Min": 1,"Max": 255}
 					]}
 				],
 				"NotUsed":[]
