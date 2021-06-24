@@ -37,11 +37,11 @@
 					{"Type": "KernelSize","Min": 1,"Max": 2,"IsOdd": true},
 					{"Type": "BorderType","Min": 1,"Max": 2}
 					]},
-				{"Name": "BilateralFilter", "Parameters":[
-					{"Type": "Diameter","Min": 1,"Max": 5},
-					{"Type": "SigmaColor","Min": 0,"Max": 10,"IsDouble": 10},
-					{"Type": "SigmaSpace","Min": 0,"Max": 10,"IsDouble": 10},
-					{"Type": "BorderType","Min": 1,"Max": 2}
+					{"Name": "BilateralFilter", "Parameters":[
+						{"Type": "Diameter","Min": 1,"Max": 5},
+						{"Type": "SigmaColor","Min": 1,"Max": 99,"IsDouble": 100},
+						{"Type": "SigmaSpace","Min": 1,"Max": 99,"IsDouble": 100},
+						{"Type": "BorderType","Min": 1,"Max": 2}
 					]}
 
 			],
@@ -88,11 +88,11 @@
 					{"Type": "KernelSize","Min": 1,"Max": 2,"IsOdd": true},
 					{"Type": "BorderType","Min": 1,"Max": 2}
 					]},
-				{"Name": "BilateralFilter", "Parameters":[
-					{"Type": "Diameter","Min": 1,"Max": 5},
-					{"Type": "SigmaColor","Min": 0,"Max": 10,"IsDouble": 10},
-					{"Type": "SigmaSpace","Min": 0,"Max": 10,"IsDouble": 10},
-					{"Type": "BorderType","Min": 1,"Max": 2}
+					{"Name": "BilateralFilter", "Parameters":[
+						{"Type": "Diameter","Min": 1,"Max": 5},
+						{"Type": "SigmaColor","Min": 1,"Max": 99,"IsDouble": 100},
+						{"Type": "SigmaSpace","Min": 1,"Max": 99,"IsDouble": 100},
+						{"Type": "BorderType","Min": 1,"Max": 2}
 					]}
 			],
 			"Used":
@@ -219,7 +219,7 @@
 				"Used":
 				[	
 					{"Name": "None", "Parameters":[
-					{"Type": "None","Min": 0,"Max": 1}
+					{"Type": "None","Min": 0,"Max": 0}
 					]}
 				],
 				"NotUsed":[]
@@ -272,8 +272,8 @@
 			{
 				"Used":
 				[	{"Name":"GMG", "Parameters":[
-					{"Type": "InitializationFrames","Min": 5,"Max": 50},
-					{"Type": "DecisionThreshold","Min": 0,"Max": 1, "IsDouble": 100}
+					{"Type": "InitializationFrames","Min": 10,"Max": 50},
+					{"Type": "DecisionThreshold","Min": 1,"Max": 99, "IsDouble": 100}
 					]}
 				],
 				"NotUsed":[]
@@ -299,10 +299,10 @@
 			{
 				"Used":
 				[	{"Name":"MOG", "Parameters":[
-					{"Type": "History","Min": 50,"Max": 50},
+					{"Type": "History","Min": 10,"Max": 50},
 					{"Type": "Nmixtures","Min": 2,"Max": 10},
-					{"Type": "BackgroundRatio","Min": 1,"Max": 9, "IsDouble": 100},
-					{"Type": "NoiseSigma","Min": 0,"Max": 1, "IsDouble": 10}
+					{"Type": "BackgroundRatio","Min": 1,"Max": 99, "IsDouble": 100},
+					{"Type": "NoiseSigma","Min": 1,"Max": 99, "IsDouble": 100}
 					]}
 				],
 				"NotUsed":[]
@@ -355,7 +355,7 @@
 			{
 				"Used":
 				[	{"Name":"ABL", "Parameters":[
-					{"Type": "Alpha","Min": 0,"Max": 1, "IsDouble": 100}
+					{"Type": "Alpha","Min": 1,"Max": 99, "IsDouble": 100}
 					]}
 				],
 				"NotUsed":[]
@@ -380,8 +380,8 @@
 			{
 				"Used":
 				[	{"Name":"ASBL", "Parameters":[
-					{"Type": "AlphaLearn","Min": 0,"Max": 1, "IsDouble": 100},
-					{"Type": "AlphaDetection","Min": 0,"Max": 1, "IsDouble": 100},
+					{"Type": "AlphaLearn","Min": 1,"Max": 99, "IsDouble": 100},
+					{"Type": "AlphaDetection","Min": 1,"Max": 99, "IsDouble": 100},
 					{"Type": "LearningFrames","Min": 1,"Max": 10},
 					{"Type": "Threshold","Min": 10,"Max": 50}
 					]}
@@ -408,7 +408,7 @@
 			{
 				"Used":
 				[	{"Name":"LOBSTER", "Parameters":[
-					{"Type": "RelSimilarityThreshold","Min": 0,"Max": 1, "IsDouble": 1000},
+					{"Type": "RelSimilarityThreshold","Min":1,"Max": 99, "IsDouble": 100},
 					{"Type": "OffsetSimilarityThreshold","Min": 0,"Max": 5},
 					{"Type": "DescDistThreshold","Min": 3,"Max": 7},
 					{"Type": "ColorDistThreshold","Min": 10,"Max": 50},
@@ -441,8 +441,8 @@
 				[	{"Name":"GSOC", "Parameters":[
 					{"Type": "CameraMotionCompensation","Min": 0,"Max": 1, "IsBool": true},
 					{"Type": "NumberOfSamples","Min": 10,"Max": 50},
-					{"Type": "ReplaceRate","Min": 0,"Max": 1, "IsDouble": 1000},
-					{"Type": "PropagationRate","Min": 0,"Max": 1, "IsDouble": 100},
+					{"Type": "ReplaceRate","Min": 1,"Max": 999, "IsDouble": 1000},
+					{"Type": "PropagationRate","Min": 1,"Max": 99, "IsDouble": 100},
 					{"Type": "HitsThreshold","Min": 1,"Max": 255}
 					]}
 				],
@@ -471,14 +471,14 @@
 					{"Type": "CameraMotionCompensation","Min": 0,"Max": 1},
 					{"Type": "NumberOfSamples","Min": 20,"Max": 50},
 					{"Type": "Radius","Min": 10,"Max": 20},
-					{"Type": "Tlower","Min": 1,"Max": 3, "IsDouble": 10},
-					{"Type": "Tupper","Min": 24,"Max": 36, "IsDouble": 10},
-					{"Type": "Tincrease","Min": 1,"Max": 2, "IsDouble": 10},
-					{"Type": "Tdecrease","Min": 1,"Max": 9, "IsDouble": 100},
-					{"Type": "Rscale","Min": 5,"Max": 15, "IsDouble": 10},
-					{"Type": "Rincrease","Min": 1,"Max": 9, "IsDouble": 1000},
-					{"Type": "NoiseBG","Min": 1,"Max": 9, "IsDouble": 1000},
-					{"Type": "NoiseFG","Min": 1,"Max": 9, "IsDouble": 1000},
+					{"Type": "Tlower","Min": 1,"Max": 30, "IsDouble": 10},
+					{"Type": "Tupper","Min": 240,"Max": 360, "IsDouble": 10},
+					{"Type": "Tincrease","Min": 10,"Max": 20, "IsDouble": 10},
+					{"Type": "Tdecrease","Min": 100,"Max": 900, "IsDouble": 100},
+					{"Type": "Rscale","Min": 50,"Max": 150, "IsDouble": 10},
+					{"Type": "Rincrease","Min": 1000,"Max": 9000, "IsDouble": 1000},
+					{"Type": "NoiseBG","Min": 1000,"Max": 9000, "IsDouble": 1000},
+					{"Type": "NoiseFG","Min": 1000,"Max": 9000, "IsDouble": 1000},
 					{"Type": "BinaryThreshold","Min": 5,"Max": 50},
 					{"Type": "MinMatchesNumber","Min": 1, "Max": 5}
 					]}
@@ -505,8 +505,8 @@
 					{"Name": "GaussianBlur", "Parameters":[
 						{"Type": "KernelSizeX","Min": 1,"Max": 5,"IsOdd": true},
 						{"Type": "KernelSizeY","Min": 1,"Max": 5,"IsOdd": true},
-						{"Type": "SigmaX","Min": 0,"Max": 10,"IsDouble": 10},
-						{"Type": "SigmaY","Min": 0,"Max": 10,"IsDouble": 10},
+						{"Type": "SigmaX","Min": 1,"Max": 99,"IsDouble": 100},
+						{"Type": "SigmaY","Min": 1,"Max": 99,"IsDouble": 100},
 						{"Type": "BorderType","Min": 1,"Max": 2}
 					]},
 					{"Name": "Threshold", "Parameters":[
@@ -530,8 +530,8 @@
 					]},
 					{"Name": "BilateralFilter", "Parameters":[
 						{"Type": "Diameter","Min": 1,"Max": 5},
-						{"Type": "SigmaColor","Min": 0,"Max": 10,"IsDouble": 10},
-						{"Type": "SigmaSpace","Min": 0,"Max": 10,"IsDouble": 10},
+						{"Type": "SigmaColor","Min": 1,"Max": 99,"IsDouble": 100},
+						{"Type": "SigmaSpace","Min": 1,"Max": 99,"IsDouble": 100},
 						{"Type": "BorderType","Min": 1,"Max": 2}
 					]}
 				],
@@ -565,8 +565,8 @@
 					{"Name": "GaussianBlur", "Parameters":[
 						{"Type": "KernelSizeX","Min": 1,"Max": 5,"IsOdd": true},
 						{"Type": "KernelSizeY","Min": 1,"Max": 5,"IsOdd": true},
-						{"Type": "SigmaX","Min": 0,"Max": 10,"IsDouble": 10},
-						{"Type": "SigmaY","Min": 0,"Max": 10,"IsDouble": 10},
+						{"Type": "SigmaX","Min": 1,"Max": 99,"IsDouble": 100},
+						{"Type": "SigmaY","Min": 1,"Max": 99,"IsDouble": 100},
 						{"Type": "BorderType","Min": 1,"Max": 2}
 					]},
 					{"Name": "Threshold", "Parameters":[
@@ -590,8 +590,8 @@
 					]},
 					{"Name": "BilateralFilter", "Parameters":[
 						{"Type": "Diameter","Min": 1,"Max": 5},
-						{"Type": "SigmaColor","Min": 0,"Max": 10,"IsDouble": 10},
-						{"Type": "SigmaSpace","Min": 0,"Max": 10,"IsDouble": 10},
+						{"Type": "SigmaColor","Min": 1,"Max": 99,"IsDouble": 100},
+						{"Type": "SigmaSpace","Min": 1,"Max": 99,"IsDouble": 100},
 						{"Type": "BorderType","Min": 1,"Max": 2}
 					]}
 				],
@@ -626,8 +626,8 @@
 					{"Name": "GaussianBlur", "Parameters":[
 						{"Type": "KernelSizeX","Min": 1,"Max": 5,"IsOdd": true},
 						{"Type": "KernelSizeY","Min": 1,"Max": 5,"IsOdd": true},
-						{"Type": "SigmaX","Min": 0,"Max": 10,"IsDouble": 10},
-						{"Type": "SigmaY","Min": 0,"Max": 10,"IsDouble": 10},
+						{"Type": "SigmaX","Min": 1,"Max": 99,"IsDouble": 100},
+						{"Type": "SigmaY","Min": 1,"Max": 99,"IsDouble": 100},
 						{"Type": "BorderType","Min": 1,"Max": 2}
 					]},
 					{"Name": "Threshold", "Parameters":[
@@ -651,8 +651,8 @@
 					]},
 					{"Name": "BilateralFilter", "Parameters":[
 						{"Type": "Diameter","Min": 1,"Max": 5},
-						{"Type": "SigmaColor","Min": 0,"Max": 10,"IsDouble": 10},
-						{"Type": "SigmaSpace","Min": 0,"Max": 10,"IsDouble": 10},
+						{"Type": "SigmaColor","Min": 1,"Max": 99,"IsDouble": 100},
+						{"Type": "SigmaSpace","Min": 1,"Max": 99,"IsDouble": 100},
 						{"Type": "BorderType","Min": 1,"Max": 2}
 					]}
 				],
@@ -687,8 +687,8 @@
 					{"Name": "GaussianBlur", "Parameters":[
 						{"Type": "KernelSizeX","Min": 1,"Max": 5,"IsOdd": true},
 						{"Type": "KernelSizeY","Min": 1,"Max": 5,"IsOdd": true},
-						{"Type": "SigmaX","Min": 0,"Max": 10,"IsDouble": 10},
-						{"Type": "SigmaY","Min": 0,"Max": 10,"IsDouble": 10},
+						{"Type": "SigmaX","Min": 1,"Max": 99,"IsDouble": 100},
+						{"Type": "SigmaY","Min": 1,"Max": 99,"IsDouble": 100},
 						{"Type": "BorderType","Min": 1,"Max": 2}
 					]},
 					{"Name": "Threshold", "Parameters":[
@@ -712,8 +712,8 @@
 					]},
 					{"Name": "BilateralFilter", "Parameters":[
 						{"Type": "Diameter","Min": 1,"Max": 5},
-						{"Type": "SigmaColor","Min": 0,"Max": 10,"IsDouble": 10},
-						{"Type": "SigmaSpace","Min": 0,"Max": 10,"IsDouble": 10},
+						{"Type": "SigmaColor","Min": 1,"Max": 99,"IsDouble": 100},
+						{"Type": "SigmaSpace","Min": 1,"Max": 99,"IsDouble": 100},
 						{"Type": "BorderType","Min": 1,"Max": 2}
 					]}
 				],
@@ -747,8 +747,8 @@
 					{"Name": "GaussianBlur", "Parameters":[
 						{"Type": "KernelSizeX","Min": 1,"Max": 5,"IsOdd": true},
 						{"Type": "KernelSizeY","Min": 1,"Max": 5,"IsOdd": true},
-						{"Type": "SigmaX","Min": 0,"Max": 10,"IsDouble": 10},
-						{"Type": "SigmaY","Min": 0,"Max": 10,"IsDouble": 10},
+						{"Type": "SigmaX","Min": 1,"Max": 99,"IsDouble": 100},
+						{"Type": "SigmaY","Min": 1,"Max": 99,"IsDouble": 100},
 						{"Type": "BorderType","Min": 1,"Max": 2}
 					]},
 					{"Name": "Threshold", "Parameters":[
@@ -772,8 +772,8 @@
 					]},
 					{"Name": "BilateralFilter", "Parameters":[
 						{"Type": "Diameter","Min": 1,"Max": 5},
-						{"Type": "SigmaColor","Min": 0,"Max": 10,"IsDouble": 10},
-						{"Type": "SigmaSpace","Min": 0,"Max": 10,"IsDouble": 10},
+						{"Type": "SigmaColor","Min": 1,"Max": 99,"IsDouble": 100},
+						{"Type": "SigmaSpace","Min": 1,"Max": 99,"IsDouble": 100},
 						{"Type": "BorderType","Min": 1,"Max": 2}
 					]}
 				],
@@ -809,8 +809,8 @@
 					{"Name": "GaussianBlur", "Parameters":[
 						{"Type": "KernelSizeX","Min": 1,"Max": 5,"IsOdd": true},
 						{"Type": "KernelSizeY","Min": 1,"Max": 5,"IsOdd": true},
-						{"Type": "SigmaX","Min": 0,"Max": 10,"IsDouble": 10},
-						{"Type": "SigmaY","Min": 0,"Max": 10,"IsDouble": 10},
+						{"Type": "SigmaX","Min": 1,"Max": 99,"IsDouble": 100},
+						{"Type": "SigmaY","Min": 1,"Max": 99,"IsDouble": 100},
 						{"Type": "BorderType","Min": 1,"Max": 2}
 					]},
 					{"Name": "Threshold", "Parameters":[
@@ -834,8 +834,8 @@
 					]},
 					{"Name": "BilateralFilter", "Parameters":[
 						{"Type": "Diameter","Min": 1,"Max": 5},
-						{"Type": "SigmaColor","Min": 0,"Max": 10,"IsDouble": 10},
-						{"Type": "SigmaSpace","Min": 0,"Max": 10,"IsDouble": 10},
+						{"Type": "SigmaColor","Min": 1,"Max": 99,"IsDouble": 100},
+						{"Type": "SigmaSpace","Min": 1,"Max": 99,"IsDouble": 100},
 						{"Type": "BorderType","Min": 1,"Max": 2}
 					]}
 				],
@@ -846,8 +846,8 @@
 			{
 				"Used":
 				[	{"Name":"GMG", "Parameters":[
-					{"Type": "InitializationFrames","Min": 5,"Max": 50},
-					{"Type": "DecisionThreshold","Min": 0,"Max": 1, "IsDouble": 100}
+					{"Type": "InitializationFrames","Min": 10,"Max": 50},
+					{"Type": "DecisionThreshold","Min": 1,"Max": 99, "IsDouble": 100}
 					]}
 				],
 				"NotUsed":[]
@@ -870,8 +870,8 @@
 					{"Name": "GaussianBlur", "Parameters":[
 						{"Type": "KernelSizeX","Min": 1,"Max": 5,"IsOdd": true},
 						{"Type": "KernelSizeY","Min": 1,"Max": 5,"IsOdd": true},
-						{"Type": "SigmaX","Min": 0,"Max": 10,"IsDouble": 10},
-						{"Type": "SigmaY","Min": 0,"Max": 10,"IsDouble": 10},
+						{"Type": "SigmaX","Min": 1,"Max": 99,"IsDouble": 100},
+						{"Type": "SigmaY","Min": 1,"Max": 99,"IsDouble": 100},
 						{"Type": "BorderType","Min": 1,"Max": 2}
 					]},
 					{"Name": "Threshold", "Parameters":[
@@ -895,8 +895,8 @@
 					]},
 					{"Name": "BilateralFilter", "Parameters":[
 						{"Type": "Diameter","Min": 1,"Max": 5},
-						{"Type": "SigmaColor","Min": 0,"Max": 10,"IsDouble": 10},
-						{"Type": "SigmaSpace","Min": 0,"Max": 10,"IsDouble": 10},
+						{"Type": "SigmaColor","Min": 1,"Max": 99,"IsDouble": 100},
+						{"Type": "SigmaSpace","Min": 1,"Max": 99,"IsDouble": 100},
 						{"Type": "BorderType","Min": 1,"Max": 2}
 					]}
 				],
@@ -907,10 +907,10 @@
 			{
 				"Used":
 				[	{"Name":"MOG", "Parameters":[
-					{"Type": "History","Min": 50,"Max": 50},
+					{"Type": "History","Min": 10,"Max": 50},
 					{"Type": "Nmixtures","Min": 2,"Max": 10},
-					{"Type": "BackgroundRatio","Min": 1,"Max": 9, "IsDouble": 100},
-					{"Type": "NoiseSigma","Min": 0,"Max": 1, "IsDouble": 10}
+					{"Type": "BackgroundRatio","Min": 1,"Max": 99, "IsDouble": 100},
+					{"Type": "NoiseSigma","Min": 1,"Max": 99, "IsDouble": 100}
 					]}
 				],
 				"NotUsed":[]
@@ -932,8 +932,8 @@
 					{"Name": "GaussianBlur", "Parameters":[
 						{"Type": "KernelSizeX","Min": 1,"Max": 5,"IsOdd": true},
 						{"Type": "KernelSizeY","Min": 1,"Max": 5,"IsOdd": true},
-						{"Type": "SigmaX","Min": 0,"Max": 10,"IsDouble": 10},
-						{"Type": "SigmaY","Min": 0,"Max": 10,"IsDouble": 10},
+						{"Type": "SigmaX","Min": 1,"Max": 99,"IsDouble": 100},
+						{"Type": "SigmaY","Min": 1,"Max": 99,"IsDouble": 100},
 						{"Type": "BorderType","Min": 1,"Max": 2}
 					]},
 					{"Name": "Threshold", "Parameters":[
@@ -957,8 +957,8 @@
 					]},
 					{"Name": "BilateralFilter", "Parameters":[
 						{"Type": "Diameter","Min": 1,"Max": 5},
-						{"Type": "SigmaColor","Min": 0,"Max": 10,"IsDouble": 10},
-						{"Type": "SigmaSpace","Min": 0,"Max": 10,"IsDouble": 10},
+						{"Type": "SigmaColor","Min": 1,"Max": 99,"IsDouble": 100},
+						{"Type": "SigmaSpace","Min": 1,"Max": 99,"IsDouble": 100},
 						{"Type": "BorderType","Min": 1,"Max": 2}
 					]}
 				],
@@ -994,8 +994,8 @@
 					{"Name": "GaussianBlur", "Parameters":[
 						{"Type": "KernelSizeX","Min": 1,"Max": 5,"IsOdd": true},
 						{"Type": "KernelSizeY","Min": 1,"Max": 5,"IsOdd": true},
-						{"Type": "SigmaX","Min": 0,"Max": 10,"IsDouble": 10},
-						{"Type": "SigmaY","Min": 0,"Max": 10,"IsDouble": 10},
+						{"Type": "SigmaX","Min": 1,"Max": 99,"IsDouble": 100},
+						{"Type": "SigmaY","Min": 1,"Max": 99,"IsDouble": 100},
 						{"Type": "BorderType","Min": 1,"Max": 2}
 					]},
 					{"Name": "Threshold", "Parameters":[
@@ -1019,8 +1019,8 @@
 					]},
 					{"Name": "BilateralFilter", "Parameters":[
 						{"Type": "Diameter","Min": 1,"Max": 5},
-						{"Type": "SigmaColor","Min": 0,"Max": 10,"IsDouble": 10},
-						{"Type": "SigmaSpace","Min": 0,"Max": 10,"IsDouble": 10},
+						{"Type": "SigmaColor","Min": 1,"Max": 99,"IsDouble": 100},
+						{"Type": "SigmaSpace","Min": 1,"Max": 99,"IsDouble": 100},
 						{"Type": "BorderType","Min": 1,"Max": 2}
 					]}
 				],
@@ -1031,7 +1031,7 @@
 			{
 				"Used":
 				[	{"Name":"ABL", "Parameters":[
-					{"Type": "Aplpha","Min": 0,"Max": 1, "IsDouble": 100}
+					{"Type": "Aplpha","Min": 1,"Max": 99, "IsDouble": 100}
 					]}
 				],
 				"NotUsed":[]
@@ -1053,8 +1053,8 @@
 					{"Name": "GaussianBlur", "Parameters":[
 						{"Type": "KernelSizeX","Min": 1,"Max": 5,"IsOdd": true},
 						{"Type": "KernelSizeY","Min": 1,"Max": 5,"IsOdd": true},
-						{"Type": "SigmaX","Min": 0,"Max": 10,"IsDouble": 10},
-						{"Type": "SigmaY","Min": 0,"Max": 10,"IsDouble": 10},
+						{"Type": "SigmaX","Min": 1,"Max": 99,"IsDouble": 100},
+						{"Type": "SigmaY","Min": 1,"Max": 99,"IsDouble": 100},
 						{"Type": "BorderType","Min": 1,"Max": 2}
 					]},
 					{"Name": "Threshold", "Parameters":[
@@ -1078,8 +1078,8 @@
 					]},
 					{"Name": "BilateralFilter", "Parameters":[
 						{"Type": "Diameter","Min": 1,"Max": 5},
-						{"Type": "SigmaColor","Min": 0,"Max": 10,"IsDouble": 10},
-						{"Type": "SigmaSpace","Min": 0,"Max": 10,"IsDouble": 10},
+						{"Type": "SigmaColor","Min": 1,"Max": 99,"IsDouble": 100},
+						{"Type": "SigmaSpace","Min": 1,"Max": 99,"IsDouble": 100},
 						{"Type": "BorderType","Min": 1,"Max": 2}
 					]}
 				],
@@ -1090,8 +1090,8 @@
 			{
 				"Used":
 				[	{"Name":"ASBL", "Parameters":[
-					{"Type": "AlphaLearn","Min": 0,"Max": 1, "IsDouble": 100},
-					{"Type": "AlphaDetection","Min": 0,"Max": 1, "IsDouble": 100},
+					{"Type": "AlphaLearn","Min": 1,"Max": 99, "IsDouble": 100},
+					{"Type": "AlphaDetection","Min": 1,"Max": 99, "IsDouble": 100},
 					{"Type": "LearningFrames","Min": 10,"Max": 50},
 					{"Type": "Threshold","Min": 10,"Max": 50}
 					]}
@@ -1115,8 +1115,8 @@
 					{"Name": "GaussianBlur", "Parameters":[
 						{"Type": "KernelSizeX","Min": 1,"Max": 5,"IsOdd": true},
 						{"Type": "KernelSizeY","Min": 1,"Max": 5,"IsOdd": true},
-						{"Type": "SigmaX","Min": 0,"Max": 10,"IsDouble": 10},
-						{"Type": "SigmaY","Min": 0,"Max": 10,"IsDouble": 10},
+						{"Type": "SigmaX","Min": 1,"Max": 99,"IsDouble": 100},
+						{"Type": "SigmaY","Min": 1,"Max": 99,"IsDouble": 100},
 						{"Type": "BorderType","Min": 1,"Max": 2}
 					]},
 					{"Name": "Threshold", "Parameters":[
@@ -1140,8 +1140,8 @@
 					]},
 					{"Name": "BilateralFilter", "Parameters":[
 						{"Type": "Diameter","Min": 1,"Max": 5},
-						{"Type": "SigmaColor","Min": 0,"Max": 10,"IsDouble": 10},
-						{"Type": "SigmaSpace","Min": 0,"Max": 10,"IsDouble": 10},
+						{"Type": "SigmaColor","Min": 1,"Max": 99,"IsDouble": 100},
+						{"Type": "SigmaSpace","Min": 1,"Max": 99,"IsDouble": 100},
 						{"Type": "BorderType","Min": 1,"Max": 2}
 					]}
 				],
@@ -1152,13 +1152,13 @@
 			{
 				"Used":
 				[	{"Name":"LOBSTER", "Parameters":[
-					{"Type": "RelSimilarityThreshold","Min": 0,"Max": 1, "IsDouble": 10},
+					{"Type": "RelSimilarityThreshold","Min":1,"Max": 99, "IsDouble": 100},
 					{"Type": "OffsetSimilarityThreshold","Min": 0,"Max": 5},
 					{"Type": "DescDistThreshold","Min": 3,"Max": 7},
 					{"Type": "ColorDistThreshold","Min": 10,"Max": 50},
-					{"Type": "NbBGSamples","Min": 20,"Max": 30},
+					{"Type": "NbBGSamples","Min": 20,"Max": 50},
 					{"Type": "RequiredNbBgSamples","Min": 1,"Max": 5},
-					{"Type": "LearningRate","Min": 1,"Max": 8}
+					{"Type": "LearningRate","Min": 8,"Max": 32}
 					]}
 				],
 				"NotUsed":[]
@@ -1205,8 +1205,8 @@
 						]},
 						{"Name": "BilateralFilter", "Parameters":[
 							{"Type": "Diameter","Min": 1,"Max": 5},
-							{"Type": "SigmaColor","Min": 0,"Max": 10,"IsDouble": 10},
-							{"Type": "SigmaSpace","Min": 0,"Max": 10,"IsDouble": 10},
+							{"Type": "SigmaColor","Min": 1,"Max": 100,"IsDouble": 100},
+							{"Type": "SigmaSpace","Min": 1,"Max": 100,"IsDouble": 100},
 							{"Type": "BorderType","Min": 1,"Max": 2}
 						]}
 				],
@@ -1219,8 +1219,8 @@
 				[	{"Name":"GSOC", "Parameters":[
 					{"Type": "CameraMotionCompensation","Min": 0,"Max": 1, "IsBool": true},
 					{"Type": "NumberOfSamples","Min": 10,"Max": 50},
-					{"Type": "ReplaceRate","Min": 0,"Max": 1, "IsDouble": 1000},
-					{"Type": "PropagationRate","Min": 0,"Max": 1, "IsDouble": 100},
+					{"Type": "ReplaceRate","Min": 1,"Max": 999, "IsDouble": 1000},
+					{"Type": "PropagationRate","Min": 1,"Max": 99, "IsDouble": 100},
 					{"Type": "HitsThreshold","Min": 1,"Max": 255}
 					]}
 				],
