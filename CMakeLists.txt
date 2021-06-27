@@ -126,6 +126,9 @@ set(HEADERS_UTILS
 	include/utils/filelogger.h
 )
 
+set(SRC_TEST_MEDIAN2
+	test_median2/main.cc)
+
 file(GLOB_RECURSE SRC_PROCESSING ProcessingModules/*.cc)
 file(GLOB_RECURSE HEADERS_PROCESSING ProcessingModules/*.h)
 
@@ -142,6 +145,8 @@ add_library(utils STATIC
 
 add_executable(${PROJECT_NAME}
     ${SRC_MAIN})
+
+add_executable(median2 ${SRC_TEST_MEDIAN2})
 
 message(" cv_libs:     " ${OpenCV_LIBS})
 message(" cv_includes: " ${OPENCV_INCLUDE_DIRS})
@@ -163,13 +168,17 @@ target_link_libraries(${PROJECT_NAME}_lib X11)
 endif (UNIX)
 
 target_link_libraries(${PROJECT_NAME} ${PROJECT_NAME}_lib ${QT_LIBRARIES} ${OpenCV_LIBS} Threads::Threads utils)
-target_link_libraries(${PROJECT_NAME} ${PROJECT_NAME}_lib Qt5::Core Qt5::Network )
+target_link_libraries(${PROJECT_NAME} Qt5::Core Qt5::Network )
 
 target_link_libraries(g_test ${PROJECT_NAME}_lib gtest gmock utils)
-target_link_libraries(g_test ${PROJECT_NAME}_lib Qt5::Core Threads::Threads)
+target_link_libraries(g_test  Qt5::Core Threads::Threads)
 
 target_link_libraries(g_test_it ${PROJECT_NAME}_lib gtest gmock utils)
-target_link_libraries(g_test_it ${PROJECT_NAME}_lib Qt5::Core Threads::Threads)
+target_link_libraries(g_test_it Qt5::Core Threads::Threads)
+
+target_link_libraries(median2 ${PROJECT_NAME}_lib utils)
+target_link_libraries(median2 Qt5::Core Threads::Threads)
+
 
 message("CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE} ")
 
