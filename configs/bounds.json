@@ -24,7 +24,7 @@
 					{"Type": "ThresholdValue","Min": 255,"Max": 255}
 				]},
 				{"Name": "None", "Parameters":[
-					{"Type": "None","Min": 0,"Max": 0}
+					{"Type": "None","Min": 0,"Max": 1}
 					]},
 				{"Name": "MorphologyOperation", "Parameters":[
 					{"Type": "MorphOperator","Min": 0,"Max": 5},
@@ -75,7 +75,7 @@
 					{"Type": "ThresholdValue","Min": 255,"Max": 255}
 				]},
 				{"Name": "None", "Parameters":[
-					{"Type": "None","Min": 0,"Max": 0}
+					{"Type": "None","Min": 0,"Max": 1}
 					]},
 				{"Name": "MorphologyOperation", "Parameters":[
 					{"Type": "MorphOperator","Min": 0,"Max": 5},
@@ -542,7 +542,7 @@
 						{"Type": "ThresholdValue","Min": 255,"Max": 255}
 					]},
 					{"Name": "None", "Parameters":[
-						{"Type": "None","Min": 0,"Max": 0}
+						{"Type": "None","Min": 0,"Max": 1}
 					]},
 					{"Name": "MorphologyOperation", "Parameters":[
 						{"Type": "MorphOperator","Min": 0,"Max": 5},
@@ -602,7 +602,7 @@
 						{"Type": "ThresholdValue","Min": 255,"Max": 255}
 					]},
 					{"Name": "None", "Parameters":[
-						{"Type": "None","Min": 0,"Max": 0}
+						{"Type": "None","Min": 0,"Max": 1}
 					]},
 					{"Name": "MorphologyOperation", "Parameters":[
 						{"Type": "MorphOperator","Min": 0,"Max": 5},
@@ -663,7 +663,7 @@
 						{"Type": "ThresholdValue","Min": 255,"Max": 255}
 					]},
 					{"Name": "None", "Parameters":[
-						{"Type": "None","Min": 0,"Max": 0}
+						{"Type": "None","Min": 0,"Max": 1}
 					]},
 					{"Name": "MorphologyOperation", "Parameters":[
 						{"Type": "MorphOperator","Min": 0,"Max": 5},
@@ -724,7 +724,7 @@
 						{"Type": "ThresholdValue","Min": 255,"Max": 255}
 					]},
 					{"Name": "None", "Parameters":[
-						{"Type": "None","Min": 0,"Max": 0}
+						{"Type": "None","Min": 0,"Max": 1}
 					]},
 					{"Name": "MorphologyOperation", "Parameters":[
 						{"Type": "MorphOperator","Min": 0,"Max": 5},
@@ -784,7 +784,7 @@
 						{"Type": "ThresholdValue","Min": 255,"Max": 255}
 					]},
 					{"Name": "None", "Parameters":[
-						{"Type": "None","Min": 0,"Max": 0}
+						{"Type": "None","Min": 0,"Max": 1}
 					]},
 					{"Name": "MorphologyOperation", "Parameters":[
 						{"Type": "MorphOperator","Min": 0,"Max": 5},
@@ -846,7 +846,7 @@
 						{"Type": "ThresholdValue","Min": 255,"Max": 255}
 					]},
 					{"Name": "None", "Parameters":[
-						{"Type": "None","Min": 0,"Max": 0}
+						{"Type": "None","Min": 0,"Max": 1}
 					]},
 					{"Name": "MorphologyOperation", "Parameters":[
 						{"Type": "MorphOperator","Min": 0,"Max": 5},
@@ -907,7 +907,7 @@
 						{"Type": "ThresholdValue","Min": 255,"Max": 255}
 					]},
 					{"Name": "None", "Parameters":[
-						{"Type": "None","Min": 0,"Max": 0}
+						{"Type": "None","Min": 0,"Max": 1}
 					]},
 					{"Name": "MorphologyOperation", "Parameters":[
 						{"Type": "MorphOperator","Min": 0,"Max": 5},
@@ -969,7 +969,7 @@
 						{"Type": "ThresholdValue","Min": 255,"Max": 255}
 					]},
 					{"Name": "None", "Parameters":[
-						{"Type": "None","Min": 0,"Max": 0}
+						{"Type": "None","Min": 0,"Max": 1}
 					]},
 					{"Name": "MorphologyOperation", "Parameters":[
 						{"Type": "MorphOperator","Min": 0,"Max": 5},
@@ -1031,7 +1031,7 @@
 						{"Type": "ThresholdValue","Min": 255,"Max": 255}
 					]},
 					{"Name": "None", "Parameters":[
-						{"Type": "None","Min": 0,"Max": 0}
+						{"Type": "None","Min": 0,"Max": 1}
 					]},
 					{"Name": "MorphologyOperation", "Parameters":[
 						{"Type": "MorphOperator","Min": 0,"Max": 5},
@@ -1090,7 +1090,7 @@
 						{"Type": "ThresholdValue","Min": 255,"Max": 255}
 					]},
 					{"Name": "None", "Parameters":[
-						{"Type": "None","Min": 0,"Max": 0}
+						{"Type": "None","Min": 0,"Max": 1}
 					]},
 					{"Name": "MorphologyOperation", "Parameters":[
 						{"Type": "MorphOperator","Min": 0,"Max": 5},
@@ -1152,7 +1152,7 @@
 						{"Type": "ThresholdValue","Min": 255,"Max": 255}
 					]},
 					{"Name": "None", "Parameters":[
-						{"Type": "None","Min": 0,"Max": 0}
+						{"Type": "None","Min": 0,"Max": 1}
 					]},
 					{"Name": "MorphologyOperation", "Parameters":[
 						{"Type": "MorphOperator","Min": 0,"Max": 5},
@@ -1217,7 +1217,7 @@
 							{"Type": "ThresholdValue","Min": 255,"Max": 255}
 						]},
 						{"Name": "None", "Parameters":[
-							{"Type": "None","Min": 0,"Max": 0}
+							{"Type": "None","Min": 0,"Max": 1}
 						]},
 						{"Name": "MorphologyOperation", "Parameters":[
 							{"Type": "MorphOperator","Min": 0,"Max": 5},
@@ -1249,6 +1249,67 @@
 					{"Type": "ReplaceRate","Min": 1,"Max": 999, "IsDouble": 1000},
 					{"Type": "PropagationRate","Min": 1,"Max": 99, "IsDouble": 100},
 					{"Type": "HitsThreshold","Min": 1,"Max": 255}
+					]}
+				],
+				"NotUsed":[]
+			}
+		},
+		"MEDIAN2":
+		{
+			"Filter": 
+			{
+				"Used":
+				[
+					{"Name": "MedianBlur", "Parameters":[{"Type": "KernelSize","Min": 1,"Max": 5,"IsOdd": true}
+						]},
+						{"Name": "Blur", "Parameters":[
+							{"Type": "KernelSizeX","Min": 1,"Max": 5,"IsOdd": true},
+							{"Type": "KernelSizeY","Min": 1,"Max": 5,"IsOdd": true},
+							{"Type": "BorderType","Min": 1,"Max": 2}
+						]},
+						{"Name": "GaussianBlur", "Parameters":[
+							{"Type": "KernelSizeX","Min": 1,"Max": 5,"IsOdd": true},
+							{"Type": "KernelSizeY","Min": 1,"Max": 5,"IsOdd": true},
+							{"Type": "SigmaX","Min": 0,"Max": 10,"IsDouble": 10},
+							{"Type": "SigmaY","Min": 0,"Max": 10,"IsDouble": 10},
+							{"Type": "BorderType","Min": 1,"Max": 2}
+						]},
+						{"Name": "Threshold", "Parameters":[
+							{"Type": "ThresholdDecision","Min": 2,"Max": 254},
+							{"Type": "ThresholdTypes","Min": 0,"Max": 1},
+							{"Type": "ThresholdValue","Min": 255,"Max": 255}
+						]},
+						{"Name": "None", "Parameters":[
+							{"Type": "None","Min": 0,"Max": 1}
+						]},
+						{"Name": "MorphologyOperation", "Parameters":[
+							{"Type": "MorphOperator","Min": 0,"Max": 5},
+							{"Type": "MorphSize","Min": 1,"Max": 3},
+							{"Type": "MorphElement","Min": 0,"Max": 2}
+						]},
+						{"Name": "Sobel", "Parameters":[
+							{"Type": "OrderDerivativeX","Min": 1,"Max": 2},
+							{"Type": "OrderDerivativeY","Min": 1,"Max": 2},
+							{"Type": "KernelSize","Min": 1,"Max": 2,"IsOdd": true},
+							{"Type": "BorderType","Min": 1,"Max": 2}
+						]},
+						{"Name": "BilateralFilter", "Parameters":[
+							{"Type": "Diameter","Min": 1,"Max": 5},
+							{"Type": "SigmaColor","Min": 1,"Max": 100,"IsDouble": 100},
+							{"Type": "SigmaSpace","Min": 1,"Max": 100,"IsDouble": 100},
+							{"Type": "BorderType","Min": 1,"Max": 2}
+						]}
+				],
+				"NotUsed":
+				[]
+			},
+			"Estimator": 
+			{
+				"Used":
+				[	{"Name":"MEDIAN2", "Parameters":[
+					{"Type": "History","Min": 3,"Max": 20},
+					{"Type": "HistoryDelta","Min": 1,"Max": 10},
+					{"Type": "DecisionThreshold","Min": 1,"Max": 254}
 					]}
 				],
 				"NotUsed":[]
