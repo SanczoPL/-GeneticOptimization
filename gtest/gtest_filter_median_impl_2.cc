@@ -27,7 +27,45 @@ namespace gtest_filter_custom_median_impl_2 {
 			p = p->prev;
 		}
 	}
+
+	TEST_F(GTest_filter_custom_median_impl_2, test_medianImage)
+	{
+		//MedianImage::MedianImage(cv::Mat &img, int listSize)
+		Logger->set_level(static_cast<spdlog::level::level_enum>(0));
 	
+
+		cv::Mat img0 = cv::Mat(2, 2, CV_8UC1, cv::Scalar(0));
+		Subtractors::MedianImage medianImage(10);
+		medianImage.initMedian(img0);
+
+		cv::Mat median1 = cv::Mat(2, 2, CV_8UC1, cv::Scalar(150));
+		medianImage.getMedianImage(median1);
+
+		
+
+		cv::Mat img1 = cv::Mat(2, 2, CV_8UC1, cv::Scalar(123));
+		medianImage.printVector();
+
+		medianImage.addImage(img1);
+		medianImage.addImage(img1);
+		medianImage.addImage(img1);
+
+		cv::Mat median2 = cv::Mat(2, 2, CV_8UC1, cv::Scalar(150));
+		medianImage.getMedianImage(median2);
+
+		cv::Mat img2 = cv::Mat(2, 2, CV_8UC1, cv::Scalar(125));
+		medianImage.addImage(img2);
+		medianImage.addImage(img2);
+		medianImage.addImage(img2);
+
+		medianImage.printVector();
+
+		cv::Mat median3 = cv::Mat(2, 2, CV_8UC1, cv::Scalar(150));
+		medianImage.getMedianImage(median3);
+
+	}
+
+
 
 	TEST_F(GTest_filter_custom_median_impl_2, test1)
 	{
@@ -39,6 +77,8 @@ namespace gtest_filter_custom_median_impl_2 {
 
 		std::vector<int> m_vector{1,2,3,4,5,6};
 		checkPointers(m_vector, lst.m_start);
+		EXPECT_EQ(lst.getMedian(), 3);
+
 
 		lst.removeNode();
 		Logger->debug("removeNode 1");
@@ -47,6 +87,7 @@ namespace gtest_filter_custom_median_impl_2 {
 		m_vector={2,3,4,5,6};
 		checkPointers(m_vector, lst.m_start);
 		EXPECT_EQ(lst.m_medianNode->key, 2);
+		EXPECT_EQ(lst.getMedian(), 4);
 
 		lst.insertNode(150);
 		Logger->debug("insertNode 150");
@@ -54,6 +95,7 @@ namespace gtest_filter_custom_median_impl_2 {
 		
 		m_vector={2,3,4,5,6,150};
 		checkPointers(m_vector, lst.m_start);
+		EXPECT_EQ(lst.getMedian(), 4);
 
 		EXPECT_EQ(lst.m_stop->key, 150);
 		EXPECT_EQ(lst.m_stop->next->key, 2);
@@ -66,6 +108,7 @@ namespace gtest_filter_custom_median_impl_2 {
 
 		m_vector={3,4,5,6,150};
 		checkPointers(m_vector, lst.m_start);
+		EXPECT_EQ(lst.getMedian(), 5);
 
 		EXPECT_EQ(lst.m_stop->key, 150);
 		EXPECT_EQ(lst.m_stop->next->key, 3);
@@ -78,6 +121,7 @@ namespace gtest_filter_custom_median_impl_2 {
 
 		m_vector={1,3,4,5,6,150};
 		checkPointers(m_vector, lst.m_start);
+		EXPECT_EQ(lst.getMedian(), 4);
 
 		EXPECT_EQ(lst.m_stop->key, 150);
 		EXPECT_EQ(lst.m_stop->next->key, 1);
@@ -91,6 +135,7 @@ namespace gtest_filter_custom_median_impl_2 {
 
 		m_vector={1,4,5,6,150};
 		checkPointers(m_vector, lst.m_start);
+		EXPECT_EQ(lst.getMedian(), 5);
 
 		EXPECT_EQ(lst.m_stop->key, 150);
 		EXPECT_EQ(lst.m_stop->next->key, 1);
@@ -104,6 +149,7 @@ namespace gtest_filter_custom_median_impl_2 {
 
 		m_vector={1,4,5,6,100,150};
 		checkPointers(m_vector, lst.m_start);
+		EXPECT_EQ(lst.getMedian(), 5);
 
 		EXPECT_EQ(lst.m_stop->key, 150);
 		EXPECT_EQ(lst.m_stop->next->key, 1);
@@ -118,6 +164,7 @@ namespace gtest_filter_custom_median_impl_2 {
 
 		m_vector={1,5,6,100,150};
 		checkPointers(m_vector, lst.m_start);
+		EXPECT_EQ(lst.getMedian(), 6);
 
 		EXPECT_EQ(lst.m_stop->key, 150);
 		EXPECT_EQ(lst.m_stop->next->key, 1);
@@ -131,6 +178,7 @@ namespace gtest_filter_custom_median_impl_2 {
 
 		m_vector={1,5,6,100,150,170};
 		checkPointers(m_vector, lst.m_start);
+		EXPECT_EQ(lst.getMedian(), 6);
 
 
 		EXPECT_EQ(lst.m_stop->key, 170);
@@ -145,6 +193,7 @@ namespace gtest_filter_custom_median_impl_2 {
 
 		m_vector={1,6,100,150,170};
 		checkPointers(m_vector, lst.m_start);
+		EXPECT_EQ(lst.getMedian(), 100);
 
 		EXPECT_EQ(lst.m_stop->key, 170);
 		EXPECT_EQ(lst.m_stop->next->key, 1);

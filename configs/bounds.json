@@ -108,7 +108,7 @@
 		{
 			"Used":
 			[	{"Name":"MOG2", "Parameters":[
-					{"Type": "History","Min": 50,"Max": 50},
+					{"Type": "History","Min": 5,"Max": 50},
 					{"Type": "VarThreshold","Min": 0,"Max": 255},
 					{"Type": "DetectShadow","Min": 0,"Max": 1, "IsBool":true}
 					]}
@@ -137,7 +137,7 @@
 			{
 				"Used":
 				[	{"Name":"MOG2", "Parameters":[
-					{"Type": "History","Min": 50,"Max": 50},
+					{"Type": "History","Min": 5,"Max": 50},
 					{"Type": "VarThreshold","Min": 8,"Max": 32},
 					{"Type": "DetectShadow","Min": 0,"Max": 1, "IsBool":true}
 					]}
@@ -164,7 +164,7 @@
 			{
 				"Used":
 				[	{"Name":"KNN", "Parameters":[
-					{"Type": "History","Min": 50,"Max": 50},
+					{"Type": "History","Min": 5,"Max": 50},
 					{"Type": "VarThreshold","Min": 1,"Max": 5000,"IsDouble": 10},
 					{"Type": "DetectShadow","Min": 0,"Max": 1, "IsBool":true}
 					]}
@@ -190,9 +190,36 @@
 			"Estimator": 
 			{
 				"Used":
-				[	{"Name":"Median", "Parameters":[
+				[	{"Name":"MEDIAN", "Parameters":[
 					{"Type": "History","Min": 3,"Max": 3},
 					{"Type": "HistoryDelta","Min": 1,"Max": 3},
+					{"Type": "DecisionThreshold","Min": 1,"Max": 254}
+					]}
+				],
+				"NotUsed":[]
+			}
+		},
+		"MEDIAN2":
+		{
+			"Filter": 
+			{
+				"Used":
+				[
+					{"Name": "Threshold", "Parameters":[
+						{"Type": "ThresholdDecision","Min": 0,"Max": 255},
+						{"Type": "ThresholdTypes","Min": 0,"Max": 1},
+						{"Type": "ThresholdValue","Min": 255,"Max": 255}
+					]}
+				],
+				"NotUsed":
+				[]
+			},
+			"Estimator": 
+			{
+				"Used":
+				[	{"Name":"MEDIAN2", "Parameters":[
+					{"Type": "History","Min": 3,"Max": 20},
+					{"Type": "HistoryDelta","Min": 1,"Max": 10},
 					{"Type": "DecisionThreshold","Min": 1,"Max": 254}
 					]}
 				],
@@ -218,8 +245,8 @@
 			{
 				"Used":
 				[	
-					{"Name": "None", "Parameters":[
-					{"Type": "None","Min": 0,"Max": 0}
+					{"Name": "NONE", "Parameters":[
+					{"Type": "NONE","Min": 0,"Max": 1}
 					]}
 				],
 				"NotUsed":[]
@@ -272,7 +299,7 @@
 			{
 				"Used":
 				[	{"Name":"GMG", "Parameters":[
-					{"Type": "InitializationFrames","Min": 10,"Max": 50},
+					{"Type": "InitializationFrames","Min": 1,"Max": 50},
 					{"Type": "DecisionThreshold","Min": 1,"Max": 99, "IsDouble": 100}
 					]}
 				],
@@ -299,7 +326,7 @@
 			{
 				"Used":
 				[	{"Name":"MOG", "Parameters":[
-					{"Type": "History","Min": 10,"Max": 50},
+					{"Type": "History","Min": 5,"Max": 50},
 					{"Type": "Nmixtures","Min": 2,"Max": 10},
 					{"Type": "BackgroundRatio","Min": 1,"Max": 99, "IsDouble": 100},
 					{"Type": "NoiseSigma","Min": 1,"Max": 99, "IsDouble": 100}
@@ -383,7 +410,7 @@
 					{"Type": "AlphaLearn","Min": 1,"Max": 99, "IsDouble": 100},
 					{"Type": "AlphaDetection","Min": 1,"Max": 99, "IsDouble": 100},
 					{"Type": "LearningFrames","Min": 1,"Max": 10},
-					{"Type": "Threshold","Min": 10,"Max": 50}
+					{"Type": "Threshold","Min": 1,"Max": 255}
 					]}
 				],
 				"NotUsed":[]
@@ -541,7 +568,7 @@
 			{
 				"Used":
 				[	{"Name":"MOG2", "Parameters":[
-					{"Type": "History","Min": 50,"Max": 50},
+					{"Type": "History","Min": 5,"Max": 50},
 					{"Type": "VarThreshold","Min": 8,"Max": 32},
 					{"Type": "DetectShadow","Min": 0,"Max": 1, "IsBool":true}
 					]}
@@ -602,7 +629,7 @@
 			{
 				"Used":
 				[	{"Name":"KNN", "Parameters":[
-					{"Type": "History","Min": 50,"Max": 50},
+					{"Type": "History","Min": 5,"Max": 50},
 					{"Type": "VarThreshold","Min": 3000,"Max": 5000,"IsDouble": 10},
 					{"Type": "DetectShadow","Min": 0,"Max": 1, "IsBool":true}
 					]}
@@ -724,8 +751,8 @@
 			{
 				"Used":
 				[	
-					{"Name": "None", "Parameters":[
-					{"Type": "None","Min": 0,"Max": 0}
+					{"Name": "NONE", "Parameters":[
+					{"Type": "NONE","Min": 0,"Max": 1}
 					]}
 				],
 				"NotUsed":[]
@@ -846,7 +873,7 @@
 			{
 				"Used":
 				[	{"Name":"GMG", "Parameters":[
-					{"Type": "InitializationFrames","Min": 10,"Max": 50},
+					{"Type": "InitializationFrames","Min": 1,"Max": 50},
 					{"Type": "DecisionThreshold","Min": 1,"Max": 99, "IsDouble": 100}
 					]}
 				],
@@ -907,7 +934,7 @@
 			{
 				"Used":
 				[	{"Name":"MOG", "Parameters":[
-					{"Type": "History","Min": 10,"Max": 50},
+					{"Type": "History","Min": 5,"Max": 50},
 					{"Type": "Nmixtures","Min": 2,"Max": 10},
 					{"Type": "BackgroundRatio","Min": 1,"Max": 99, "IsDouble": 100},
 					{"Type": "NoiseSigma","Min": 1,"Max": 99, "IsDouble": 100}
@@ -1092,8 +1119,8 @@
 				[	{"Name":"ASBL", "Parameters":[
 					{"Type": "AlphaLearn","Min": 1,"Max": 99, "IsDouble": 100},
 					{"Type": "AlphaDetection","Min": 1,"Max": 99, "IsDouble": 100},
-					{"Type": "LearningFrames","Min": 10,"Max": 50},
-					{"Type": "Threshold","Min": 10,"Max": 50}
+					{"Type": "LearningFrames","Min": 1,"Max": 10},
+					{"Type": "Threshold","Min": 1,"Max": 255}
 					]}
 				],
 				"NotUsed":[]
