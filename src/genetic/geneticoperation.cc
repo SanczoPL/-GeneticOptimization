@@ -597,7 +597,7 @@ QJsonObject GeneticOperation::createRandomProcessingBlock(const QJsonObject& bou
 		QJsonObject parameterIter = parameters[j].toObject();
 		if (parameterIter[IS_BOOL].toBool() == true)
 		{
-			bool boolValue = m_randomGenerator->bounded(0, 1);
+			bool boolValue = m_randomGenerator->bounded(0, 2);
 			parameterObj.insert(parameterIter[TYPE].toString(), boolValue);
 			continue;
 		}

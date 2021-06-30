@@ -271,7 +271,7 @@
 			{
 				"Used":
 				[	{"Name":"CNT", "Parameters":[
-					{"Type": "MinPixelStability","Min": 10,"Max": 20},
+					{"Type": "MinPixelStability","Min": 2,"Max": 50},
 					{"Type": "MaxPixelStability","Min": 600,"Max": 1200},
 					{"Type": "IsParallel", "Min": 0,"Max": 1, "IsBool":true},
 					{"Type": "UseHistory", "Min": 0,"Max": 1, "IsBool":true}

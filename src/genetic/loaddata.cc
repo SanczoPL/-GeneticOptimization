@@ -81,10 +81,10 @@ bool LoadData::loadData(std::vector<cv::Mat> &data, std::vector<cv::Mat> &gt)
 	#endif // _WIN32
 
 	#ifdef DEBUG
-	Logger->debug("LoadData::loadData() data.size data:{}", (data).size());
+	
 	Logger->debug("LoadData::loadData() gt.size data:{}", (gt).size());
 	#endif
-	
+	Logger->debug("LoadData::loadData() data.size:{} ({}x{})", (data).size(), data[0].cols, data[0].rows);
 	
 
 	return true;
