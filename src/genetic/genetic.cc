@@ -252,10 +252,20 @@ void Genetic::iteration()
 		int y = m_randomGenerator->bounded(0, m_probAll);
 		if (y >= 0 && y < m_probCrossover)
 		{
-			m_geneticOperation.crossover(man);
-			#ifdef GENETIC_OPERATION_DEBUG
-			Logger->debug("men[{}] has crossover", man);
-			#endif
+			if (m_geneticOperation.crossover(man))
+			{
+				#ifdef GENETIC_OPERATION_DEBUG
+				Logger->debug("men[{}] has crossover", man);
+				#endif
+			}
+			else
+			{
+				m_geneticOperation.mutate(man);
+				#ifdef GENETIC_OPERATION_DEBUG
+				Logger->debug("men[{}] has gradient failed, its mutate!", man);
+				Logger->debug("men[{}] has mutate", man);
+				#endif
+			}
 		}
 		y -= m_probCrossover;
 
