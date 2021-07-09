@@ -52,7 +52,7 @@ int main(int argc, char* argv[])
 }
 
 void intro() {
-	Logger->info("\n\n\t\033[1;31mGenetic v3.1\033[0m\n"
+	Logger->info("\n\n\t\033[1;31mGenetic v3.2\033[0m\n"
 		"\tAuthor: Grzegorz Matczak\n"
 		"\t02.06.2021\n");
 }
