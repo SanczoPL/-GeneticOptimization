@@ -5,13 +5,13 @@
 
 		"DatasetWin32": 
 		{
-			"PathToDataset": "E:\\repo\\datasets\\NORM0010_1280x720_120\\",
+			"PathToDataset": "",
 			"ConfigName": "config.json"
 		},
 		"DatasetLinux": 
 		{
-			"PathToDataset2": "/home/matczak/repo/datasets/NORM0010_1280x720_120/",
-			"PathToDataset": "/home/matczak/repo/datasets/NORM0006_1280x720x30_1/",
+			"PathToDataset2": "/home/matczak/repo/GeneticOptimizationDataset/NORM0010_1280x720_120FPS/",
+			"PathToDataset": "/home/matczak/repo/GeneticOptimizationDataset/NORM0006_1280x720_30FPS/",
 			"ConfigName": "config.json"
 		}
 	},
@@ -21,13 +21,13 @@
 
 		"DatasetWin32": 
 		{
-			"PathToDataset": "E:\\repo\\datasets\\NORM0010_1280x720_120\\",
+			"PathToDataset": "",
 			"ConfigName": "config.json"
 		},
 		"DatasetLinux": 
 		{
-			"PathToDataset2": "/home/matczak/repo/datasets/NORM0010_1280x720_120/",
-      		"PathToDataset": "/home/matczak/repo/datasets/NORM0006_1280x720x30_1/",
+			"PathToDataset2": "/home/matczak/repo/GeneticOptimizationDataset/NORM0010_1280x720_120FPS/",
+			"PathToDataset": "/home/matczak/repo/GeneticOptimizationDataset/NORM0006_1280x720_30FPS/",
 			"ConfigName": "config.json"
 		}
 	}
