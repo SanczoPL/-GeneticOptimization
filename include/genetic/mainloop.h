@@ -72,7 +72,7 @@ public slots:
 
 private:
 
-	const qint32 m_threadsMax{};
+	int m_threadsMax{};
 
 	QThread* m_dataMemoryThread;
 	DataMemory* m_dataMemory;

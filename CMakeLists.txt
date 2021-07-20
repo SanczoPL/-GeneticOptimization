@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.9 FATAL_ERROR)
 project(GeneticOptimization VERSION 3.0 DESCRIPTION "GeneticOptimization v3.0 Windows/Linux" LANGUAGES C CXX)
 
-set(DEFAULT_BUILD_TYPE "Release")
+set(DEFAULT_BUILD_TYPE "Debug")
 set(CMAKE_BUILD_TYPE "Debug")
 
 #STNDARD STUFF
@@ -61,6 +61,7 @@ endif (WIN32)
 if (UNIX)
 find_package(X11 REQUIRED)
 endif (UNIX)
+
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
 find_package(Qt5Core REQUIRED)
@@ -113,17 +114,23 @@ set(HEADERS
 	include/genetic/graph.h
 	)
 
-set(SRC_UTILS
-	src/utils/configreader.cc
-	src/utils/includespdlog.cc
-	src/utils/listvector.cc
-	src/utils/filelogger.cc
+file(GLOB_RECURSE SRC_UTILS Utils/src/*.cc)
+file(GLOB_RECURSE HEADERS_UTILS Utils/include/*.h)
+
+set(SRC_GRAPH
+	ProcessingGraph/src/graph.cc
 )
-set(HEADERS_UTILS
-	include/utils/configreader.h
-	include/utils/includespdlog.h
-	include/utils/listvector.h
-	include/utils/filelogger.h
+set(HEADERS_GRAPH
+	ProcessingGraph/include/graph.h
+)
+
+set(SRC_DATA
+	DataManagement/src/data.cc
+	DataManagement/src/loaddata.cc
+)
+set(HEADERS_DATA
+	DataManagement/include/data.h
+	DataManagement/include/loaddata.h
 )
 
 set(SRC_TEST_MEDIAN2
@@ -140,8 +147,14 @@ add_library(${PROJECT_NAME}_lib STATIC
 	${SRC_PROCESSING} ${HEADERS_PROCESSING}
 	${SRC_POST_PROCESSING} ${HEADERS_POST_PROCESSING})
 
-add_library(utils STATIC
+add_library(utils_lib STATIC
 	${SRC_UTILS} ${HEADERS_UTILS})
+
+add_library(data_lib STATIC
+	${SRC_DATA} ${HEADERS_DATA})
+
+add_library(graph_lib STATIC
+	${SRC_GRAPH} ${HEADERS_GRAPH})
 
 add_executable(${PROJECT_NAME}
     ${SRC_MAIN})
@@ -157,27 +170,21 @@ file(GLOB_RECURSE SRC_HEADERS_TEST_IT gtest_it/*.cc gtest_it/*.h)
 add_executable(g_test ${SRC_HEADERS_TEST})
 add_executable(g_test_it ${SRC_HEADERS_TEST_IT})
 
-target_link_libraries(utils ${QT_LIBRARIES} spdlog)
-target_link_libraries(utils Qt5::Core )
+target_link_libraries(utils_lib ${QT_LIBRARIES} spdlog Qt5::Core)
+target_link_libraries(data_lib ${QT_LIBRARIES} spdlog Qt5::Core ${OpenCV_LIBS})
+target_link_libraries(graph_lib ${QT_LIBRARIES} spdlog Qt5::Core ${OpenCV_LIBS})
 
-target_link_libraries(${PROJECT_NAME}_lib ${QT_LIBRARIES} ${OpenCV_LIBS} Threads::Threads utils)
+target_link_libraries(${PROJECT_NAME}_lib ${QT_LIBRARIES} ${OpenCV_LIBS} Threads::Threads utils_lib data_lib graph_lib)
 target_link_libraries(${PROJECT_NAME}_lib Qt5::Core Qt5::Network)
 
 if (UNIX)
 target_link_libraries(${PROJECT_NAME}_lib X11)
 endif (UNIX)
 
-target_link_libraries(${PROJECT_NAME} ${PROJECT_NAME}_lib ${QT_LIBRARIES} ${OpenCV_LIBS} Threads::Threads utils)
-target_link_libraries(${PROJECT_NAME} Qt5::Core Qt5::Network )
-
-target_link_libraries(g_test ${PROJECT_NAME}_lib gtest gmock utils)
-target_link_libraries(g_test  Qt5::Core Threads::Threads)
-
-target_link_libraries(g_test_it ${PROJECT_NAME}_lib gtest gmock utils)
-target_link_libraries(g_test_it Qt5::Core Threads::Threads)
-
-target_link_libraries(median2 ${PROJECT_NAME}_lib utils)
-target_link_libraries(median2 Qt5::Core Threads::Threads)
+target_link_libraries(${PROJECT_NAME} ${PROJECT_NAME}_lib)
+target_link_libraries(g_test ${PROJECT_NAME}_lib gtest gmock )
+target_link_libraries(g_test_it ${PROJECT_NAME}_lib gtest gmock)
+target_link_libraries(median2 ${PROJECT_NAME}_lib)
 
 
 message("CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE} ")
