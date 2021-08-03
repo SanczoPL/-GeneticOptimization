@@ -142,7 +142,6 @@ void MainLoop::createConfig(QJsonObject const& a_config)
 							QJsonObject config = obj[CONFIG].toObject();
 							//config[DRON_NOISE] = i;
 							//config[DRON_CONTRAST] = 100;
-							config[DRON_TYPE] = m_dronTypes[dron].toString();
 							config[BOUNDS_TYPE] = m_boundsTypes[bounds].toString();
 							config[DRON_TYPE] = m_dronTypes[dron].toString();
 							config[DRON_RAND_SEED] = randNumber;
