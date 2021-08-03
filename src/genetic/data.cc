@@ -196,6 +196,7 @@ bool DataMemory::preprocess(QJsonArray dataGraph)
 	{
 		Logger->error("DataMemory::preprocess() size not correct:");
 	}
+	Logger->debug("DataMemory::preprocess() sizes: m_inputData.size:{}, ({}x{}) ", m_inputData.size(), m_inputData[0].cols, m_inputData[0].rows);
 	m_loaded = true;
 	
 	if(m_savePreprocessingDataset)

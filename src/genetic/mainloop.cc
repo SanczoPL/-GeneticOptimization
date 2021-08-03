@@ -100,16 +100,6 @@ bool MainLoop::checkAndCreateFolder(QString name)
 
 void MainLoop::createConfig(QJsonObject const& a_config)
 {
-
-	//m_graphTypes = a_config[GENETIC].toObject()[GRAPH_TYPES].toArray()},
-	//m_boundsTypes = a_config[GENETIC].toObject()[BOUNDS_TYPES].toArray()},
-	//m_dronTypes = a_config[GENETIC].toObject()[DRON_TYPES].toArray()},
-	//std::vector<QString> grafConfigs{"Graph_estimator_with_filters", "Graph_estimator"};
-	//std::vector<QString> dronConfigs{"BLACK", "BLACK_WHITE",  "WHITE"};
-	//std::vector<QString> boundConfigs{"NONE", "MOG2","LOBSTER", "ABL", "ASBL", "MOG2", "CNT" , "MOG", "KNN", "GMG", "ViBe"};
-
-	//qint64 _nowTime = qint64(QDateTime::currentMSecsSinceEpoch());
-
 	QTime now = QTime::currentTime();
     int randNumber = now.msecsSinceStartOfDay();
 
@@ -152,7 +142,6 @@ void MainLoop::createConfig(QJsonObject const& a_config)
 							QJsonObject config = obj[CONFIG].toObject();
 							//config[DRON_NOISE] = i;
 							//config[DRON_CONTRAST] = 100;
-							config[DRON_TYPE] = m_dronTypes[dron].toString();
 							config[BOUNDS_TYPE] = m_boundsTypes[bounds].toString();
 							config[DRON_TYPE] = m_dronTypes[dron].toString();
 							config[DRON_RAND_SEED] = randNumber;

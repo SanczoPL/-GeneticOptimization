@@ -4,3 +4,12 @@
 [submodule "PostProcessingModules"]
 	path = PostProcessingModules
 	url = https://github.com/SanczoPL/PostProcessingModules
+[submodule "ProcessingGraph"]
+	path = ProcessingGraph
+	url = https://github.com/SanczoPL/ProcessingGraph.git
+[submodule "DataManagement"]
+	path = DataManagement
+	url = https://github.com/SanczoPL/DataManagement.git
+[submodule "Utils"]
+	path = Utils
+	url = https://github.com/SanczoPL/Utils.git

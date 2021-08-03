@@ -107,10 +107,10 @@ void Case::processing(const int iteration)
 {
 	Case::clearDataForNextIteration();
 	cv::Mat input = m_dataMemory->input(iteration).clone();
-	Logger->trace("Case::process() iteration:{}", iteration);
+	Logger->trace("Case::processing() iteration:{}", iteration);
 
 	#ifdef DEBUG_CASE
-		Logger->debug("Case::process() graph[{}] Processing:", iteration);
+		Logger->debug("Case::processing() graph[{}] Processing:", iteration);
 	#endif
 	for (int i = 0; i < m_graph_config.size(); i++)
 	{
@@ -119,7 +119,7 @@ void Case::processing(const int iteration)
 		const QJsonArray _prevActive = _obj[PREV].toArray();
 		const QJsonArray _nextActive = _obj[NEXT].toArray();
 		#ifdef DEBUG_CASE
-		Logger->info("Case::process() i:{}, _prevActive.size:{}", i, _prevActive.size());
+		Logger->info("Case::processing() i:{}, _prevActive.size:{}", i, _prevActive.size());
 		#endif	
 		if (m_graph_processing.checkIfLoadInputs(_prevActive, dataVec, input))
 		{
@@ -128,7 +128,7 @@ void Case::processing(const int iteration)
 		try
 		{
 			#ifdef DEBUG_CASE
-			Logger->debug("Case::process() graph[{}] Processing: block[{}]->process", iteration, i);
+			Logger->debug("Case::processing() graph[{}] Processing: block[{}]->process", iteration, i);
 			#endif
 			m_block[i]->process((dataVec));
 		}
@@ -148,7 +148,7 @@ void Case::processing(const int iteration)
 		dataVec.clear();
 	}
 	#ifdef DEBUG_CASE
-		Logger->debug("Case::process() graph[{}] Intephase:", iteration);
+		Logger->debug("Case::processing() graph[{}] Intephase:", iteration);
 	#endif
 	
 
@@ -157,7 +157,7 @@ void Case::processing(const int iteration)
 	cv::Mat inputImage = m_dataMemory->input(iteration).clone();
 	m_outputData.push_back(inputImage.clone());
 	#ifdef DEBUG_CASE
-	Logger->info("Case::process() postprocess iteration:{}, m_outputData.size:{}", iteration, m_outputData.size());
+	Logger->info("Case::processing() postprocess iteration:{}, m_outputData.size:{}", iteration, m_outputData.size());
 	#endif
 	
 	#ifdef DEBUG_OPENCV
@@ -174,7 +174,7 @@ void Case::postprocessing()
 	m_dataPostprocess.clear();
 
 	#ifdef DEBUG_POSTPROCESSING
-	Logger->debug("Case::process() PostProcessing:");
+	Logger->debug("Case::postprocessing() PostProcessing:");
 	#endif
 	for (int i = 0; i < m_postprocess_config.size(); i++)
 	{
@@ -194,16 +194,17 @@ void Case::postprocessing()
 		const QJsonArray _prevActive = _obj[PREV].toArray();
 		const QJsonArray _nextActive = _obj[NEXT].toArray();
 		#ifdef DEBUG_POSTPROCESSING
-		Logger->debug("Case::process() postprocess i:{}, _prevActive.size:{}", i, _prevActive.size());
+		Logger->debug("Case::postprocessing() postprocess i:{}, _prevActive.size:{}", i, _prevActive.size());
 		#endif
 		if (m_graph_postprocessing.checkIfLoadInputs(_prevActive, dataVec, m_outputData, i))
 		{
-			m_graph_postprocessing.loadInputs(_prevActive, dataVec, m_graph_config, m_dataPostprocess);				
+			m_graph_postprocessing.loadInputs(_prevActive, dataVec, m_postprocess_config, m_dataPostprocess);				
 		}
 		try
 		{
+			Logger->debug("Case::postprocessing() postProcessing: block[{}]->process", i);
 			#ifdef DEBUG_POSTPROCESSING
-			Logger->debug("Case::process() postProcessing: block[{}]->process", i);
+			Logger->debug("Case::postprocessing() postProcessing: block[{}]->process", i);
 			#endif
 			m_blockPostprocess[i]->process((dataVec));
 		}
@@ -220,7 +221,7 @@ void Case::postprocessing()
 fitness Case::finishPostProcessing()
 {
 	#ifdef DEBUG_POSTPROCESSING
-	Logger->debug("Case::process() Calculate fitness:");
+	Logger->debug("Case::finishPostProcessing() Calculate fitness:");
 	#endif
 	struct fitness fs;
 	for (int i = 0; i < m_postprocess_config.size(); i++)
@@ -230,18 +231,18 @@ fitness Case::finishPostProcessing()
 		if (_type == "Fitness")
 		{
 			#ifdef DEBUG_POSTPROCESSING
-			Logger->debug("Case::process() Calculate Fitness endProcess:");
+			Logger->debug("Case::finishPostProcessing() Calculate Fitness endProcess:");
 			#endif
 			m_blockPostprocess[i]->endProcess(m_dataPostprocess[i]);
 			fs = m_dataPostprocess[i][0].fs;
 			#ifdef DEBUG_POSTPROCESSING
-			Logger->debug("Case::process() fs:{}", fs.fitness);
+			Logger->debug("Case::finishPostProcessing() fs:{}", fs.fitness);
 			#endif
 		}
 		if (_type == "Encoder")
 		{
 			#ifdef DEBUG_POSTPROCESSING
-			Logger->debug("Case::process() Calculate Encoder endProcess:");
+			Logger->debug("Case::finishPostProcessing() Calculate Encoder endProcess:");
 			#endif
 			m_blockPostprocess[i]->endProcess(m_dataPostprocess[i]);
 		}
@@ -262,7 +263,7 @@ fitness Case::finishPostProcessing()
 void Case::deleteData()
 {
 	#ifdef DEBUG_CASE
-	Logger->debug("Case::process() deletes:");
+	Logger->debug("Case::deleteData() deletes:");
 	#endif
 
 	// TODO: not working properly:

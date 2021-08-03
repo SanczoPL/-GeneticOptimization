@@ -34,8 +34,8 @@ class GeneticOperation
 		void crossover();
 		void xOver(qint32 one, qint32 two);
 		void gradient();
-		void mutate(int men);
-		void crossover(int men);
+		bool mutate(int men);
+		bool crossover(int men);
 		bool gradient(int men);
 		bool gradientOnConfig(QJsonObject bounds, QJsonObject config);
 

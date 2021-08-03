@@ -77,12 +77,13 @@ void GeneticOperation::mutate()
 	#endif
 }
 
-void GeneticOperation::mutate(int men) 
+bool GeneticOperation::mutate(int men) 
 {
 	#ifdef GENETIC_OPERATION_DEBUG
 	Logger->debug("GeneticOperation::mutate({})", men);
 	#endif
 	m_vectorBits[men] = createRandomProcessing(m_optimizationTypes, m_boundsGraph);
+	return true;
 }
 
 void GeneticOperation::crossover()
@@ -110,10 +111,10 @@ void GeneticOperation::crossover()
 	#endif
 }
 
-void GeneticOperation::crossover(int men)
+bool GeneticOperation::crossover(int men)
 {
 	#ifdef GENETIC_OPERATION_DEBUG
-	Logger->debug("GeneticOperation::crossover({})", men),;
+	Logger->debug("GeneticOperation::crossover({})", men);
 	#endif
 	for (qint32 man2 = m_populationSize; man2 >= 0; man2--)
 	{
@@ -125,13 +126,15 @@ void GeneticOperation::crossover(int men)
 			if (x < 0.5)
 			{
 				xOver(men, man2);
-				break;
+				return true;
 			}
 		}
 	}
+	
 	#ifdef GENETIC_OPERATION_DEBUG
-	Logger->debug("GeneticOperation::crossover({}) done", men),;
+	Logger->debug("GeneticOperation::crossover({}) done", men);
 	#endif
+	return false;
 }
 
 void GeneticOperation::gradient()
@@ -179,6 +182,7 @@ void GeneticOperation::gradient()
 			}
 		}
 	}
+
 	#ifdef GENETIC_OPERATION_DEBUG
 	Logger->debug("GeneticOperation::gradient() done");
 	#endif
@@ -269,7 +273,7 @@ bool GeneticOperation::gradientOnConfig(QJsonObject bounds, QJsonObject config)
 	int value = config[parameter].toInt();
 	#ifdef GENETIC_OPERATION_DEBUG
 	Logger->debug("Gradient normal pre value:{}", value);
-	#endifz
+	#endif
 	if (bounds[IS_BOOL].toBool() == true)
 	{
 		#ifdef GENETIC_OPERATION_DEBUG
@@ -597,7 +601,7 @@ QJsonObject GeneticOperation::createRandomProcessingBlock(const QJsonObject& bou
 		QJsonObject parameterIter = parameters[j].toObject();
 		if (parameterIter[IS_BOOL].toBool() == true)
 		{
-			bool boolValue = m_randomGenerator->bounded(0, 1);
+			bool boolValue = m_randomGenerator->bounded(0, 2);
 			parameterObj.insert(parameterIter[TYPE].toString(), boolValue);
 			continue;
 		}

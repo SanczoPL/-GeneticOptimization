@@ -1,32 +1,34 @@
 {
-  "Graph_estimator":
-  {
-    "SavePreprocessingDataset": false,
+	"Graph_estimator":
+	{
+		"SavePreprocessingDataset": false,
 
-    "DatasetWin32": 
-    {
-      "PathToDataset": "E:\\repo\\datasets\\NORM0010_1280x720_120\\",
-      "ConfigName": "config.json"
-    },
-    "DatasetLinux": 
-    {
-      "PathToDataset": "/home/matczak/repo/datasets/NORM0010_1280x720_120/",
-      "ConfigName": "config.json"
-    }
-  },
-  "Graph_estimator_with_filters":
-  {
-    "SavePreprocessingDataset": false,
+		"DatasetWin32": 
+		{
+			"PathToDataset": "E:\\repo\\GeneticOptimizationDataset\\NORM0006_1280x720_30FPS\\",
+			"ConfigName": "config.json"
+		},
+		"DatasetLinux": 
+		{
+			"PathToDataset2": "/home/matczak/repo/GeneticOptimizationDataset/NORM0010_1280x720_120FPS/",
+			"PathToDataset": "/home/matczak/repo/GeneticOptimizationDataset/NORM0006_1280x720_30FPS/",
+			"ConfigName": "config.json"
+		}
+	},
+	"Graph_estimator_with_filters":
+	{
+		"SavePreprocessingDataset": false,
 
-    "DatasetWin32": 
-    {
-      "PathToDataset": "E:\\repo\\datasets\\NORM0010_1280x720_120\\",
-      "ConfigName": "config.json"
-    },
-    "DatasetLinux": 
-    {
-      "PathToDataset": "/home/matczak/repo/datasets/NORM0010_1280x720_120/",
-      "ConfigName": "config.json"
-    }
-  }
+		"DatasetWin32": 
+		{
+			"PathToDataset": "E:\\repo\\GeneticOptimizationDataset\\NORM0006_1280x720_30FPS\\",
+			"ConfigName": "config.json"
+		},
+		"DatasetLinux": 
+		{
+			"PathToDataset2": "/home/matczak/repo/GeneticOptimizationDataset/NORM0010_1280x720_120FPS/",
+			"PathToDataset": "/home/matczak/repo/GeneticOptimizationDataset/NORM0006_1280x720_30FPS/",
+			"ConfigName": "config.json"
+		}
+	}
 }
